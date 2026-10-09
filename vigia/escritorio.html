@@ -79,7 +79,7 @@ ul { padding: 0; list-style: none; }
 @keyframes subir { from { transform: translate(-50%, 16px); opacity: 0; } }
 .inicio .cuerpo-ini { padding: 28px 32px 18px; }
 .inicio h3 { font-size: 14px; font-weight: 600; margin: 0 0 12px 8px; }
-.inicio .rejilla-ini { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-bottom: 22px; }
+.inicio .rejilla-ini { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; margin-bottom: 22px; }
 .inicio .rejilla-ini button { display: grid; justify-items: center; gap: 8px; padding: 12px 4px; border-radius: 5px; font-size: 12px; }
 .inicio .rejilla-ini button:hover { background: rgba(255,255,255,.08); }
 .inicio .rejilla-ini svg { width: 32px; height: 32px; }
@@ -146,6 +146,7 @@ body.arrastrando { user-select: none; }
 .term { flex: 1; overflow-y: auto; padding: 8px 12px 18px; background: #0c0c0c; color: #cccccc; font: 14px/1.4 var(--mono); cursor: text; }
 .term pre { font: inherit; white-space: pre-wrap; word-break: break-word; }
 .term .linea-entrada { display: flex; flex-wrap: wrap; }
+.term .linea-entrada[hidden] { display: none; }
 .term input { flex: 1; min-width: 6ch; background: none; border: 0; outline: none; color: #fff; font: inherit; padding: 0; caret-color: #fff; }
 .term .prompt { color: #cccccc; white-space: pre; }
 .term .orden { color: #61d6d6; cursor: pointer; text-decoration: underline; text-decoration-color: rgba(97,214,214,.35); text-underline-offset: 3px; }
@@ -219,7 +220,7 @@ body.arrastrando { user-select: none; }
 .ver-paneles { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
 .ver-fuente { border-right: 1px solid var(--borde); display: flex; flex-direction: column; min-height: 0; background: var(--campo); }
 .ver h3 { font-size: 12px; font-weight: 600; color: var(--tenue); padding: 10px 14px 6px; }
-.ver-fuente pre { flex: 1; overflow: auto; padding: 0 14px 14px; font: 12.5px/1.45 var(--mono); white-space: pre-wrap; }
+.ver-fuente pre { position: relative; flex: 1; overflow: auto; padding: 0 14px 14px; font: 12.5px/1.45 var(--mono); white-space: pre-wrap; }
 .ver-fuente mark { background: #fff100; color: #000; border-radius: 2px; }
 .ver-extr { overflow-y: auto; padding-bottom: 18px; }
 .ver table { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -270,6 +271,38 @@ body.arrastrando { user-select: none; }
   .inicio .cuerpo-ini, .inicio .pie-ini { padding-left: 16px; padding-right: 16px; }
   .term { font-size: 13px; }
   .pestana, .nav-pestana { min-width: 0; }
+}
+/* ── Flujo (diagrama; estilos base en vigia/diagrama.py) ─────────── */
+/*ESTILOS_DIAGRAMA*/
+.ventana[data-app="flujo"] .cuerpo { background: var(--contenido); overflow: auto; }
+.flujo-cuerpo { padding: 14px 22px 18px; --dg-acento: var(--acento); --dg-fondo: var(--contenido); color: var(--texto); }
+.flujo-cuerpo .dg { min-width: 760px; }
+.flujo-cuerpo .dg [data-ir] { cursor: pointer; }
+.flujo-cuerpo .dg [data-ir]:hover .caja, .flujo-cuerpo .dg [data-ir]:focus .caja { stroke-opacity: 1; stroke-width: 2.2; fill: var(--seleccion); }
+.flujo-cuerpo .dg [data-ir]:focus { outline: none; }
+.flujo-pie { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; margin-top: 12px; font-size: 13px; color: var(--tenue); }
+.flujo-pie .boton { color: var(--texto); }
+.flujo-pie .boton.primario { background: var(--acento); border-color: var(--acento); color: #fff; }
+:root[data-theme="dark"] .flujo-pie .boton.primario { color: #002642; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .flujo-pie .boton.primario { color: #002642; } }
+
+/* ── Verificador: leyenda, nota del autor y edición faltante ───────── */
+.ver-paneles[hidden], .segmentado[hidden] { display: none; }
+.ver .lado { display: flex; flex-direction: column; }
+.ver .leyenda { margin-top: auto; padding: 12px 10px 4px; font-size: 11.5px; color: var(--tenue); display: grid; gap: 5px; }
+.ver .leyenda span { display: flex; align-items: center; gap: 8px; }
+.segmentado .marca { margin-left: 6px; vertical-align: 1px; }
+.nota-autor { margin: 4px 14px 10px; padding: 8px 12px; font-size: 13px; border-left: 3px solid var(--error); background: var(--hover); border-radius: 0 4px 4px 0; }
+.nota-autor b { display: block; font-size: 12px; margin-bottom: 2px; }
+.editor.md { grid-template-columns: minmax(0, 1fr); font: 14px/1.6 var(--sans); }
+.editor.md .nums { display: none; }
+.editor.md .codigo { white-space: pre-wrap; max-width: 92ch; padding: 16px 24px; }
+.editor.md .hl-s, .editor.md .hl-c { font-family: var(--mono); font-size: 13px; }
+/* Teléfono: va al final para ganar a las reglas de arriba */
+@media (max-width: 760px) {
+  .ver .lado { flex-direction: row; }
+  .ver .leyenda { display: none; }
+  .flujo-cuerpo { padding: 10px 12px; }
 }
 @media (prefers-reduced-motion: reduce) { .ventana.abriendo, .inicio.abierto { animation: none; } }
 </style>
@@ -329,6 +362,7 @@ const ICONO = {
   editor: `<svg viewBox="0 0 32 32"><rect x="5" y="3" width="22" height="26" rx="3" fill="#2b88d8"/><rect x="5" y="3" width="22" height="26" rx="3" fill="none" stroke="#1f6fb5"/><path d="M10 11h12M10 15h12M10 19h8" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>`,
   verificador: `<svg viewBox="0 0 32 32"><rect x="3" y="5" width="26" height="22" rx="3" fill="#fafafa" stroke="#bdbdbd"/><path d="M3 10h26" stroke="#bdbdbd"/><path d="M7 15h9M7 19h9M7 23h9" stroke="#8a8a8a" stroke-width="1.8" stroke-linecap="round"/><circle cx="23" cy="20" r="6" fill="#0f7b0f"/><path d="M20 20l2 2 4-4.5" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   navegador: `<svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="#0f6cbd"/><path d="M3 16h26M16 3c-4.5 4.5-4.5 21.5 0 26M16 3c4.5 4.5 4.5 21.5 0 26M6 9.5h20M6 22.5h20" stroke="#fff" stroke-width="1.4" fill="none" opacity=".85"/></svg>`,
+  flujo: `<svg viewBox="0 0 32 32"><rect x="2" y="4" width="28" height="24" rx="4" fill="#fafafa" stroke="#bdbdbd"/><rect x="5" y="15" width="6" height="6" rx="1.2" fill="#8a8a8a"/><rect x="13" y="15" width="6" height="6" rx="1.2" fill="#8a8a8a"/><rect x="21" y="15" width="6" height="6" rx="1.2" fill="#0078d4"/><path d="M8 15V10h16v5" stroke="#0078d4" stroke-width="1.6" fill="none"/></svg>`,
   carpeta: `<svg viewBox="0 0 32 32"><path d="M3 8a2 2 0 0 1 2-2h7l3 3h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="#e8a317"/><path d="M3 12a2 2 0 0 1 2-2h22a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="#ffc83d"/></svg>`,
   hoja: (color, rotulo) => `<svg viewBox="0 0 32 32"><path d="M8 2h11l7 7v19a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" fill="#fff" stroke="#9e9e9e"/><path d="M19 2v7h7" fill="#e6e6e6" stroke="#9e9e9e"/><rect x="3" y="17" width="20" height="9" rx="1.5" fill="${color}"/><text x="13" y="23.6" font-family="Segoe UI, sans-serif" font-size="6.2" font-weight="700" fill="#fff" text-anchor="middle">${rotulo}</text></svg>`,
 };
@@ -345,6 +379,7 @@ const SVG_MAX = '<svg viewBox="0 0 10 10"><rect x=".5" y=".5" width="9" height="
 
 // ── Gestor de ventanas ────────────────────────────────────────────────
 const APPS = {
+  flujo: { nombre: 'Flujo', ancho: 1120, alto: 350, crear: crearFlujo },
   terminal: { nombre: 'PowerShell', ancho: 860, alto: 560, crear: crearTerminal },
   verificador: { nombre: 'Verificador', ancho: 1180, alto: 680, crear: crearVerificador },
   navegador: { nombre: 'Navegador', ancho: 1180, alto: 720, crear: crearNavegador },
@@ -379,7 +414,7 @@ function ventana(app) {
   v.style.width = ancho + 'px';
   v.style.height = alto + 'px';
   v.style.left = Math.max(100, (W - ancho) / 2 - 50 + corrimiento) + 'px';
-  v.style.top = Math.max(12, (H - alto) / 2 - 30 + corrimiento) + 'px';
+  v.style.top = Math.max(12, Math.min(H - alto - 8, (H - alto) / 2 - 30 + corrimiento)) + 'px';
   $('#ventanas').append(v);
   v.addEventListener('pointerdown', () => enfocar(v));
   $('.cerrar', v).onclick = () => cerrar(app);
@@ -437,7 +472,7 @@ function arrastrar(e, v) {
 }
 
 // ── Barra de tareas, menú Inicio, íconos del escritorio ───────────────
-const ORDEN = ['terminal', 'verificador', 'navegador', 'archivos', 'editor'];
+const ORDEN = ['flujo', 'terminal', 'verificador', 'navegador', 'archivos', 'editor'];
 function armarTareas() {
   $('#apps').innerHTML = `<button id="btnInicio" data-tip="Inicio" aria-label="Inicio" aria-expanded="false">${ICONO.inicio}</button>`
     + ORDEN.map((a) => `<button data-app="${a}" data-tip="${APPS[a].nombre}" aria-label="${APPS[a].nombre}">${ICONO[a]}</button>`).join('');
@@ -465,6 +500,7 @@ function cerrarInicio() {
   $('#btnInicio')?.setAttribute('aria-expanded', 'false');
 }
 addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarInicio(); });
+addEventListener('blur', cerrarInicio);  // un clic dentro del iframe del informe no llega como pointerdown
 addEventListener('pointerdown', (e) => { if (!e.target.closest('#inicio, #btnInicio')) cerrarInicio(); });
 
 function armarInicio() {
@@ -510,8 +546,7 @@ function armarIconos() {
     { rotulo: 'README.md', icono: iconoArchivo('README.md'), accion: () => abrir('editor', 'README.md') },
   ];
   $('#iconos').innerHTML = iconos.map((i, k) => `<button data-k="${k}">${i.icono}<span>${i.rotulo}</span></button>`).join('');
-  $('#iconos').onclick = (e) => { const b = e.target.closest('button'); document.querySelectorAll('#iconos button').forEach((x) => x.classList.toggle('sel', x === b)); };
-  $('#iconos').ondblclick = (e) => { const b = e.target.closest('button'); if (b) iconos[b.dataset.k].accion(); };
+  $('#iconos').onclick = (e) => { const b = e.target.closest('button'); if (b) iconos[b.dataset.k].accion(); };
   $('#iconos').onkeydown = (e) => { const b = e.target.closest('button'); if (b && e.key === 'Enter') iconos[b.dataset.k].accion(); };
 }
 
@@ -538,7 +573,7 @@ function listar(dir) {
 const esCarpeta = (ruta) => ruta === '' || Object.keys(ARCHIVOS).some((r) => r.startsWith(ruta + '/'));
 function normalizarRuta(ruta) {
   return ruta.replace(/\\/g, '/').replace(/^"|"$/g, '').replace(/^c:\/users\/francisco\/vigia-ernc\/?/i, '')
-    .replace(/^\.\//, '').replace(/\/+$/, '');
+    .replace(/^\.\//, '').replace(/\/+$/, '').replace(/^\.$/, '');
 }
 const tamano = (b) => b == null ? '' : `${Math.max(1, Math.round(b / 1024)).toLocaleString('es-CL')} KB`;
 
@@ -547,9 +582,41 @@ function abrirArchivo(ruta) {
   if (!a) return;
   if (a.tipo === 'pdf') return abrir('verificador', { edicion: ruta.match(/(\d{6})\.pdf$/)[1] });
   if (a.tipo === 'web') return abrir('navegador');
-  if (a.tipo === 'base') return abrir('terminal').ejecutar(`python -m vigia sql "${D.consultas[1]}"`);
-  if (a.tipo === 'esta') return abrir('terminal').escribirTexto('docs\\index.html es esta misma página: el escritorio que estás usando.\n');
+  // setTimeout: si viene de una orden de la terminal (start …), primero termina esa orden
+  if (a.tipo === 'base') return void setTimeout(() => abrir('terminal').ejecutar(`python -m vigia sql "${D.consultas[1]}"`));
+  if (a.tipo === 'esta') return void setTimeout(() => abrir('terminal').escribirTexto('docs\\index.html es esta misma página: el escritorio que estás usando.\n\n'));
   abrir('editor', ruta);
+}
+
+// ── Flujo: el diagrama de la corrida; cada caja abre su parte ─────────
+function irA(destino) {
+  const [app, arg] = destino.split(':');
+  abrir(app, arg);
+}
+function crearFlujo(cuerpo, v) {
+  $('h2', v).textContent = 'Flujo de Vigía ERNC';
+  cuerpo.innerHTML = `
+    <div class="flujo-cuerpo">
+      <figure class="flujo">${D.diagrama}<figcaption>${esc(D.leyenda_diagrama)}</figcaption></figure>
+      <div class="flujo-pie">
+        <button class="boton primario" data-accion="todo">Correr el flujo en PowerShell</button>
+        <button class="boton" data-accion="verificador">Ver los hallazgos en el Verificador</button>
+        <span>o haz clic en una caja para abrir esa parte</span>
+      </div>
+    </div>`;
+  cuerpo.addEventListener('click', (e) => {
+    const caja = e.target.closest('[data-ir]');
+    if (caja) return irA(caja.dataset.ir);
+    const b = e.target.closest('[data-accion]');
+    if (b?.dataset.accion === 'todo') abrir('terminal').ejecutar('python -m vigia todo');
+    if (b?.dataset.accion === 'verificador') abrir('verificador');
+  });
+  cuerpo.querySelectorAll('[data-ir]').forEach((g) => {
+    g.setAttribute('tabindex', '0');
+    g.setAttribute('role', 'button');
+    g.addEventListener('keydown', (e) => { if (e.key === 'Enter') irA(g.dataset.ir); });
+  });
+  return {};
 }
 
 // ── PowerShell ────────────────────────────────────────────────────────
@@ -589,23 +656,33 @@ function crearTerminal(cuerpo, v) {
     }
   }
 
+  // Lista de órdenes con su descripción; en el teléfono, la descripción va debajo
+  const lista = (filas) => filas.map(([o, d]) => telefono()
+    ? `  ${ord(o)}\n      <span class="t-tenue">${d}</span>`
+    : `  ${ord(o)}${' '.repeat(Math.max(2, 29 - o.length))}${d}`).join('\n');
+  const toca = () => telefono() ? 'Toca' : 'Haz clic en';
+
   function bienvenida() {
     const r = RESUMEN;
+    const fecha = new Date(D.generado + 'T12:00').toLocaleDateString('es-CL', { day: 'numeric', month: 'short', year: 'numeric' });
     html(`<span class="t-titulo">Vigía ERNC</span>  <span class="t-tenue">·  ${esc(D.autor.nombre)}</span>
+<span class="t-tenue">Simulación en el navegador: cada orden reproduce la salida grabada de la corrida
+real (${esc(fecha)}). Nada se ejecuta en tu equipo.</span>
 
 Un agente lee los reportes mensuales ERNC de la Comisión Nacional de Energía,
 extrae los proyectos de cada tabla y siete reglas verifican cada número
 antes de guardarlo. <span class="t-acento">El modelo propone, las reglas verifican.</span>
 
-  ${ord('python -m vigia todo')}         descarga, lectura, verificación y publicación
-  ${ord('python -m vigia precision')}    el modelo contra 216 campos de referencia
-  ${ord('pytest -q')}                    pruebas del código
-  ${ord('start verificador')}            el texto del PDF junto a lo que extrajo el modelo
-  ${ord('start informe')}                el resultado publicado
-  ${ord('ayuda')}                        todas las órdenes
+<span class="t-titulo">Recorrido sugerido</span>  <span class="t-tenue">(${toca().toLowerCase()} una orden o escríbela)</span>
+${lista([
+    ['python -m vigia todo', '1. el agente completo: descarga, lectura y verificación'],
+    ['start verificador', '2. el texto del PDF junto a lo que extrajo el modelo'],
+    ['start informe', '3. el resultado: proyectos, verificación y fichas'],
+  ])}
 
-<span class="t-tenue">Última corrida: ${r.reportes} reportes · ${r.filas} filas · ${r.ok} controles ok · ${r.avisos} avisos · ${r.errores} errores</span>
-<span class="t-tenue">Haz clic en una orden o escríbela.</span>
+Más: ${ord('python -m vigia precision')} (el modelo contra 216 campos de referencia) · ${ord('pytest -q')} · ${ord('ayuda')}
+
+<span class="t-tenue">Última corrida: ${r.reportes} reportes · ${r.filas} filas · ${r.ok} ok · ${r.avisos} avisos · ${r.errores} errores, todos de la fuente</span>
 
 `);
   }
@@ -661,8 +738,14 @@ antes de guardarlo. <span class="t-acento">El modelo propone, las reglas verific
   async function interpretar(o) {
     if (!o) return;
     const orden = o.replace(/^(py|python3) /, 'python ').replace(/^pytest$/, 'pytest -q');
-    if (orden in ALIAS) return reproducir(D.terminal[`python -m vigia sql "${D.consultas[ALIAS[orden]]}"`]);
-    if (orden in D.terminal) return reproducir(D.terminal[orden]);
+    if (Object.hasOwn(ALIAS, orden)) return reproducir(D.terminal[`python -m vigia sql "${D.consultas[ALIAS[orden]]}"`]);
+    if (Object.hasOwn(D.terminal, orden)) {
+      await reproducir(D.terminal[orden]);
+      if (/^python -m vigia (todo|validar)$/.test(orden) && RESUMEN.errores) {
+        html(`\n<span class="t-tenue"># Los ${RESUMEN.errores} errores vienen del PDF, no de la lectura del modelo:\n#   junio y julio de 2026 repiten las tablas de abril (fecha y duplicado),\n#   y abril de 2026 trae la errata «3 13 MW» (evidencia).\n# Míralos en </span>${ord('start verificador')}\n`);
+      }
+      return;
+    }
     const [cmd, ...resto] = o.split(' ');
     const arg = resto.join(' ');
     switch (cmd.toLowerCase()) {
@@ -674,6 +757,7 @@ Procesos, automatización y datos. Este proyecto: Python, SQLite y un modelo de 
 ${[D.autor.correo, D.autor.linkedin, D.autor.github].filter(Boolean).map(esc).join('\n')}`);
       case 'ls': case 'dir': case 'get-childitem': {
         const dir = normalizarRuta(arg || '');
+        if (ARCHIVOS[dir]) return html(ord(`start ${win(dir)}`, win(dir)) + '\n');
         if (!esCarpeta(dir)) return html(`<span class="t-error">Get-ChildItem : No se encuentra la ruta '${esc(CASA + '\\' + win(dir))}' porque no existe.</span>\n`);
         const { carpetas, archivos } = listar(dir);
         const pre = dir ? dir + '/' : '';
@@ -710,7 +794,7 @@ ${[D.autor.correo, D.autor.linkedin, D.autor.github].filter(Boolean).map(esc).jo
 
   salida.addEventListener('click', (e) => {
     const o = e.target.closest('.orden');
-    if (o) { e.stopPropagation(); ejecutar(o.dataset.orden); }
+    if (o) { e.stopPropagation(); if (ocupado) apurar = true; else ejecutar(o.dataset.orden); }
   });
   salida.addEventListener('keydown', (e) => {
     const o = e.target.closest('.orden');
@@ -780,7 +864,7 @@ function crearExplorador(cuerpo, v) {
       <tbody>${carpetas.map((c) => `<tr tabindex="0" data-dir="${esc(pre + c)}"><td class="nombre">${ICONO.carpeta}${esc(c)}</td><td>Carpeta de archivos</td><td></td></tr>`).join('')}
       ${archivos.map((a) => `<tr tabindex="0" data-archivo="${esc(pre + a)}"><td class="nombre">${iconoArchivo(a)}${esc(a)}</td><td>${tipoDe(a)[2]}</td><td class="n">${tamano(ARCHIVOS[pre + a].bytes)}</td></tr>`).join('')}</tbody>
     </table>`;
-    $('.estado', cuerpo).textContent = `${carpetas.length + archivos.length} elementos · doble clic para abrir`;
+    $('.estado', cuerpo).textContent = `${carpetas.length + archivos.length} elementos · clic para abrir`;
     $('h2', v).textContent = `${partes.at(-1) || 'vigia-ernc'} - Explorador de archivos`;
   }
   const accion = (el) => {
@@ -796,9 +880,8 @@ function crearExplorador(cuerpo, v) {
   lista.onclick = (e) => {
     const tr = e.target.closest('tbody tr');
     lista.querySelectorAll('tr.sel').forEach((x) => x.classList.remove('sel'));
-    if (tr) { tr.classList.add('sel'); if (telefono()) accion(tr); }
+    if (tr) { tr.classList.add('sel'); accion(tr); }
   };
-  lista.ondblclick = (e) => accion(e.target.closest('tbody tr'));
   lista.onkeydown = (e) => { if (e.key === 'Enter') accion(e.target.closest('tbody tr')); };
   cargar('', { guardar: false });
   return { cargar: (dir) => cargar(dir || '') };
@@ -836,6 +919,7 @@ function crearEditor(cuerpo, v) {
     const texto = a.contenido.replace(/\n$/, '');
     const ext = ruta.split('.').pop();
     const lineas = texto.split('\n').length;
+    $('.editor', cuerpo).classList.toggle('md', ext === 'md');
     $('.codigo', cuerpo).innerHTML = resaltar(texto, ext);
     $('.nums', cuerpo).textContent = Array.from({ length: lineas }, (_, i) => i + 1).join('\n');
     const carpeta = ruta.split('/').slice(0, -1).join('/');
@@ -849,11 +933,16 @@ function crearEditor(cuerpo, v) {
 
 // ── Verificador: la página del PDF junto a la extracción y las reglas ─
 const NOMBRE_REGLA = { totales: 'Totales', conteo: 'Conteo', evidencia: 'Evidencia', fecha_en_mes: 'Fecha', rango: 'Rango', faltante: 'Faltante', duplicado: 'Duplicado' };
+const TITULO_MARCA = { ok: 'sin observaciones', aviso: 'aviso: revisar', error: 'error: la regla no se cumple' };
+const mesAnterior = (e) => { const a = +e.slice(0, 4), m = +e.slice(4); return m === 1 ? `diciembre de ${a - 1}` : `${MESES_L[m - 2]} de ${a}`; };
 const PEOR = (cs) => cs.some((c) => c.resultado === 'error') ? 'error' : cs.some((c) => c.resultado === 'aviso') ? 'aviso' : 'ok';
 const GENERICAS = /^(parque|planta|central|proyecto|solar|fotovoltaic[ao]s?|e[oó]lic[ao]|energ[ií]a|chile|spa\.?|s\.a\.|almacenamiento|generaci[oó]n|sistema|modificaci[oó]n|ampliaci[oó]n|l[ií]nea|transmisi[oó]n|mediante|baterías|hidroel[eé]ctrica)$/i;
 function crearVerificador(cuerpo, v) {
+  // Abre en el primer hallazgo de la fuente (si lo hay); si no, en la última edición
   const conDatos = EDS.filter((e) => e.estado === 'ok');
-  let ed = conDatos.at(-1)?.edicion, etapa = 'aprobacion';
+  const conError = conDatos.find((e) => e.controles.some((c) => c.resultado === 'error') && D.notas[e.edicion]);
+  let ed = (conError || conDatos.at(-1))?.edicion;
+  let etapa = conError?.controles.find((c) => c.resultado === 'error')?.etapa || 'aprobacion';
   cuerpo.innerHTML = `
     <div class="ver">
       <nav class="lado" aria-label="Ediciones"></nav>
@@ -875,16 +964,15 @@ function crearVerificador(cuerpo, v) {
     $('.lado', cuerpo).innerHTML = EDS.map((e) => {
       if (e.estado !== 'ok') return `<button data-ed="${e.edicion}" class="faltante" aria-current="${e.edicion === ed}"><span>${edCorta(e.edicion)}</span><span class="marca m-nada" title="no publicado"></span></button>`;
       const p = PEOR(e.controles);
-      return `<button data-ed="${e.edicion}" aria-current="${e.edicion === ed}"><span>${edCorta(e.edicion)}</span><span class="marca m-${p}" title="${p}"></span></button>`;
-    }).join('');
+      return `<button data-ed="${e.edicion}" aria-current="${e.edicion === ed}"><span>${edCorta(e.edicion)}</span><span class="marca m-${p}" title="${TITULO_MARCA[p]}"></span></button>`;
+    }).join('') + `<div class="leyenda"><span><i class="marca m-ok"></i>sin observaciones</span><span><i class="marca m-aviso"></i>aviso: revisar</span><span><i class="marca m-error"></i>error: la regla no se cumple</span><span><i class="marca m-nada"></i>no publicado</span></div>`;
   }
 
   function tokens(f) {
     // Lo que debería estar escrito en la página para esta fila: números, fecha y palabras propias del nombre
-    const t = [];
-    for (const val of [f.potencia_mw, f.inversion_musd]) if (val != null) t.push(`(?<![\\d.,])${comoTexto(val).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1\\.?')}(?![\\d,])`);
     const [a, m, d] = f.fecha.split('-');
-    t.push(`${d}\\s*[-/]\\s*${m}\\s*[-/]\\s*${a}`);
+    const t = [`${d}\\s*[-/]\\s*${m}\\s*[-/]\\s*${a}`];  // primero: si el día coincide con los MW, gana la fecha
+    for (const val of [f.potencia_mw, f.inversion_musd]) if (val != null) t.push(`(?<![\\d.,/-])${comoTexto(val).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1\\.?')}(?![\\d,/-])`);
     const palabras = (f.nombre + ' ' + f.titular).split(/\s+/)
       .filter((p) => p.replace(/[^\p{L}\d]/gu, '').length >= 5 && !GENERICAS.test(p));
     for (const p of palabras.slice(0, 6)) t.push(p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
@@ -894,19 +982,33 @@ function crearVerificador(cuerpo, v) {
   function fuente(fila) {
     const pag = EDS.find((e) => e.edicion === ed).paginas[etapa];
     const pre = $('.ver-fuente pre', cuerpo);
-    if (!fila) { pre.textContent = pag.texto; return; }
+    if (!fila) {
+      const i = pag.texto.search(/Durante el mes/);
+      pre.innerHTML = i < 0 ? esc(pag.texto) : esc(pag.texto.slice(0, i)) + '<span class="ancla"></span>' + esc(pag.texto.slice(i));
+      const ancla = $('.ancla', pre);
+      pre.scrollTop = ancla ? ancla.getBoundingClientRect().top - pre.getBoundingClientRect().top + pre.scrollTop - 8 : 0;
+      return;
+    }
     const re = new RegExp(tokens(fila).join('|'), 'gi');
     pre.innerHTML = esc(pag.texto).replace(re, (m) => `<mark>${m}</mark>`);
     const [a, , d] = fila.fecha.split('-');
     const marcas = [...pre.querySelectorAll('mark')];
     const primera = marcas.find((x) => x.textContent.startsWith(d) && x.textContent.includes(a)) || marcas[0];
-    if (primera) pre.scrollTo({ top: primera.offsetTop - pre.clientHeight / 3, behavior: quieto ? 'auto' : 'smooth' });
+    if (primera) {
+      // salto inmediato: el desplazamiento suave puede quedar a medias si se tocan varias filas seguidas
+      pre.scrollTop = primera.getBoundingClientRect().top - pre.getBoundingClientRect().top + pre.scrollTop - pre.clientHeight / 3;
+    }
   }
 
   function mostrar() {
     lado();
     const e = EDS.find((x) => x.edicion === ed);
-    cuerpo.querySelectorAll('.segmentado button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.etapa === etapa));
+    cuerpo.querySelectorAll('.segmentado button').forEach((b) => {
+      b.setAttribute('aria-pressed', b.dataset.etapa === etapa);
+      const p = PEOR(e.controles.filter((c) => c.etapa === b.dataset.etapa));
+      b.innerHTML = `${b.dataset.etapa === 'ingreso' ? 'Ingresos' : 'Aprobados'}${e.estado === 'ok' ? `<span class="marca m-${p}" title="${TITULO_MARCA[p]}"></span>` : ''}`;
+    });
+    $('.segmentado', cuerpo).hidden = e.estado !== 'ok';
     $('h2', v).textContent = `Verificador - ${e.estado === 'ok' ? 'edición de ' + edLarga(e.edicion) : 'edición faltante'}`;
     $('.ver-main', cuerpo).querySelector('.ausente')?.remove();
     if (e.estado !== 'ok') {
@@ -917,14 +1019,15 @@ function crearVerificador(cuerpo, v) {
     }
     $('.ver-paneles', cuerpo).hidden = false;
     const pag = e.paginas[etapa];
-    $('.info', cuerpo).innerHTML = `Página ${pag.pagina} del <a href="${esc(e.url)}" target="_blank" rel="noopener">PDF de la CNE</a> · ${e.intentos} intento${e.intentos === 1 ? '' : 's'} del modelo`;
+    $('.info', cuerpo).innerHTML = `Informa lo ocurrido en ${mesAnterior(e.edicion)} · página ${pag.pagina} del <a href="${esc(e.url)}" target="_blank" rel="noopener">PDF de la CNE</a> · ${e.intentos} intento${e.intentos === 1 ? '' : 's'} del modelo`;
     fuente(null);
 
     const filas = e.filas.filter((f) => f.etapa === etapa);
     const ctrl = e.controles.filter((c) => c.etapa === etapa);
     const dec = e.declarado[etapa];
     $('.ver-extr', cuerpo).innerHTML = `
-      <h3>Filas que devolvió el modelo · pasa el cursor o toca una fila para ver de dónde sale</h3>
+      ${D.notas[e.edicion] ? `<p class="nota-autor"><b>Qué explica lo que marcan las reglas</b>${esc(D.notas[e.edicion])}</p>` : ''}
+      <h3>Filas que devolvió el modelo · ${telefono() ? 'toca' : 'pasa el cursor sobre'} una fila para ver de dónde sale en el PDF</h3>
       <table>
         <thead><tr><th>Proyecto</th><th>Titular</th><th>Reg.</th><th>Fecha</th><th class="n">MW</th><th class="n">MMUSD</th><th>Bat.</th></tr></thead>
         <tbody>${filas.map((f, i) => `<tr data-i="${i}" tabindex="0"><td>${esc(f.nombre)}<br><span class="sub">${esc(f.tecnologia)}</span></td><td>${esc(f.titular)}</td><td>${esc(f.region)}</td><td style="white-space:nowrap">${esc(f.fecha)}</td><td class="n${f.potencia_mw == null ? ' vacio' : ''}">${f.potencia_mw == null ? 'vacío' : num(f.potencia_mw)}</td><td class="n${f.inversion_musd == null ? ' vacio' : ''}">${f.inversion_musd == null ? 'vacío' : num(f.inversion_musd)}</td><td>${f.almacenamiento ? 'Sí' : 'No'}</td></tr>`).join('')}</tbody>
@@ -946,7 +1049,11 @@ function crearVerificador(cuerpo, v) {
   $('.lado', cuerpo).onclick = (e) => { const b = e.target.closest('button'); if (b) { ed = b.dataset.ed; mostrar(); } };
   $('.segmentado', cuerpo).onclick = (e) => { const b = e.target.closest('button'); if (b) { etapa = b.dataset.etapa; mostrar(); } };
   mostrar();
-  return { cargar: (o) => { if (o?.edicion) ed = o.edicion; if (o?.etapa) etapa = o.etapa; mostrar(); } };
+  return { cargar: (o) => {
+    if (o?.edicion && EDS.some((e) => e.edicion === o.edicion)) ed = o.edicion;
+    if (o?.etapa === 'ingreso' || o?.etapa === 'aprobacion') etapa = o.etapa;
+    mostrar();
+  } };
 }
 
 // ── Navegador ─────────────────────────────────────────────────────────
@@ -969,7 +1076,20 @@ armarInicio();
 armarIconos();
 reloj();
 setInterval(reloj, 20000);
-abrir('terminal');
+if (telefono() || innerWidth < 900) abrir('terminal');
+else if (innerHeight < 820) abrir('flujo');  // el Flujo tiene el botón para correr el agente en PowerShell
+else {
+  abrir('terminal');
+  const f = ventana('flujo'), term = ventanas.terminal;
+  abrir('flujo');
+  f.style.top = '12px';
+  f.style.height = Math.min(350, innerHeight - 48 - 280) + 'px';
+  const arriba = 12 + f.offsetHeight + 12;
+  term.style.top = arriba + 'px';
+  term.style.height = Math.max(220, Math.min(560, innerHeight - 48 - arriba - 12)) + 'px';
+  term.style.left = f.style.left;
+  enfocar(term);
+}
 </script>
 </body>
 </html>

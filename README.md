@@ -6,12 +6,24 @@ Un agente lee los reportes mensuales ERNC de la Comisión Nacional de Energía (
 
 ## Ver la demo
 
-- **Escritorio** ([fruiz-01.github.io/vigia-ernc](https://fruiz-01.github.io/vigia-ernc/)): el proyecto dentro de un escritorio Windows en el navegador. PowerShell reproduce la salida grabada de cada orden; el verificador muestra el texto de cada página del PDF junto a lo que extrajo el modelo y el resultado de cada regla.
+- **Escritorio** ([fruiz-01.github.io/vigia-ernc](https://fruiz-01.github.io/vigia-ernc/)): el proyecto dentro de un escritorio Windows en el navegador. Abre con el diagrama del flujo, donde cada caja lleva a su parte; PowerShell reproduce la salida grabada de cada orden; el verificador muestra el texto de cada página del PDF junto a lo que extrajo el modelo y el resultado de cada regla.
 - **Informe** ([fruiz-01.github.io/vigia-ernc/informe.html](https://fruiz-01.github.io/vigia-ernc/informe.html)): proyectos, verificación por edición y fichas.
 
 Ambas páginas se generan desde la corrida real y no necesitan servidor.
 
 ## Qué hace
+
+```mermaid
+flowchart LR
+    A["Reportes CNE<br/>11 PDF mensuales"] -->|PDF| B["Texto<br/>PyMuPDF"]
+    B -->|texto| C["Claude<br/>propone las filas"]
+    C -->|filas| D["7 reglas<br/>verifican cada número"]
+    B -. "texto fuente y totales declarados" .-> D
+    D -. "si los totales no cuadran:<br/>1 reintento con la diferencia" .-> C
+    D -->|guarda| E["SQLite e informe"]
+```
+
+Las reglas reciben dos entradas: lo que propone el modelo y el texto fuente con los totales que declara el propio reporte. Si los totales no cuadran, el modelo reintenta una vez con la diferencia concreta.
 
 | Paso | Qué hace |
 |---|---|
@@ -43,7 +55,7 @@ Ediciones de octubre de 2025 a septiembre de 2026.
 | | |
 |---|---|
 | Reportes leídos | 11 de 12 (mayo de 2026 no está publicado: HTTP 404) |
-| Filas | 113: 49 ingresos a evaluación (5.267 MW) y 64 aprobaciones (7.630 MW) |
+| Filas | 113: 49 ingresos a evaluación y 64 aprobaciones. Sin las 4 filas que la fuente repite: 47 ingresos (4.937 MW) y 62 aprobaciones (7.417 MW) |
 | Controles | 154: 137 ok, 12 avisos, 5 errores |
 | Reintentos del modelo | 0: las 11 ediciones cuadraron al primer intento |
 | Precisión | 216 de 216 campos correctos contra la transcripción de referencia (octubre 2025 y septiembre 2026, 27 filas) |
@@ -60,7 +72,7 @@ Los avisos:
 - **6 faltantes**: proyectos con potencia o inversión «-» en la fuente. Quedan vacíos.
 - **4 de rango**: inversiones por MW fuera de 0,3–3 MMUSD. Son plausibles (una minicentral hidroeléctrica a 8 MMUSD/MW, una planta de hidrógeno verde a 4,2) y el rango se puede afinar por tecnología.
 
-Otras inconsistencias de la fuente, transcritas tal cual: «Parque Eólico Las Lilas» viene con tecnología «Solar - PV», y la región aparece como «Interregional» o «Interregion» según la edición.
+Otras inconsistencias de la fuente, transcritas tal cual: «Parque Eólico Las Lilas» viene con tecnología «Solar - PV», y la región aparece como «Interregional» o «Inter-region» según la edición (la base la guarda tal cual; el informe las agrupa como «Interregional»).
 
 ### Un ajuste que salió de la corrida
 

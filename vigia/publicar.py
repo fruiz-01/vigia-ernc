@@ -9,7 +9,8 @@ from datetime import date
 from html import escape
 from pathlib import Path
 
-from vigia import base, descargar, leer, validar
+from vigia import base, descargar, diagrama, leer, validar
+from vigia.notas import NOMBRE_REGLA, NOTAS
 
 # Regiones de norte a sur: el orden de los gráficos sigue la geografía de Chile.
 REGIONES = {
@@ -20,8 +21,6 @@ REGIONES = {
 }
 MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto",
          "septiembre", "octubre", "noviembre", "diciembre"]
-NOMBRE_REGLA = {"totales": "Totales", "conteo": "Conteo", "evidencia": "Evidencia", "fecha_en_mes": "Fecha",
-                "rango": "Rango", "faltante": "Faltante", "duplicado": "Duplicado"}
 GRAVEDAD = {"ok": 0, "aviso": 1, "error": 2}
 TECNOLOGIAS = {"solar": "Solar", "eolica": "Eólica", "mixto": "Mixto", "otra": "Otra"}
 
@@ -51,6 +50,9 @@ def fecha_corta(iso):
 
 
 def region(codigo):
+    # La fuente escribe «Interregional» o «Inter-region» según la edición: se guarda tal cual, se muestra igual
+    if codigo.lower().startswith("interreg"):
+        return "Interregional"
     return REGIONES.get(codigo, codigo)
 
 
@@ -98,16 +100,18 @@ def fichas(filas):
 
 def bloque_cifras(reportes, filas, controles):
     leidas = sorted({f["edicion"] for f in filas})
-    mw = sum(f["potencia_mw"] or 0 for f in filas)
+    # un proyecto repetido por la fuente (misma etapa en otra edición) se cuenta una vez
+    unicos = {(f["clave"], f["etapa"]): f for f in filas}.values()
+    mw = sum(f["potencia_mw"] or 0 for f in unicos)
     errores = sum(c["resultado"] == "error" for c in controles)
     avisos = sum(c["resultado"] == "aviso" for c in controles)
     cifra = lambda v, d=0: f'<span data-cuenta="{v}" data-decimales="{d}">{numero(v, d)}</span>'
     return f"""
     <dl class="cifras">
       <div><dt>Filas leídas</dt><dd>{cifra(len(filas))}</dd><dd class="nota">{len(leidas)} de {len(reportes)} ediciones</dd></div>
-      <div><dt>Potencia</dt><dd>{cifra(mw)} <small>MW</small></dd><dd class="nota">ingresos y aprobaciones</dd></div>
+      <div><dt>Potencia</dt><dd>{cifra(mw)} <small>MW</small></dd><dd class="nota">ingresos y aprobaciones, sin repetidos</dd></div>
       <div><dt>Controles</dt><dd>{cifra(len(controles))}</dd><dd class="nota">7 reglas por tabla</dd></div>
-      <div><dt>Observaciones</dt><dd><span class="{'rojo' if errores else 'verde'}">{cifra(errores)}</span> <small>errores</small> · <span class="ambar">{cifra(avisos)}</span> <small>avisos</small></dd><dd class="nota">cada una explicada abajo</dd></div>
+      <div><dt>Observaciones</dt><dd><span class="{'rojo' if errores else 'verde'}">{cifra(errores)}</span> <small>errores</small> · <span class="ambar">{cifra(avisos)}</span> <small>avisos</small></dd><dd class="nota">{"explicados en Verificación" if errores else "ver Verificación"}</dd></div>
     </dl>"""
 
 
@@ -208,6 +212,13 @@ def bloque_verificacion(reportes, controles):
                                     f'{NOMBRE_REGLA[c["regla"]]}: {escape(c["detalle"])}</li>')
         filas_html.append(f'<tr{clase}><td class="ed">{edicion_larga(ed)}</td><td>{estado}</td>{celdas}</tr>')
     lista = f'<ul class="detalles">{"".join(detalles)}</ul>' if detalles else ""
+    # Lo que explica los errores, revisado a mano (vigia/notas.py)
+    con_nota = [r["edicion"] for r in reportes if r["edicion"] in NOTAS
+                and any(c["edicion"] == r["edicion"] and c["resultado"] == "error" for c in controles)]
+    if con_nota:
+        lista = ('<div class="hallazgos"><h3>Qué explica los errores</h3>'
+                 + "".join(f'<p><b>{edicion_larga(e)}</b> {escape(NOTAS[e])}</p>' for e in con_nota)
+                 + '</div>' + lista)
     return f"""
     <section>
       <h2>Verificación</h2>
@@ -276,12 +287,7 @@ def bloque_proyectos(filas):
 METODO = """
     <section class="metodo">
       <h2>Método</h2>
-      <ol class="pasos">
-        <li><b>Descarga</b><span>Cada mes la CNE publica en PDF el Reporte Mensual ERNC. Se descarga con su huella SHA-256; si una edición no está, se registra.</span></li>
-        <li><b>Lectura</b><span>Las tablas no se extraen limpias: nombres partidos en varias líneas y formatos que cambian entre meses. Un modelo de lenguaje (Claude) las lee y devuelve filas con un esquema fijo.</span></li>
-        <li><b>Verificación</b><span>Siete reglas revisan lo extraído antes de guardarlo. Si las sumas no cuadran con lo que declara el reporte, el modelo reintenta una vez; si sigue fallando, queda para revisión manual.</span></li>
-        <li><b>Publicación</b><span>Base SQLite y esta página, regenerada con un comando.</span></li>
-      </ol>
+      <!--FLUJO-->
       <dl class="reglas">
         <div><dt>Totales</dt><dd>La suma de MW e inversión coincide con lo que declara el texto del reporte.</dd></div>
         <div><dt>Conteo</dt><dd>El número de filas coincide con los proyectos declarados.</dd></div>
@@ -387,6 +393,11 @@ tbody tr:hover { background: color-mix(in srgb, var(--eolica) 6%, transparent); 
 .m-ok { width: 8px; height: 8px; border-radius: 50%; background: color-mix(in srgb, var(--verde) 70%, transparent); }
 .m-aviso { width: 9px; height: 9px; background: var(--ambar); transform: rotate(45deg) scale(.86); }
 .m-error { width: 9px; height: 9px; background: var(--rojo); }
+.hallazgos { margin-top: 20px; max-width: 88ch; padding: 14px 18px; border-left: 3px solid var(--rojo);
+  background: color-mix(in srgb, var(--rojo) 5%, transparent); }
+.hallazgos h3 { font-size: 15px; font-stretch: 85%; margin-bottom: 6px; }
+.hallazgos p { font-size: 14px; color: var(--tinta-2); padding: 4px 0; }
+.hallazgos b { color: var(--tinta); margin-right: 4px; }
 .detalles { list-style: none; padding: 0; margin-top: 18px; font-size: 14px; color: var(--tinta-2); }
 .detalles li { padding: 7px 0; border-bottom: 1px solid var(--regla); }
 .detalles .m { margin-right: 10px; }
@@ -413,11 +424,10 @@ tbody tr:hover { background: color-mix(in srgb, var(--eolica) 6%, transparent); 
 .fuente { margin-top: 6px; font-size: 13px; color: var(--tenue); }
 a { color: var(--eolica); text-underline-offset: 3px; }
 
-/* Método */
-.pasos { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; counter-reset: paso; }
-.pasos li { counter-increment: paso; border-top: 1.5px solid var(--regla); padding-top: 10px; color: var(--tinta-2); font-size: 14px; }
-.pasos b { display: block; color: var(--tinta); font-size: 15px; margin-bottom: 4px; }
-.pasos b::before { content: counter(paso) " "; color: var(--eolica); font-weight: 700; }
+/* Método: diagrama del flujo (estilos en diagrama.py) */
+.metodo { --dg-acento: var(--eolica); --dg-fondo: var(--fondo); }
+.metodo .flujo { color: var(--tinta); overflow-x: auto; }
+.metodo .flujo .dg { min-width: 760px; }
 .reglas { margin-top: 28px; max-width: 86ch; }
 .reglas div { display: grid; grid-template-columns: 8rem 1fr; padding: 7px 0; border-bottom: 1px solid var(--regla); font-size: 14px; }
 .reglas dt { font-weight: 600; }
@@ -432,13 +442,13 @@ footer { margin: 72px 0 0; padding: 18px 0 40px; border-top: 1px solid var(--reg
 @media (prefers-reduced-motion: reduce) {
   *, *::before { animation: none !important; transition: none !important; }
 }
-@media (max-width: 860px) { .graficos { grid-template-columns: 1fr; } .pasos { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 860px) { .graficos { grid-template-columns: 1fr; } }
 @media (max-width: 600px) { .contenido { padding: 0 16px; } h1 { font-size: 42px; }
   .cabecera .contenido { padding-top: 40px; }
   .cifras div { padding-right: 18px; margin-right: 18px; margin-bottom: 12px; } .cifras dd { font-size: 26px; }
   .region { grid-template-columns: 7rem minmax(0, 1fr) 3rem; }
   .meses { gap: 3px; } .mes .area { height: 130px; }
-  .datos { grid-template-columns: repeat(2, auto); } .pasos { grid-template-columns: 1fr; }
+  .datos { grid-template-columns: repeat(2, auto); }
   .reglas div { grid-template-columns: 1fr; } }
 """
 
@@ -473,7 +483,7 @@ def pagina(reportes, filas, controles, aviso=None):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
-<style>{ESTILOS}</style>
+<style>{ESTILOS}{diagrama.ESTILOS}</style>
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
@@ -487,11 +497,11 @@ def pagina(reportes, filas, controles, aviso=None):
   </div>
 </header>
 <main class="contenido">
+  {METODO.replace('<!--FLUJO-->', diagrama.figura(reportes, filas, controles, len(fichas(filas))))}
   {bloque_graficos(reportes, filas)}
   {bloque_verificacion(reportes, controles)}
   {bloque_fichas(fichas(filas), reportes)}
   {bloque_proyectos(filas)}
-  {METODO}
   <footer>Prototipo de Francisco Ruiz · Datos públicos de la Comisión Nacional de Energía · Generado el {fecha_corta(date.today().isoformat())}</footer>
 </main>
 <script>{SCRIPT}</script>

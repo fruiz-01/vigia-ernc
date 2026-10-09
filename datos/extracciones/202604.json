@@ -1,7 +1,7 @@
 {
   "edicion": "202604",
   "modelo": "claude-opus-5-5",
-  "via": "Claude Code (plan Team), sin clave de API: mismo mensaje y mismo esquema que messages.parse",
+  "via": "Claude Code, sin clave de API, con el mismo mensaje y esquema que usa la API",
   "paginas": {
     "ingreso": 7,
     "aprobacion": 8

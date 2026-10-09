@@ -16,6 +16,7 @@ from collections import Counter
 from pathlib import Path
 
 from vigia import base, descargar, escritorio, extraer, leer, precision, publicar, validar
+from vigia.notas import NOMBRE_ETAPA, NOMBRE_REGLA
 
 
 def paso_descargar(con):
@@ -67,13 +68,14 @@ def paso_validar(con):
         base.guardar_edicion(con, edicion, paginas, final["filas"], controles)
         malos = [c for c in controles if c["resultado"] != "ok"]
         resumen.update(c["resultado"] for c in controles)
-        por_regla.update(f"{c['regla']} ({c['resultado']})" for c in malos)
+        por_regla.update(f"{NOMBRE_REGLA[c['regla']]} ({c['resultado']})" for c in malos)
         print(f"  {edicion}: {len(final['filas'])} filas, "
               f"{sum(c['resultado'] == 'error' for c in controles)} errores, "
               f"{sum(c['resultado'] == 'aviso' for c in controles)} avisos")
         for c in malos:
-            print(f"      [{c['resultado']}] {c['etapa']} · {c['regla']}: {c['detalle']}")
-    print(f"Controles: {dict(resumen)} · reintentos usados: {reintentos}")
+            print(f"      [{c['resultado']}] {NOMBRE_ETAPA[c['etapa']]} · {NOMBRE_REGLA[c['regla']]}: {c['detalle']}")
+    print(f"Controles: {resumen['ok']} ok · {resumen['aviso']} avisos · {resumen['error']} errores"
+          f" · reintentos usados: {reintentos}")
     for regla, n in sorted(por_regla.items()):
         print(f"  {regla}: {n}")
 

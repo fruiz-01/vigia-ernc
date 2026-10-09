@@ -16,7 +16,8 @@ import sys
 from datetime import date
 from pathlib import Path
 
-from vigia import base, extraer
+from vigia import base, diagrama, extraer, publicar
+from vigia.notas import NOTAS
 
 PLANTILLA = Path(__file__).with_name("escritorio.html")
 DESTINO = Path("docs/index.html")
@@ -109,12 +110,17 @@ def ediciones(con):
 def generar(destino=DESTINO):
     salidas = grabar()  # primero: `todo` y `publicar` regeneran la base y el informe
     con = base.conectar()
+    reportes, filas, controles = publicar.leer_base(con)
     datos = {"generado": date.today().isoformat(), "modelo": extraer.MODELO, "autor": AUTOR,
              "consultas": CONSULTAS, "ediciones": ediciones(con), "archivos": archivos(),
-             "terminal": salidas}
-    # «</» dentro de un <script> cerraría la etiqueta antes de tiempo
-    incrustado = json.dumps(datos, ensure_ascii=False).replace("</", "<\\/")
-    html = PLANTILLA.read_text(encoding="utf-8").replace("/*DATOS*/{}", incrustado)
+             "terminal": salidas, "notas": NOTAS,
+             "diagrama": diagrama.svg(reportes, filas, controles, len(publicar.fichas(filas))),
+             "leyenda_diagrama": diagrama.LEYENDA}
+    # «<» escapado: ni «</script>» ni «<!--» dentro del JSON pueden cortar la etiqueta
+    incrustado = json.dumps(datos, ensure_ascii=False).replace("<", "\\u003c")
+    html = (PLANTILLA.read_text(encoding="utf-8")
+            .replace("/*ESTILOS_DIAGRAMA*/", diagrama.ESTILOS)
+            .replace("/*DATOS*/{}", incrustado))
     destino = Path(destino)
     destino.parent.mkdir(parents=True, exist_ok=True)
     destino.write_text(html, encoding="utf-8")

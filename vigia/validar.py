@@ -105,7 +105,7 @@ def fecha_en_mes(filas, edicion):
     mes = mes_cubierto(edicion)
     fuera = [f"{f['nombre']} ({f['fecha']})" for f in filas if not f["fecha"].startswith(mes)]
     if fuera:
-        return control("fecha_en_mes", "error", f"fuera de {mes}: " + "; ".join(fuera))
+        return control("fecha_en_mes", "error", f"fuera de {mes}, el mes que informa esta edición: " + "; ".join(fuera))
     return control("fecha_en_mes", "ok", f"todas las fechas caen en {mes}")
 
 
