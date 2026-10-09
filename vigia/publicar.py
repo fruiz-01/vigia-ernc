@@ -171,7 +171,7 @@ def bloque_graficos(reportes, filas):
     leyenda = "".join(f"<span>{punto(t)}{n}</span>" for t, n in TECNOLOGIAS.items()
                       if any(tecnologia(f["tecnologia"]) == t for f in filas))
     return f"""
-    <section class="aparece">
+    <section>
       <div class="graficos">
         {grafico_regiones(filas)}
         {grafico_meses(reportes, filas)}
@@ -209,7 +209,7 @@ def bloque_verificacion(reportes, controles):
         filas_html.append(f'<tr{clase}><td class="ed">{edicion_larga(ed)}</td><td>{estado}</td>{celdas}</tr>')
     lista = f'<ul class="detalles">{"".join(detalles)}</ul>' if detalles else ""
     return f"""
-    <section class="aparece">
+    <section>
       <h2>Verificación</h2>
       <div class="tabla"><table class="verificacion">
         <thead><tr><th>Edición</th><th>Estado</th>{encabezado}</tr></thead>
@@ -243,7 +243,7 @@ def bloque_fichas(seleccion, reportes):
         <p class="fuente">Fuente: <a href="{escape(url.get(f["edicion"], "#"))}">CNE, Reporte Mensual ERNC, {edicion_larga(f["edicion"])}</a>, página {f["pagina"]}</p>
       </article>""")
     return f"""
-    <section class="aparece">
+    <section>
       <h2>Fichas de oportunidad</h2>
       <p class="criterio">Proyectos con RCA aprobada, con baterías y entre {FICHA_MW_MIN} y {FICHA_MW_MAX} MW, de mayor a menor potencia. Son posibles vendedores de energía para una comercializadora sin centrales propias; el criterio es un supuesto para conversar con el área de Mercados.</p>
       <div class="fichas">{"".join(piezas)}</div>
@@ -264,7 +264,7 @@ def bloque_proyectos(filas):
           <td>{"Sí" if f["almacenamiento"] else "—"}</td>
         </tr>""" for f in filas)
     return f"""
-    <section class="aparece">
+    <section>
       <h2>Proyectos</h2>
       <div class="tabla"><table>
         <thead><tr><th>Etapa</th><th class="n">Fecha</th><th>Proyecto</th><th>Titular</th><th>Región</th><th>Tecnología</th><th class="n">MW</th><th class="n">MMUSD</th><th>Baterías</th></tr></thead>
@@ -274,7 +274,7 @@ def bloque_proyectos(filas):
 
 
 METODO = """
-    <section class="metodo aparece">
+    <section class="metodo">
       <h2>Método</h2>
       <ol class="pasos">
         <li><b>Descarga</b><span>Cada mes la CNE publica en PDF el Reporte Mensual ERNC. Se descarga con su huella SHA-256; si una edición no está, se registra.</span></li>
@@ -425,16 +425,12 @@ a { color: var(--eolica); text-underline-offset: 3px; }
 footer { margin: 72px 0 0; padding: 18px 0 40px; border-top: 1px solid var(--regla); font-size: 13px; color: var(--tenue); }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 
-/* Animaciones: crecen las barras y las secciones aparecen al llegar a ellas */
+/* Animaciones: crecen las barras al cargar. Las secciones no se ocultan esperando el scroll:
+   con ese efecto, la tabla de proyectos (más alta que la pantalla) quedaba invisible. */
 @keyframes crecer-x { from { transform: scaleX(0); } }
 @keyframes crecer-y { from { transform: scaleY(0); } }
-.js .aparece { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
-.js .aparece.visible { opacity: 1; transform: none; }
-.js .aparece .pista, .js .aparece .barra { animation-play-state: paused; }
-.js .aparece.visible .pista, .js .aparece.visible .barra { animation-play-state: running; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before { animation: none !important; transition: none !important; }
-  .js .aparece { opacity: 1; transform: none; }
 }
 @media (max-width: 860px) { .graficos { grid-template-columns: 1fr; } .pasos { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 600px) { .contenido { padding: 0 16px; } h1 { font-size: 42px; }
@@ -446,7 +442,7 @@ footer { margin: 72px 0 0; padding: 18px 0 40px; border-top: 1px solid var(--reg
   .reglas div { grid-template-columns: 1fr; } }
 """
 
-# Cifras que cuentan desde cero y secciones que aparecen al hacer scroll. Sin JS, todo se ve igual.
+# Cifras que cuentan desde cero. Sin JS, todo se ve igual.
 SCRIPT = """
 document.documentElement.classList.add('js');
 const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -462,10 +458,6 @@ for (const el of document.querySelectorAll('[data-cuenta]')) {
   };
   requestAnimationFrame(paso);
 }
-const observador = new IntersectionObserver((entradas) => {
-  for (const e of entradas) if (e.isIntersecting) { e.target.classList.add('visible'); observador.unobserve(e.target); }
-}, { threshold: 0.12 });
-document.querySelectorAll('.aparece').forEach((s) => observador.observe(s));
 """
 
 
