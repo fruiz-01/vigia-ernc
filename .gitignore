@@ -1,0 +1,14 @@
+# PDFs descargados de la CNE (se vuelven a bajar con `python -m vigia descargar`)
+datos/reportes/
+# base generada
+datos/vigia.sqlite
+# claves
+.env
+# cachés de Python
+__pycache__/
+*.pyc
+.pytest_cache/
+# borradores locales
+salida/
+# notas internas
+PLAN.md

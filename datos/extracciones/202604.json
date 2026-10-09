@@ -1,0 +1,115 @@
+{
+  "edicion": "202604",
+  "modelo": "claude-opus-5-5",
+  "via": "Claude Code (plan Team), sin clave de API: mismo mensaje y mismo esquema que messages.parse",
+  "paginas": {
+    "ingreso": 7,
+    "aprobacion": 8
+  },
+  "intentos": [
+    {
+      "filas": [
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Eólica",
+          "region": "VI",
+          "titular": "Statkraft eólico S.A.",
+          "nombre": "Modificación Parques Eólicos Cardonal, Manantiales y Los Cerrillos",
+          "fecha": "2026-03-27",
+          "potencia_mw": 6.0,
+          "inversion_musd": 14.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "VII",
+          "titular": "ENERGIA RENOVABLE TOPACIO SPA",
+          "nombre": "Parque fotovoltaico El colorado",
+          "fecha": "2026-03-06",
+          "potencia_mw": 114.0,
+          "inversion_musd": 130.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "IV",
+          "titular": "Soles Del Norte SpA",
+          "nombre": "Ampliación y Modificaciones Parque Fotovoltaico Soles del Norte",
+          "fecha": "2026-03-18",
+          "potencia_mw": 91.0,
+          "inversion_musd": 79.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "IV",
+          "titular": "CLD GENERACION 5 SPA",
+          "nombre": "Planta Solar Monte Patria III",
+          "fecha": "2026-03-30",
+          "potencia_mw": 6.0,
+          "inversion_musd": 13.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "III",
+          "titular": "Sonnedix Chile Holding SpA",
+          "nombre": "Modificación Planta Solar Fotovoltaica Tres Cruces",
+          "fecha": "2026-03-02",
+          "potencia_mw": null,
+          "inversion_musd": 205.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Eólica",
+          "region": "VII",
+          "titular": "Engie Energía Chile S.A.",
+          "nombre": "Parque Eólico El Rosal",
+          "fecha": "2026-03-09",
+          "potencia_mw": 172.0,
+          "inversion_musd": 230.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Eólica",
+          "region": "Interregion",
+          "titular": "Parque Eólico Maqui SpA",
+          "nombre": "Parque Eólico Fénix",
+          "fecha": "2026-03-04",
+          "potencia_mw": 128.0,
+          "inversion_musd": 110.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "RM",
+          "titular": "CVE Proyecto Cuarenta y Ocho SpA.",
+          "nombre": "Parque Fotovoltaico Hortensia Solar",
+          "fecha": "2026-03-26",
+          "potencia_mw": 13.0,
+          "inversion_musd": 11.0,
+          "almacenamiento": true
+        }
+      ],
+      "declarado_ingreso": {
+        "proyectos": 5,
+        "mw": 217.0,
+        "mmusd": 441.0,
+        "cita": "Durante el mes de marzo, el Sistema de Evaluación Ambiental acogió 5 nuevos proyectos ERNC a calificación. De los cuales, 4 proyectos son solares fotovoltaicos y 1 proyecto es eólico; que en su conjunto suman 217 MW , y que equivalen a una inversión de 441 MMUSD."
+      },
+      "declarado_aprobacion": {
+        "proyectos": 3,
+        "mw": 313.0,
+        "mmusd": 351.0,
+        "cita": "Durante el mes de marzo, el Sistema de Evaluación Ambiental otorgó 3 nuevas Resoluciones de Calificación Ambiental (RCA) favorables en proyectos ERNC. De los cuales, 1 proyecto es solar fotovoltaico y 2 proyectos son eólicos; que en su conjunto suman 3 13 MW, y que equivale a una inversión de 351 MMUSD."
+      }
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "edicion": "202609",
+  "nota": "Transcrito a mano desde el PDF de la CNE (páginas de las tablas).",
+  "filas": [
+    {
+      "etapa": "ingreso",
+      "tecnologia": "Eólica",
+      "region": "X",
+      "titular": "AUSTRIA ENERGY",
+      "nombre": "Parque Eólico Viena",
+      "fecha": "2026-08-19",
+      "potencia_mw": 120,
+      "inversion_musd": 150,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "ingreso",
+      "tecnologia": "Solar - PV",
+      "region": "V",
+      "titular": "Langa",
+      "nombre": "Parque Fotovoltaico y de Almacenamiento de Energía Mediante el Uso de Baterías (BESS) Versalles II - Sector Chilicauquen",
+      "fecha": "2026-08-21",
+      "potencia_mw": 116,
+      "inversion_musd": 110,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "ingreso",
+      "tecnologia": "Solar - PV",
+      "region": "V",
+      "titular": "IDENERGY",
+      "nombre": "Planta Fotovoltaica Cabildo",
+      "fecha": "2026-08-06",
+      "potencia_mw": 9,
+      "inversion_musd": 10,
+      "almacenamiento": false
+    },
+    {
+      "etapa": "ingreso",
+      "tecnologia": "Solar - PV",
+      "region": "III",
+      "titular": "IDENERGY",
+      "nombre": "Planta Fotovoltaica El Faro",
+      "fecha": "2026-08-27",
+      "potencia_mw": null,
+      "inversion_musd": 10,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "aprobacion",
+      "tecnologia": "Eólica",
+      "region": "XVI",
+      "titular": "andes-solar",
+      "nombre": "Parque Eólico Andino Suiza",
+      "fecha": "2026-08-21",
+      "potencia_mw": 115,
+      "inversion_musd": 172,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "aprobacion",
+      "tecnologia": "Eólica",
+      "region": "X",
+      "titular": "ENGIE",
+      "nombre": "Parque Eólico Loma Verde",
+      "fecha": "2026-08-18",
+      "potencia_mw": 136,
+      "inversion_musd": 212,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "aprobacion",
+      "tecnologia": "Solar - PV",
+      "region": "IV",
+      "titular": "LENERGIA",
+      "nombre": "Parque Fotovoltaico Hanna",
+      "fecha": "2026-08-27",
+      "potencia_mw": 9,
+      "inversion_musd": 15,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "aprobacion",
+      "tecnologia": "Solar - PV",
+      "region": "X",
+      "titular": "IM2 SOLAR",
+      "nombre": "Parque Fotovoltaico Chacayal",
+      "fecha": "2026-08-18",
+      "potencia_mw": 14,
+      "inversion_musd": 15,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "aprobacion",
+      "tecnologia": "Solar - PV",
+      "region": "VII",
+      "titular": "CIUDADLUZ",
+      "nombre": "Planta fotovoltaica Parral",
+      "fecha": "2026-08-05",
+      "potencia_mw": 7,
+      "inversion_musd": 14,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "aprobacion",
+      "tecnologia": "Solar - PV",
+      "region": "XVI",
+      "titular": "CIUDADLUZ",
+      "nombre": "Planta Fotovoltaica Las Mellizas",
+      "fecha": "2026-08-04",
+      "potencia_mw": 212,
+      "inversion_musd": 400,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "aprobacion",
+      "tecnologia": "Solar - PV",
+      "region": "X",
+      "titular": "Eactiva",
+      "nombre": "Parque Fotovoltaico El Roble Norte",
+      "fecha": "2026-08-03",
+      "potencia_mw": 17,
+      "inversion_musd": 15,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "aprobacion",
+      "tecnologia": "Solar - PV",
+      "region": "RM",
+      "titular": "CVE",
+      "nombre": "Parque Fotovoltaico Gabriela Solar",
+      "fecha": "2026-08-03",
+      "potencia_mw": 11,
+      "inversion_musd": 11,
+      "almacenamiento": true
+    }
+  ],
+  "declarado_ingreso": {
+    "proyectos": 4,
+    "mw": 245,
+    "mmusd": 280,
+    "cita": "el Sistema de Evaluación Ambiental acogió 4 nuevos proyectos ERNC a calificación. De estos proyectos, 1 corresponde a generación eólica y 3 corresponden a generación solar fotovoltaica; que en su conjunto suman 245 MW , y que equivalen a una inversión de 280 MMUSD."
+  },
+  "declarado_aprobacion": {
+    "proyectos": 8,
+    "mw": 521,
+    "mmusd": 854,
+    "cita": "el Sistema de Evaluación Ambiental otorgó 8 nuevas Resoluciones de Calificación Ambiental (RCA) favorables en proyectos ERNC. De los cuales, 2 proyectos son eólicos y 6 proyectos son solares fotovoltaicos; que en su conjunto suman 521 MW, y que equivalen a una inversión de 854 MMUSD."
+  }
+}

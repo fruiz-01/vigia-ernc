@@ -1,0 +1,127 @@
+Comisión Nacional de Energía -  Reporte Mensual ERNC -  Octubre 2025  
+7 
+57%
+43%
+52%
+48%
+1. Proyectos Ingresados a Evaluación Ambiental
+ 
+PROYECTOS EN EVALUACIÓN AMBIENTAL  
+Durante el mes de septiembre, el Sistema de Evaluación Ambiental acogió 8 nuevos proyectos ERNC a calificación. Todos corresp
+on-
+dientes a proyectos solares; que en su conjunto suman 574 MW , y que equivalen a una inversión de 1.248 MMUSD.  
+Notas: 
+1) Los valores de MW e inversión podrían modificarse, de acuerdo a la evaluación ambiental de los proyectos.  
+2) La columna de almacenamiento indica si el proyecto incorpora sistema de almacenamiento en su presentación.
+ 
+Fuente: Ministerio de Energía, División de Desarrollo de Proyectos,  a partir de datos del SEA. Datos: Energía Abierta. Blockchain: Certificado. 
+2. Proyectos en Evaluación Ambiental  
+A septiembre de 2025, se registran 105 proyectos ERNC en etapa de calificación dentro del Servicio de Evaluación Ambiental (S
+EA). 
+De estos, hay 19 parques eólicos, 84 solares fotovoltaicas y 2 mini - hidro. En su conjunto, suman 10.719 MW y corresponden a 30.282 
+MMUSD de inversión. 
+Distribución de Proyectos ERNC según Potencia e Inversión
+ 
+Solar fotovoltaico  
+Eólica 
+Biomasa 
+Mini Hidráulica de Pasada 
+Concentración Solar de Potencia  
+Geotermia 
+Inversión  
+30.282  
+[MMUSD] 
+10.719
+[MW] 
+Potencia  
+Nota:  
+1) Los valores de MW e inversión podrían modificarse, de acuerdo a la evaluación ambiental de los proyectos ERNC.  
+2) Los valores de MW e inversión incluyen los proyectos ERNC destinados a producir hidrógeno y/o amoníaco verde.  
+Fuente: Ministerio de Energía, División de Desarrollo de Proyectos,  a partir de datos del SEA. Datos: Energía Abierta. Blockchain: Certificado. 
+Tecnología  
+Región Titular del proyecto  
+Nombre del proyecto  
+Fecha 
+Ingreso 
+Potencia  
+[MW] 
+Inversión 
+[MMUSD] 
+WEB 
+Almacena-
+miento 
+Solar - PV 
+I 
+Pampino Solar SpA 
+Parque Fotovoltaico Pampino 
+30-09- 2025 
+170 
+263 
+Ver 
+Si 
+Solar - PV 
+X 
+Energía Renovable 
+Turquesa SpA 
+Parque Fotovoltaico Los Maquis 
+16-09- 2025 
+9 
+15 
+Ver 
+Si 
+Solar - PV 
+VII 
+Manquel Solar SpA 
+Parque Fotovoltaico Manquel Solar 
+03-09- 2025 
+65 
+39 
+Ver 
+Si 
+Solar - PV 
+RM 
+CLD GENERACION 2 
+SPA 
+PLANTA FOTOVOLTAICA GRANEROS II 
+22-09- 2025 
+7 
+12 
+Ver 
+Si 
+Solar - PV 
+RM 
+IM2 Solar Chile SpA 
+Parque Solar Alvarado 
+02-09- 2025 
+9 
+15 
+Ver 
+Si 
+Solar - PV 
+III 
+PFV PEUCO SPA 
+Parque Fotovoltaico Peuco 
+05-09- 2025 
+285 
+795 
+Ver 
+Si 
+Solar - PV 
+III 
+PFV PIMPOLLO SPA 
+Parque Fotovoltaico Pimpollo 
+08-09- 2025 
+9 
+43 
+Ver 
+Si 
+Solar - PV 
+III 
+PFV EL AGUILUCHO 
+SPA 
+Parque Fotovoltaico El Aguilucho 
+08-09- 2025 
+20 
+66 
+Ver 
+Si 

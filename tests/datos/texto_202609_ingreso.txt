@@ -1,0 +1,92 @@
+Comisión Nacional de Energía -  Reporte Mensual ERNC -  Septiembre 2026  
+6 
+70%
+30%
+36%
+64%
+1. Proyectos Ingresados a Evaluación Ambiental
+ 
+PROYECTOS EN EVALUACIÓN AMBIENTAL  
+Durante el mes de agosto, el Sistema de Evaluación Ambiental acogió 4 nuevos proyectos ERNC a calificación. De estos proyecto
+s, 1 
+corresponde a generación eólica y 3 corresponden a generación solar fotovoltaica; que en su conjunto suman 245 MW , y que equ
+i-
+valen a una inversión de 280 MMUSD.  
+Notas: 
+1) Los valores de MW e inversión podrían modificarse, de acuerdo a la evaluación ambiental de los proyectos.  
+2) La columna de almacenamiento indica si el proyecto incorpora sistema de almacenamiento en su presentación.
+ 
+Fuente: Ministerio de Energía, División de Desarrollo de Proyectos,  a partir de datos del SEA. Datos: Energía Abierta. 
+2. Proyectos en Evaluación Ambiental  
+A agosto de 2026, se registran 72 proyectos ERNC en etapa de calificación dentro del Servicio de Evaluación Ambiental (SEA). 
+De 
+estos, hay 17 parques eólicos, 54 solares fotovoltaicas, 0 mini - hidro y 1 biomasa. En su conjunto, suman 9.406 MW y corresponden a 
+31.210 MMUSD de inversión. 
+Distribución de Proyectos ERNC según Potencia e Inversión
+ 
+Solar fotovoltaico  
+Eólica 
+Biomasa 
+Mini Hidráulica de Pasada 
+Concentración Solar de Potencia  
+Geotermia 
+Inversión  
+31.210  
+[MMUSD] 
+9.406
+[MW] 
+Potencia  
+Nota:  
+1) Los valores de MW e inversión podrían modificarse, de acuerdo a la evaluación ambiental de los proyectos ERNC.  
+2) Los valores de MW e inversión incluyen los proyectos ERNC destinados a producir hidrógeno y/o amoníaco verde.  
+Fuente: Ministerio de Energía, División de Desarrollo de Proyectos,  a partir de datos del SEA. Datos: Energía Abierta. 
+Tecnología  Región 
+Titular del proyecto  
+Nombre del proyecto  
+Fecha 
+Ingreso 
+Potencia  
+[MW] 
+Inversión 
+[MMUSD] 
+WEB Almacena-
+miento 
+Eólica 
+X 
+AUSTRIA ENERGY 
+Parque Eólico Viena 
+19/08/2026 
+120 
+150 
+Ver 
+Si 
+Solar - PV 
+V 
+Langa 
+Parque Fotovoltaico y de Almacena-
+miento de Energía Mediante el Uso de 
+Baterías (BESS) Versalles II - Sector 
+Chilicauquen 
+21/08/2026 
+116 
+110 
+Ver 
+Si 
+Solar - PV 
+V 
+IDENERGY 
+Planta Fotovoltaica Cabildo  
+06/08/2026 
+9 
+10 
+Ver 
+No 
+Solar - PV 
+III 
+IDENERGY 
+Planta Fotovoltaica El Faro  
+27/08/2026 
+-  
+10 
+Ver 
+Si 

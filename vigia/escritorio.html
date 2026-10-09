@@ -1,0 +1,975 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vigía ERNC</title>
+<meta name="description" content="Un agente lee los reportes mensuales ERNC de la CNE y siete reglas verifican cada número. Proyecto de Francisco Ruiz.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<!--
+  Plantilla de vigia/escritorio.py. No editar docs/index.html a mano:
+  se regenera con `python -m vigia escritorio` a partir de la corrida real.
+-->
+<style>
+:root {
+  --barra-tareas: 48px;
+  --acento: #0067c0;
+  --ok: #0f7b0f; --aviso: #c27c0e; --error: #c42b1c;
+  --ventana: #f3f3f3; --contenido: #ffffff; --borde: rgba(0,0,0,.12); --texto: #1b1b1b; --tenue: #5f5f5f;
+  --lado: #f3f3f3; --hover: rgba(0,0,0,.05); --seleccion: rgba(0,103,192,.10); --campo: #ffffff;
+  --sombra: 0 16px 40px rgba(0,0,0,.28), 0 0 0 1px rgba(0,0,0,.10);
+  --mono: 'Cascadia Mono', 'Cascadia Code', Consolas, 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Segoe UI Variable Text', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --acento: #4cc2ff; --ok: #6ccb5f; --aviso: #fce100; --error: #ff99a4;
+  --ventana: #202020; --contenido: #272727; --borde: rgba(255,255,255,.09); --texto: #ffffff; --tenue: #b5b5b5;
+  --lado: #202020; --hover: rgba(255,255,255,.06); --seleccion: rgba(76,194,255,.14); --campo: #1c1c1c;
+  --sombra: 0 16px 40px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.08);
+} }
+:root[data-theme="dark"] {
+  --acento: #4cc2ff; --ok: #6ccb5f; --aviso: #fce100; --error: #ff99a4;
+  --ventana: #202020; --contenido: #272727; --borde: rgba(255,255,255,.09); --texto: #ffffff; --tenue: #b5b5b5;
+  --lado: #202020; --hover: rgba(255,255,255,.06); --seleccion: rgba(76,194,255,.14); --campo: #1c1c1c;
+  --sombra: 0 16px 40px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.08);
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; overflow: hidden; }
+body { font: 14px/1.45 var(--sans); color: var(--texto); background: #0a2a5c;
+       -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: default; }
+h1, h2, h3, p, ul, ol, dl, dd, pre { margin: 0; }
+ul { padding: 0; list-style: none; }
+
+/* ── Fondo ─────────────────────────────────────────────────────────── */
+.fondo { position: fixed; inset: 0; overflow: hidden;
+  background:
+    radial-gradient(38% 46% at 64% 58%, rgba(214,236,255,.95) 0%, rgba(120,182,255,.75) 28%, rgba(40,110,230,0) 100%),
+    radial-gradient(70% 80% at 30% 100%, rgba(30,100,220,.85) 0%, rgba(20,70,180,0) 70%),
+    linear-gradient(160deg, #061c45 0%, #0a3a8c 50%, #1257c4 100%); }
+
+/* ── Barra de tareas ───────────────────────────────────────────────── */
+.tareas { position: fixed; inset: auto 0 0 0; height: var(--barra-tareas); z-index: 9000;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 10px;
+  background: rgba(32,32,32,.82); backdrop-filter: blur(30px) saturate(1.4); border-top: 1px solid rgba(255,255,255,.08); color: #fff; }
+.tareas .apps { display: flex; gap: 4px; grid-column: 2; }
+.tareas .apps button { position: relative; width: 44px; height: 40px; border-radius: 5px; display: grid; place-items: center; }
+.tareas .apps button:hover, .tareas .apps button[aria-expanded="true"] { background: rgba(255,255,255,.08); }
+.tareas .apps button svg { width: 26px; height: 26px; }
+.tareas .apps button.abierta::after { content: ""; position: absolute; bottom: 2px; left: 50%; width: 6px; height: 3px;
+  margin-left: -3px; border-radius: 2px; background: #9a9a9a; }
+.tareas .apps button.activa { background: rgba(255,255,255,.06); }
+.tareas .apps button.activa::after { width: 16px; margin-left: -8px; background: #4cc2ff; }
+.tareas .apps button[data-tip]:hover::before { content: attr(data-tip); position: absolute; bottom: 50px; left: 50%;
+  transform: translateX(-50%); white-space: nowrap; background: #2b2b2b; color: #fff; font-size: 12px;
+  padding: 5px 9px; border-radius: 5px; border: 1px solid rgba(255,255,255,.1); pointer-events: none; }
+.bandeja { grid-column: 3; justify-self: end; display: flex; align-items: center; gap: 2px; font-size: 12px; }
+.bandeja button { display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-radius: 5px; }
+.bandeja button:hover { background: rgba(255,255,255,.08); }
+.bandeja svg { width: 15px; height: 15px; fill: #fff; }
+.reloj { text-align: right; line-height: 1.3; }
+
+/* ── Menú Inicio ───────────────────────────────────────────────────── */
+.inicio { position: fixed; z-index: 9100; bottom: calc(var(--barra-tareas) + 12px); left: 50%; transform: translateX(-50%);
+  width: 600px; max-width: calc(100vw - 24px); border-radius: 8px; color: #fff; display: none;
+  background: rgba(36,36,36,.92); backdrop-filter: blur(40px) saturate(1.4); border: 1px solid rgba(255,255,255,.1); box-shadow: 0 24px 60px rgba(0,0,0,.5); }
+.inicio.abierto { display: block; animation: subir .18s ease-out; }
+@keyframes subir { from { transform: translate(-50%, 16px); opacity: 0; } }
+.inicio .cuerpo-ini { padding: 28px 32px 18px; }
+.inicio h3 { font-size: 14px; font-weight: 600; margin: 0 0 12px 8px; }
+.inicio .rejilla-ini { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-bottom: 22px; }
+.inicio .rejilla-ini button { display: grid; justify-items: center; gap: 8px; padding: 12px 4px; border-radius: 5px; font-size: 12px; }
+.inicio .rejilla-ini button:hover { background: rgba(255,255,255,.08); }
+.inicio .rejilla-ini svg { width: 32px; height: 32px; }
+.inicio .recientes { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.inicio .recientes button { display: flex; gap: 12px; align-items: center; padding: 8px; border-radius: 5px; text-align: left; }
+.inicio .recientes button:hover { background: rgba(255,255,255,.08); }
+.inicio .recientes svg { width: 30px; height: 30px; flex: none; }
+.inicio .recientes b { display: block; font-weight: 400; font-size: 13px; }
+.inicio .recientes span span { font-size: 12px; color: #c5c5c5; }
+.inicio .pie-ini { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 32px;
+  background: rgba(0,0,0,.2); border-top: 1px solid rgba(255,255,255,.08); border-radius: 0 0 8px 8px; flex-wrap: wrap; }
+.inicio .quien { display: flex; gap: 12px; align-items: center; font-size: 13px; }
+.inicio .quien span span { display: block; font-size: 12px; color: #c5c5c5; }
+.inicial { width: 34px; height: 34px; border-radius: 50%; background: #4cc2ff; color: #002642; display: grid; place-items: center; font-weight: 700; font-size: 13px; flex: none; }
+.inicio .enlaces { display: flex; gap: 4px; flex-wrap: wrap; }
+.inicio .enlaces a { color: #fff; text-decoration: none; font-size: 12.5px; padding: 6px 10px; border-radius: 5px; }
+.inicio .enlaces a:hover { background: rgba(255,255,255,.08); }
+
+/* ── Íconos del escritorio ─────────────────────────────────────────── */
+.iconos { position: fixed; top: 8px; left: 8px; display: grid; gap: 2px; z-index: 1; }
+.iconos button { width: 84px; padding: 6px 2px; border-radius: 4px; display: grid; justify-items: center; gap: 3px; border: 1px solid transparent;
+  color: #fff; font-size: 12px; text-shadow: 0 1px 2px rgba(0,0,0,.9); word-break: break-word; }
+.iconos button:hover { background: rgba(255,255,255,.12); }
+.iconos button:focus-visible, .iconos button.sel { background: rgba(255,255,255,.22); border-color: rgba(255,255,255,.35); outline: none; }
+.iconos svg { width: 44px; height: 44px; filter: drop-shadow(0 1px 2px rgba(0,0,0,.4)); }
+
+/* ── Ventanas ──────────────────────────────────────────────────────── */
+.ventana { position: fixed; display: flex; flex-direction: column; min-width: 340px; min-height: 220px;
+  background: var(--ventana); color: var(--texto); border-radius: 8px; overflow: hidden; resize: both; box-shadow: var(--sombra); }
+.ventana[hidden] { display: none; }
+.ventana.max { inset: 0 0 var(--barra-tareas) 0 !important; width: auto !important; height: auto !important; border-radius: 0; resize: none; }
+.ventana.abriendo { animation: abrir .16s ease-out; }
+@keyframes abrir { from { opacity: 0; transform: scale(.97) translateY(6px); } }
+.titulo { flex: none; height: 32px; display: flex; align-items: center; user-select: none; touch-action: none; }
+.titulo .izq { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; padding-left: 12px; height: 100%; }
+.titulo .izq svg { width: 16px; height: 16px; flex: none; }
+.titulo h2 { font-size: 12px; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ventana:not(.enfocada) .titulo h2 { color: var(--tenue); }
+.controles { display: flex; height: 100%; }
+.controles button { width: 46px; height: 100%; display: grid; place-items: center; }
+.controles button:hover { background: var(--hover); }
+.controles button.cerrar:hover { background: #c42b1c; color: #fff; }
+.controles svg { width: 10px; height: 10px; stroke: currentColor; stroke-width: 1; fill: none; }
+.cuerpo { flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column; }
+body.arrastrando iframe { pointer-events: none; }
+body.arrastrando { user-select: none; }
+.boton { padding: 4px 11px; border-radius: 4px; background: var(--contenido); border: 1px solid var(--borde); font-size: 13px; }
+.boton:hover { background: var(--hover); }
+.segmentado { display: inline-flex; gap: 2px; }
+.segmentado button { padding: 5px 12px; border-radius: 4px; font-size: 13px; position: relative; }
+.segmentado button:hover { background: var(--hover); }
+.segmentado button[aria-pressed="true"] { background: var(--hover); font-weight: 600; }
+.segmentado button[aria-pressed="true"]::after { content: ""; position: absolute; left: 50%; bottom: 0; width: 16px; height: 3px; margin-left: -8px; border-radius: 2px; background: var(--acento); }
+
+/* ── PowerShell ────────────────────────────────────────────────────── */
+.ventana[data-app="terminal"] { background: #1f1f1f; color: #fff; }
+.ventana[data-app="terminal"] .titulo { background: #1f1f1f; }
+.ventana[data-app="terminal"] .controles button:hover { background: rgba(255,255,255,.08); }
+.ventana[data-app="terminal"] .controles button.cerrar:hover { background: #c42b1c; }
+.pestana, .nav-pestana { display: flex; align-items: center; gap: 8px; align-self: flex-end; height: 28px; padding: 0 12px; margin-left: -4px;
+  border-radius: 6px 6px 0 0; font-size: 12px; min-width: 190px; }
+.pestana { background: #0c0c0c; color: #fff; }
+.pestana svg, .nav-pestana svg { width: 14px !important; height: 14px !important; }
+.term { flex: 1; overflow-y: auto; padding: 8px 12px 18px; background: #0c0c0c; color: #cccccc; font: 14px/1.4 var(--mono); cursor: text; }
+.term pre { font: inherit; white-space: pre-wrap; word-break: break-word; }
+.term .linea-entrada { display: flex; flex-wrap: wrap; }
+.term input { flex: 1; min-width: 6ch; background: none; border: 0; outline: none; color: #fff; font: inherit; padding: 0; caret-color: #fff; }
+.term .prompt { color: #cccccc; white-space: pre; }
+.term .orden { color: #61d6d6; cursor: pointer; text-decoration: underline; text-decoration-color: rgba(97,214,214,.35); text-underline-offset: 3px; }
+.term .orden:hover { text-decoration-color: currentColor; }
+.term .carpeta { color: #3b78ff; }
+.term .t-tenue { color: #8a8a8a; }
+.term .t-ok { color: #16c60c; }
+.term .t-aviso { color: #f9f1a5; }
+.term .t-error { color: #e74856; }
+.term .t-titulo { color: #f2f2f2; font-weight: 700; }
+.term .t-acento { color: #f9f1a5; }
+.term ::selection { background: #f2f2f2; color: #0c0c0c; }
+
+/* ── Explorador de archivos ────────────────────────────────────────── */
+.exp-barra { display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-bottom: 1px solid var(--borde); background: var(--ventana); }
+.exp-barra .flecha { width: 30px; height: 30px; border-radius: 4px; display: grid; place-items: center; }
+.exp-barra .flecha:hover:not(:disabled) { background: var(--hover); }
+.exp-barra .flecha:disabled { opacity: .35; }
+.exp-barra .flecha svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.4; }
+.direccion { flex: 1; min-width: 0; display: flex; align-items: center; gap: 2px; padding: 3px 8px; border-radius: 4px;
+  background: var(--contenido); border: 1px solid var(--borde); overflow: hidden; white-space: nowrap; }
+.direccion button { padding: 2px 6px; border-radius: 3px; font-size: 13px; }
+.direccion button:hover { background: var(--hover); }
+.direccion .sep { color: var(--tenue); font-size: 11px; }
+.direccion svg { width: 16px; height: 16px; margin-right: 4px; flex: none; }
+.exp { flex: 1; display: grid; grid-template-columns: 200px minmax(0, 1fr); min-height: 0; }
+.exp-main { display: flex; flex-direction: column; min-height: 0; min-width: 0; background: var(--contenido); }
+.lado { background: var(--lado); padding: 6px; overflow-y: auto; border-right: 1px solid var(--borde); }
+.lado button { display: flex; align-items: center; gap: 10px; width: 100%; padding: 6px 10px; border-radius: 4px; text-align: left; font-size: 13px; position: relative; }
+.lado button:hover { background: var(--hover); }
+.lado button[aria-current="true"] { background: var(--seleccion); }
+.lado button[aria-current="true"]::before { content: ""; position: absolute; left: 0; top: 50%; height: 16px; margin-top: -8px; width: 3px; border-radius: 2px; background: var(--acento); }
+.lado svg { width: 16px; height: 16px; flex: none; }
+.lado .grupo { font-size: 12px; color: var(--tenue); padding: 10px 10px 4px; }
+.lista { flex: 1; overflow: auto; }
+.lista table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.lista th { text-align: left; font-weight: 400; color: var(--tenue); padding: 6px 12px; border-bottom: 1px solid var(--borde); position: sticky; top: 0; background: var(--contenido); white-space: nowrap; }
+.lista td { padding: 4px 12px; white-space: nowrap; }
+.lista td.nombre { display: flex; align-items: center; gap: 8px; }
+.lista td.nombre svg { width: 18px; height: 18px; flex: none; }
+.lista td.n, .lista th.n { text-align: right; }
+.lista tbody tr:hover { background: var(--hover); }
+.lista tbody tr.sel, .lista tbody tr:focus-visible { background: var(--seleccion); outline: none; }
+.estado { padding: 4px 12px; font-size: 12px; color: var(--tenue); background: var(--ventana); border-top: 1px solid var(--borde); }
+
+/* ── Editor ────────────────────────────────────────────────────────── */
+.editor { flex: 1; overflow: auto; display: grid; grid-template-columns: auto minmax(0, 1fr); background: var(--contenido); font: 13.5px/1.55 var(--mono); }
+.editor pre { font: inherit; }
+.editor .nums { text-align: right; color: var(--tenue); padding: 10px 12px 10px 16px; user-select: none; opacity: .7; }
+.editor .codigo { padding: 10px 16px; white-space: pre; tab-size: 4; }
+.hl-k { color: #0000ff; } .hl-s { color: #a31515; } .hl-c { color: #008000; } .hl-n { color: #098658; }
+.hl-f { color: #795e26; } .hl-h { color: #0451a5; font-weight: 700; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .hl-k { color: #569cd6; } :root:not([data-theme="light"]) .hl-s { color: #ce9178; }
+  :root:not([data-theme="light"]) .hl-c { color: #6a9955; } :root:not([data-theme="light"]) .hl-n { color: #b5cea8; }
+  :root:not([data-theme="light"]) .hl-f { color: #dcdcaa; } :root:not([data-theme="light"]) .hl-h { color: #569cd6; } }
+.editor-estado { display: flex; gap: 24px; justify-content: flex-end; padding: 4px 16px; font-size: 12px; color: var(--tenue); border-top: 1px solid var(--borde); }
+
+/* ── Verificador ───────────────────────────────────────────────────── */
+.ver { flex: 1; display: grid; grid-template-columns: 170px minmax(0, 1fr); min-height: 0; }
+.ver .lado button { justify-content: space-between; }
+.ver .lado .faltante { color: var(--tenue); }
+.marca { display: inline-block; width: 9px; height: 9px; flex: none; }
+.m-ok { border-radius: 50%; background: var(--ok); }
+.m-aviso { background: var(--aviso); transform: rotate(45deg) scale(.85); }
+.m-error { background: var(--error); }
+.m-nada { border: 1.5px solid var(--tenue); border-radius: 50%; }
+.ver-main { display: flex; flex-direction: column; min-height: 0; min-width: 0; background: var(--contenido); }
+.ver-barra { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding: 6px 12px; border-bottom: 1px solid var(--borde); }
+.ver-barra .info { color: var(--tenue); font-size: 12.5px; }
+.ver-barra a { color: var(--acento); }
+.ver-paneles { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+.ver-fuente { border-right: 1px solid var(--borde); display: flex; flex-direction: column; min-height: 0; background: var(--campo); }
+.ver h3 { font-size: 12px; font-weight: 600; color: var(--tenue); padding: 10px 14px 6px; }
+.ver-fuente pre { flex: 1; overflow: auto; padding: 0 14px 14px; font: 12.5px/1.45 var(--mono); white-space: pre-wrap; }
+.ver-fuente mark { background: #fff100; color: #000; border-radius: 2px; }
+.ver-extr { overflow-y: auto; padding-bottom: 18px; }
+.ver table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.ver th { text-align: left; font-weight: 600; font-size: 12px; color: var(--tenue); padding: 4px 8px; border-bottom: 1px solid var(--borde); white-space: nowrap; }
+.ver td { padding: 6px 8px; border-bottom: 1px solid var(--borde); vertical-align: top; }
+.ver th:first-child, .ver td:first-child { padding-left: 14px; }
+.ver td.n, .ver th.n { text-align: right; white-space: nowrap; }
+.ver tbody tr:hover, .ver tbody tr.activa { background: var(--seleccion); }
+.ver .vacio { color: var(--tenue); font-style: italic; }
+.ver .sub { color: var(--tenue); font-size: 12px; }
+.declarado { margin: 0 14px; padding: 8px 12px; border-left: 3px solid var(--acento); background: var(--hover); color: var(--tenue); font-size: 13px; border-radius: 0 4px 4px 0; }
+.declarado b { color: var(--texto); }
+.reglas li { display: grid; grid-template-columns: 16px 92px minmax(0, 1fr); gap: 6px; align-items: baseline; padding: 6px 14px; font-size: 13px; border-bottom: 1px solid var(--borde); }
+.reglas .det { color: var(--tenue); }
+.reglas li.error .det { color: var(--texto); }
+.nota-ver { padding: 12px 14px 0; color: var(--tenue); font-size: 12px; }
+.ausente { padding: 40px 20px; text-align: center; color: var(--tenue); }
+
+/* ── Navegador ─────────────────────────────────────────────────────── */
+.nav-pestana { background: var(--contenido); }
+.nav-barra { display: flex; gap: 6px; align-items: center; padding: 5px 8px; background: var(--contenido); border-bottom: 1px solid var(--borde); }
+.nav-barra .url { flex: 1; min-width: 0; padding: 5px 14px; border-radius: 999px; background: var(--ventana); color: var(--tenue);
+  font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nav-barra .url b { color: var(--texto); font-weight: 400; }
+.ventana iframe { flex: 1; width: 100%; border: 0; background: #fff; }
+
+/* ── Teléfono: una ventana a la vez ────────────────────────────────── */
+@media (max-width: 760px) {
+  .iconos { display: none; }
+  .tareas { grid-template-columns: 1fr; justify-items: center; }
+  .tareas .apps { grid-column: 1; }
+  .bandeja { display: none; }
+  .ventana, .ventana.max { inset: 0 0 var(--barra-tareas) 0 !important; width: auto !important; height: auto !important;
+    border-radius: 0; resize: none; min-width: 0; }
+  .controles .min, .controles .max { display: none; }
+  .exp, .ver { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+  .lado { border-right: 0; border-bottom: 1px solid var(--borde); display: flex; overflow-x: auto; gap: 4px; }
+  .lado .grupo { display: none; }
+  .lado button { width: auto; white-space: nowrap; }
+  .lista th:nth-child(2), .lista td:nth-child(2) { display: none; }
+  .ver-paneles { grid-template-columns: minmax(0, 1fr); grid-template-rows: 38% minmax(0, 1fr); }
+  .ver-fuente { border-right: 0; border-bottom: 1px solid var(--borde); }
+  .ver th:nth-child(2), .ver td:nth-child(2), .ver th:nth-child(7), .ver td:nth-child(7) { display: none; }
+  .ver-extr { overflow-x: auto; }
+  .reglas li { grid-template-columns: 16px 76px minmax(0, 1fr); }
+  .inicio .rejilla-ini { grid-template-columns: repeat(3, 1fr); }
+  .inicio .recientes { grid-template-columns: 1fr; }
+  .inicio .cuerpo-ini, .inicio .pie-ini { padding-left: 16px; padding-right: 16px; }
+  .term { font-size: 13px; }
+  .pestana, .nav-pestana { min-width: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .ventana.abriendo, .inicio.abierto { animation: none; } }
+</style>
+</head>
+<body>
+<div class="fondo" aria-hidden="true"></div>
+
+<div class="iconos" id="iconos"></div>
+<div id="ventanas"></div>
+<div class="inicio" id="inicio" role="dialog" aria-label="Inicio"></div>
+
+<nav class="tareas" aria-label="Barra de tareas">
+  <div class="apps" id="apps"></div>
+  <div class="bandeja">
+    <button aria-label="Red, volumen y batería">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3C5.2 3 2.7 4.1.9 5.9L2 7c1.6-1.5 3.7-2.4 6-2.4S12.4 5.5 14 7l1.1-1.1C13.3 4.1 10.8 3 8 3zM3.4 8.4l1.1 1.1C5.4 8.6 6.6 8 8 8s2.6.6 3.5 1.5l1.1-1.1C11.4 7.2 9.8 6.5 8 6.5s-3.4.7-4.6 1.9zM8 9.5c-1 0-1.8.4-2.4 1L8 13l2.4-2.5c-.6-.6-1.4-1-2.4-1z"/></svg>
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h3l4-3v10L5 10H2zM11 5.5a3.5 3.5 0 0 1 0 5l-.8-.8a2.4 2.4 0 0 0 0-3.4z"/></svg>
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 5h12v6H1zm1 1v4h10V6zm12 1h1v2h-1z"/><path d="M3 7h7v2H3z"/></svg>
+    </button>
+    <button class="reloj" id="reloj" aria-label="Fecha y hora"></button>
+  </div>
+</nav>
+
+<script id="datos" type="application/json">/*DATOS*/{}</script>
+<script>
+"use strict";
+const D = JSON.parse(document.getElementById('datos').textContent);
+const $ = (s, r = document) => r.querySelector(s);
+const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const telefono = () => matchMedia('(max-width: 760px)').matches;
+const espera = (ms) => new Promise((r) => setTimeout(r, ms));
+const MESES = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+const MESES_L = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+const edCorta = (e) => `${MESES[+e.slice(4) - 1]} ${e.slice(0, 4)}`;
+const edLarga = (e) => `${MESES_L[+e.slice(4) - 1]} de ${e.slice(0, 4)}`;
+const num = (v) => v == null ? '—' : v.toLocaleString('es-CL', { maximumFractionDigits: 1 });
+const comoTexto = (v) => Number.isInteger(v) ? String(v) : String(v).replace('.', ',');
+const CASA = 'C:\\Users\\francisco\\vigia-ernc';
+const win = (ruta) => ruta.replace(/\//g, '\\');
+
+// ── Resumen de la corrida (para el mensaje de bienvenida) ─────────────
+const EDS = D.ediciones;
+const TODOS_CONTROLES = EDS.flatMap((e) => e.controles);
+const contar = (r) => TODOS_CONTROLES.filter((c) => c.resultado === r).length;
+const RESUMEN = {
+  reportes: EDS.filter((e) => e.estado === 'ok').length,
+  filas: EDS.reduce((s, e) => s + e.filas.length, 0),
+  errores: contar('error'), avisos: contar('aviso'), ok: contar('ok'),
+};
+
+// ── Íconos ────────────────────────────────────────────────────────────
+const ICONO = {
+  inicio: `<svg viewBox="0 0 24 24"><defs><linearGradient id="gi" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5ec8ff"/><stop offset="1" stop-color="#0078d4"/></linearGradient></defs><rect x="2" y="2" width="9.4" height="9.4" rx="1.2" fill="url(#gi)"/><rect x="12.6" y="2" width="9.4" height="9.4" rx="1.2" fill="url(#gi)"/><rect x="2" y="12.6" width="9.4" height="9.4" rx="1.2" fill="url(#gi)"/><rect x="12.6" y="12.6" width="9.4" height="9.4" rx="1.2" fill="url(#gi)"/></svg>`,
+  terminal: `<svg viewBox="0 0 32 32"><rect x="2" y="4" width="28" height="24" rx="4" fill="#2c2c2c"/><rect x="2" y="4" width="28" height="24" rx="4" fill="none" stroke="#4a4a4a"/><path d="M8 12l5 4-5 4" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 21h9" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+  archivos: `<svg viewBox="0 0 32 32"><path d="M3 8a2 2 0 0 1 2-2h7l3 3h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="#e8a317"/><path d="M3 12a2 2 0 0 1 2-2h22a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="#ffc83d"/></svg>`,
+  editor: `<svg viewBox="0 0 32 32"><rect x="5" y="3" width="22" height="26" rx="3" fill="#2b88d8"/><rect x="5" y="3" width="22" height="26" rx="3" fill="none" stroke="#1f6fb5"/><path d="M10 11h12M10 15h12M10 19h8" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>`,
+  verificador: `<svg viewBox="0 0 32 32"><rect x="3" y="5" width="26" height="22" rx="3" fill="#fafafa" stroke="#bdbdbd"/><path d="M3 10h26" stroke="#bdbdbd"/><path d="M7 15h9M7 19h9M7 23h9" stroke="#8a8a8a" stroke-width="1.8" stroke-linecap="round"/><circle cx="23" cy="20" r="6" fill="#0f7b0f"/><path d="M20 20l2 2 4-4.5" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  navegador: `<svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="#0f6cbd"/><path d="M3 16h26M16 3c-4.5 4.5-4.5 21.5 0 26M16 3c4.5 4.5 4.5 21.5 0 26M6 9.5h20M6 22.5h20" stroke="#fff" stroke-width="1.4" fill="none" opacity=".85"/></svg>`,
+  carpeta: `<svg viewBox="0 0 32 32"><path d="M3 8a2 2 0 0 1 2-2h7l3 3h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="#e8a317"/><path d="M3 12a2 2 0 0 1 2-2h22a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="#ffc83d"/></svg>`,
+  hoja: (color, rotulo) => `<svg viewBox="0 0 32 32"><path d="M8 2h11l7 7v19a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" fill="#fff" stroke="#9e9e9e"/><path d="M19 2v7h7" fill="#e6e6e6" stroke="#9e9e9e"/><rect x="3" y="17" width="20" height="9" rx="1.5" fill="${color}"/><text x="13" y="23.6" font-family="Segoe UI, sans-serif" font-size="6.2" font-weight="700" fill="#fff" text-anchor="middle">${rotulo}</text></svg>`,
+};
+const TIPOS = {
+  py: ['#3a6ea5', 'PY', 'Archivo de Python'], json: ['#986a44', 'JSON', 'Archivo JSON'], md: ['#5c5c5c', 'MD', 'Archivo Markdown'],
+  pdf: ['#c42b1c', 'PDF', 'Documento PDF'], sqlite: ['#0f7b0f', 'DB', 'Base de datos SQLite'], html: ['#d83b01', 'HTML', 'Documento HTML'],
+  txt: ['#6b6b6b', 'TXT', 'Documento de texto'], ini: ['#6b6b6b', 'INI', 'Configuración'], gitignore: ['#6b6b6b', 'GIT', 'Archivo GITIGNORE'],
+};
+const tipoDe = (ruta) => TIPOS[ruta.split('.').pop()] || ['#6b6b6b', ruta.split('.').pop().toUpperCase().slice(0, 4), 'Archivo'];
+const iconoArchivo = (ruta) => { const [c, r] = tipoDe(ruta); return ICONO.hoja(c, r); };
+const SVG_CERRAR = '<svg viewBox="0 0 10 10"><path d="M.5.5l9 9M9.5.5l-9 9"/></svg>';
+const SVG_MIN = '<svg viewBox="0 0 10 10"><path d="M0 5.5h10"/></svg>';
+const SVG_MAX = '<svg viewBox="0 0 10 10"><rect x=".5" y=".5" width="9" height="9" rx="1"/></svg>';
+
+// ── Gestor de ventanas ────────────────────────────────────────────────
+const APPS = {
+  terminal: { nombre: 'PowerShell', ancho: 860, alto: 560, crear: crearTerminal },
+  verificador: { nombre: 'Verificador', ancho: 1180, alto: 680, crear: crearVerificador },
+  navegador: { nombre: 'Navegador', ancho: 1180, alto: 720, crear: crearNavegador },
+  archivos: { nombre: 'Explorador de archivos', ancho: 860, alto: 540, crear: crearExplorador },
+  editor: { nombre: 'Editor', ancho: 880, alto: 620, crear: crearEditor },
+};
+const ventanas = {};
+let zTope = 100, abiertas = 0;
+
+function ventana(app) {
+  if (ventanas[app]) return ventanas[app];
+  const a = APPS[app];
+  const v = document.createElement('section');
+  v.className = 'ventana';
+  v.dataset.app = app;
+  v.setAttribute('role', 'dialog');
+  v.setAttribute('aria-label', a.nombre);
+  v.innerHTML = `
+    <header class="titulo">
+      <div class="izq">${ICONO[app]}<h2>${a.nombre}</h2></div>
+      <div class="controles">
+        <button class="min" aria-label="Minimizar">${SVG_MIN}</button>
+        <button class="max" aria-label="Maximizar">${SVG_MAX}</button>
+        <button class="cerrar" aria-label="Cerrar">${SVG_CERRAR}</button>
+      </div>
+    </header>
+    <div class="cuerpo"></div>`;
+  // Tamaño y posición: centrada, en cascada, sin tapar la barra de tareas
+  const W = innerWidth, H = innerHeight - 48;
+  const ancho = Math.min(a.ancho, W - 120), alto = Math.min(a.alto, H - 40);
+  const corrimiento = (abiertas++ % 5) * 26;
+  v.style.width = ancho + 'px';
+  v.style.height = alto + 'px';
+  v.style.left = Math.max(100, (W - ancho) / 2 - 50 + corrimiento) + 'px';
+  v.style.top = Math.max(12, (H - alto) / 2 - 30 + corrimiento) + 'px';
+  $('#ventanas').append(v);
+  v.addEventListener('pointerdown', () => enfocar(v));
+  $('.cerrar', v).onclick = () => cerrar(app);
+  $('.min', v).onclick = (e) => { e.stopPropagation(); v.hidden = true; marcarTareas(); };
+  $('.max', v).onclick = () => v.classList.toggle('max');
+  const tit = $('.titulo', v);
+  tit.addEventListener('dblclick', (e) => { if (!e.target.closest('button')) v.classList.toggle('max'); });
+  tit.addEventListener('pointerdown', (e) => arrastrar(e, v));
+  ventanas[app] = v;
+  a.api = a.crear($('.cuerpo', v), v);
+  return v;
+}
+
+function abrir(app, arg) {
+  const v = ventana(app);
+  const nueva = v.hidden || !v.dataset.vista;
+  v.hidden = false;
+  v.dataset.vista = '1';
+  if (nueva && !quieto) { v.classList.remove('abriendo'); void v.offsetWidth; v.classList.add('abriendo'); }
+  if (arg !== undefined && APPS[app].api?.cargar) APPS[app].api.cargar(arg);
+  enfocar(v);
+  cerrarInicio();
+  return APPS[app].api;
+}
+
+function cerrar(app) {
+  ventanas[app]?.remove();
+  delete ventanas[app];
+  delete APPS[app].api;
+  marcarTareas();
+}
+
+function enfocar(v) {
+  v.style.zIndex = ++zTope;
+  document.querySelectorAll('.ventana').forEach((x) => x.classList.toggle('enfocada', x === v));
+  marcarTareas();
+  APPS[v.dataset.app].api?.foco?.();
+}
+
+function arrastrar(e, v) {
+  if (e.button !== 0 || e.target.closest('button, select, input, a') || v.classList.contains('max') || telefono()) return;
+  const x0 = e.clientX - v.offsetLeft, y0 = e.clientY - v.offsetTop;
+  document.body.classList.add('arrastrando');
+  const mover = (ev) => {
+    v.style.left = Math.min(innerWidth - 80, Math.max(-v.offsetWidth + 120, ev.clientX - x0)) + 'px';
+    v.style.top = Math.min(innerHeight - 90, Math.max(0, ev.clientY - y0)) + 'px';
+  };
+  const soltar = () => {
+    document.body.classList.remove('arrastrando');
+    removeEventListener('pointermove', mover);
+    removeEventListener('pointerup', soltar);
+  };
+  addEventListener('pointermove', mover);
+  addEventListener('pointerup', soltar);
+}
+
+// ── Barra de tareas, menú Inicio, íconos del escritorio ───────────────
+const ORDEN = ['terminal', 'verificador', 'navegador', 'archivos', 'editor'];
+function armarTareas() {
+  $('#apps').innerHTML = `<button id="btnInicio" data-tip="Inicio" aria-label="Inicio" aria-expanded="false">${ICONO.inicio}</button>`
+    + ORDEN.map((a) => `<button data-app="${a}" data-tip="${APPS[a].nombre}" aria-label="${APPS[a].nombre}">${ICONO[a]}</button>`).join('');
+  $('#apps').onclick = (e) => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    if (b.id === 'btnInicio') return alternarInicio();
+    const v = ventanas[b.dataset.app];
+    if (v && !v.hidden && +v.style.zIndex === zTope) { v.hidden = true; marcarTareas(); } else abrir(b.dataset.app);
+  };
+}
+function marcarTareas() {
+  const arriba = Object.values(ventanas).filter((v) => !v.hidden).sort((a, b) => b.style.zIndex - a.style.zIndex)[0];
+  document.querySelectorAll('#apps button[data-app]').forEach((b) => {
+    b.classList.toggle('abierta', !!ventanas[b.dataset.app]);
+    b.classList.toggle('activa', !!arriba && ventanas[b.dataset.app] === arriba);
+  });
+}
+function alternarInicio() {
+  const abierto = $('#inicio').classList.toggle('abierto');
+  $('#btnInicio').setAttribute('aria-expanded', abierto);
+}
+function cerrarInicio() {
+  $('#inicio').classList.remove('abierto');
+  $('#btnInicio')?.setAttribute('aria-expanded', 'false');
+}
+addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarInicio(); });
+addEventListener('pointerdown', (e) => { if (!e.target.closest('#inicio, #btnInicio')) cerrarInicio(); });
+
+function armarInicio() {
+  const a = D.autor;
+  const iniciales = a.nombre.split(' ').filter(Boolean).slice(0, 2).map((p) => p[0]).join('');
+  const enlaces = [
+    a.correo && `<a href="mailto:${esc(a.correo)}">Correo</a>`,
+    a.linkedin && `<a href="${esc(a.linkedin)}" target="_blank" rel="noopener">LinkedIn</a>`,
+    a.github && `<a href="${esc(a.github)}" target="_blank" rel="noopener">GitHub</a>`,
+    a.repo && `<a href="${esc(a.repo)}" target="_blank" rel="noopener">Código</a>`,
+  ].filter(Boolean).join('');
+  const recientes = [
+    ['README.md', 'Qué hace, resultados y límites'],
+    ['docs/informe.html', 'Informe publicado'],
+    ['vigia/validar.py', 'Las siete reglas'],
+    ['vigia/extraer.py', 'Esquema y mensaje al modelo'],
+    ['datos/extracciones/202609.json', 'Respuesta del modelo, sep 2026'],
+    ['datos/reportes/202604.pdf', 'Abril 2026: la errata «3 13 MW»'],
+  ].filter(([r]) => ARCHIVOS[r]);
+  $('#inicio').innerHTML = `
+    <div class="cuerpo-ini">
+      <h3>Anclado</h3>
+      <div class="rejilla-ini">${ORDEN.map((x) => `<button data-app="${x}">${ICONO[x]}<span>${APPS[x].nombre}</span></button>`).join('')}</div>
+      <h3>Recomendado</h3>
+      <div class="recientes">${recientes.map(([r, d]) => `<button data-archivo="${r}">${iconoArchivo(r)}<span><b>${esc(r.split('/').pop())}</b><span>${esc(d)}</span></span></button>`).join('')}</div>
+    </div>
+    <div class="pie-ini">
+      <div class="quien"><span class="inicial">${esc(iniciales)}</span><span>${esc(a.nombre)}<span>${esc(a.cargo)}</span></span></div>
+      <div class="enlaces">${enlaces}</div>
+    </div>`;
+  $('#inicio').onclick = (e) => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    if (b.dataset.app) abrir(b.dataset.app);
+    else if (b.dataset.archivo) { abrirArchivo(b.dataset.archivo); cerrarInicio(); }
+  };
+}
+
+function armarIconos() {
+  const iconos = [
+    { rotulo: 'vigia-ernc', icono: ICONO.carpeta, accion: () => abrir('archivos', '') },
+    { rotulo: 'informe.html', icono: iconoArchivo('informe.html'), accion: () => abrir('navegador') },
+    { rotulo: 'README.md', icono: iconoArchivo('README.md'), accion: () => abrir('editor', 'README.md') },
+  ];
+  $('#iconos').innerHTML = iconos.map((i, k) => `<button data-k="${k}">${i.icono}<span>${i.rotulo}</span></button>`).join('');
+  $('#iconos').onclick = (e) => { const b = e.target.closest('button'); document.querySelectorAll('#iconos button').forEach((x) => x.classList.toggle('sel', x === b)); };
+  $('#iconos').ondblclick = (e) => { const b = e.target.closest('button'); if (b) iconos[b.dataset.k].accion(); };
+  $('#iconos').onkeydown = (e) => { const b = e.target.closest('button'); if (b && e.key === 'Enter') iconos[b.dataset.k].accion(); };
+}
+
+function reloj() {
+  const ahora = new Date();
+  const hora = ahora.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+  const fecha = ahora.toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  $('#reloj').innerHTML = `${hora}<br>${fecha}`;
+}
+
+// ── Sistema de archivos (solo lectura) ────────────────────────────────
+const ARCHIVOS = Object.fromEntries(D.archivos.map((a) => [a.ruta, a]));
+function listar(dir) {
+  const pre = dir ? dir + '/' : '';
+  const carpetas = new Set(), archivos = [];
+  for (const ruta of Object.keys(ARCHIVOS)) {
+    if (!ruta.startsWith(pre)) continue;
+    const resto = ruta.slice(pre.length);
+    if (resto.includes('/')) carpetas.add(resto.split('/')[0]);
+    else archivos.push(resto);
+  }
+  return { carpetas: [...carpetas].sort(), archivos: archivos.sort() };
+}
+const esCarpeta = (ruta) => ruta === '' || Object.keys(ARCHIVOS).some((r) => r.startsWith(ruta + '/'));
+function normalizarRuta(ruta) {
+  return ruta.replace(/\\/g, '/').replace(/^"|"$/g, '').replace(/^c:\/users\/francisco\/vigia-ernc\/?/i, '')
+    .replace(/^\.\//, '').replace(/\/+$/, '');
+}
+const tamano = (b) => b == null ? '' : `${Math.max(1, Math.round(b / 1024)).toLocaleString('es-CL')} KB`;
+
+function abrirArchivo(ruta) {
+  const a = ARCHIVOS[ruta];
+  if (!a) return;
+  if (a.tipo === 'pdf') return abrir('verificador', { edicion: ruta.match(/(\d{6})\.pdf$/)[1] });
+  if (a.tipo === 'web') return abrir('navegador');
+  if (a.tipo === 'base') return abrir('terminal').ejecutar(`python -m vigia sql "${D.consultas[1]}"`);
+  if (a.tipo === 'esta') return abrir('terminal').escribirTexto('docs\\index.html es esta misma página: el escritorio que estás usando.\n');
+  abrir('editor', ruta);
+}
+
+// ── PowerShell ────────────────────────────────────────────────────────
+function crearTerminal(cuerpo, v) {
+  $('.izq', v).innerHTML = `<span class="pestana">${ICONO.terminal}PowerShell</span>`;
+  cuerpo.innerHTML = `<div class="term"><pre class="salida"></pre><div class="linea-entrada"><span class="prompt"></span><input aria-label="Orden de PowerShell" spellcheck="false" autocomplete="off" autocapitalize="off"></div></div>`;
+  const term = $('.term', cuerpo), salida = $('.salida', cuerpo), entrada = $('input', cuerpo), linea = $('.linea-entrada', cuerpo);
+  const PROMPT = `PS ${esc(CASA)}&gt; `;
+  $('.prompt', cuerpo).innerHTML = PROMPT;
+  const historial = [];
+  let posHist = 0, ocupado = false, apurar = false;
+
+  const abajo = () => { term.scrollTop = term.scrollHeight; };
+  const html = (h) => { salida.insertAdjacentHTML('beforeend', h); abajo(); };
+  const ord = (o, texto = o) => `<span class="orden" data-orden="${esc(o)}" role="button" tabindex="0">${esc(texto)}</span>`;
+
+  function colorear(l) {
+    const e = esc(l);
+    if (/\[error\]|ERROR|FAILED|faltante \(HTTP/.test(l)) return `<span class="t-error">${e}</span>`;
+    if (/\[aviso\]/.test(l)) return `<span class="t-aviso">${e}</span>`;
+    if (/\bpassed\b|campos correctos|: ok \(/.test(l)) return `<span class="t-ok">${e}</span>`;
+    if (/^(Descargando|Extrayendo|Validando|Precisión|Página escrita|Controles:|Grabando|Escritorio)/.test(l)) return `<span class="t-titulo">${e}</span>`;
+    if (/^-+(\s+-+)*$/.test(l)) return `<span class="t-tenue">${e}</span>`;
+    return e;
+  }
+  function ritmo(l) {
+    if (apurar || quieto) return 0;
+    if (/leído vía|filas \(\d intento/.test(l)) return 240;  // cada edición: una lectura del modelo
+    if (/: ok \(|faltante \(HTTP/.test(l)) return 70;        // cada descarga
+    return 22;
+  }
+  async function reproducir(texto) {
+    for (const l of texto.split('\n')) {
+      html(colorear(l) + '\n');
+      const ms = ritmo(l);
+      if (ms) await espera(ms);
+    }
+  }
+
+  function bienvenida() {
+    const r = RESUMEN;
+    html(`<span class="t-titulo">Vigía ERNC</span>  <span class="t-tenue">·  ${esc(D.autor.nombre)}</span>
+
+Un agente lee los reportes mensuales ERNC de la Comisión Nacional de Energía,
+extrae los proyectos de cada tabla y siete reglas verifican cada número
+antes de guardarlo. <span class="t-acento">El modelo propone, las reglas verifican.</span>
+
+  ${ord('python -m vigia todo')}         descarga, lectura, verificación y publicación
+  ${ord('python -m vigia precision')}    el modelo contra 216 campos de referencia
+  ${ord('pytest -q')}                    pruebas del código
+  ${ord('start verificador')}            el texto del PDF junto a lo que extrajo el modelo
+  ${ord('start informe')}                el resultado publicado
+  ${ord('ayuda')}                        todas las órdenes
+
+<span class="t-tenue">Última corrida: ${r.reportes} reportes · ${r.filas} filas · ${r.ok} controles ok · ${r.avisos} avisos · ${r.errores} errores</span>
+<span class="t-tenue">Haz clic en una orden o escríbela.</span>
+
+`);
+  }
+
+  function ayuda() {
+    html(`<span class="t-titulo">Flujo</span>
+  ${ord('python -m vigia todo')}              los cuatro pasos seguidos
+  ${ord('python -m vigia descargar')}         baja los PDF de la CNE y guarda su huella SHA-256
+  ${ord('python -m vigia extraer')}           lee las tablas con el modelo (o desde la caché)
+  ${ord('python -m vigia validar')}           aplica las siete reglas y guarda en SQLite
+  ${ord('python -m vigia publicar')}          escribe docs\\informe.html
+  ${ord('python -m vigia precision')}         compara con la transcripción de referencia
+  ${ord('pytest -q')}                         pruebas
+
+<span class="t-titulo">Base de datos</span>
+  ${ord(`python -m vigia sql "${D.consultas[0]}"`, 'sql totales')}        filas, MW y MMUSD por etapa
+  ${ord(`python -m vigia sql "${D.consultas[1]}"`, 'sql controles')}      resultado de cada regla
+  ${ord(`python -m vigia sql "${D.consultas[2]}"`, 'sql baterias')}       aprobados con almacenamiento
+
+<span class="t-titulo">Escritorio</span>
+  ${ord('ls')} [carpeta]   ${ord('cat README.md', 'cat')} archivo   ${ord('start archivos', 'start')} archivo|verificador|informe|archivos
+  ${ord('whoami')}   ${ord('cls')}   ↑ ↓ historial   Tab completa
+`);
+  }
+
+  // Órdenes cortas que llevan a la consulta grabada
+  const ALIAS = { 'sql totales': 0, 'sql controles': 1, 'sql baterias': 2, 'sql baterías': 2 };
+  const COMPLETAR = [...Object.keys(D.terminal), 'ayuda', 'start verificador', 'start informe', 'start archivos',
+    'cat README.md', 'ls', 'whoami', 'cls', ...Object.keys(ALIAS)];
+
+  async function ejecutar(orden, { tipear = true } = {}) {
+    if (ocupado) return;
+    ocupado = true;
+    apurar = false;
+    linea.hidden = true;
+    entrada.value = '';
+    html(PROMPT);
+    if (tipear && !quieto) {
+      for (const c of orden) { html(esc(c)); await espera(apurar ? 0 : 16); }
+    } else html(esc(orden));
+    html('\n');
+    if (orden.trim()) { historial.push(orden); posHist = historial.length; }
+    try { await interpretar(orden.trim().replace(/\s+/g, ' ')); }
+    finally {
+      if (orden.trim() && !/^(cls|clear)$/i.test(orden.trim())) html('\n');
+      ocupado = false;
+      linea.hidden = false;
+      abajo();
+      if (!telefono()) entrada.focus({ preventScroll: true });
+    }
+  }
+
+  async function interpretar(o) {
+    if (!o) return;
+    const orden = o.replace(/^(py|python3) /, 'python ').replace(/^pytest$/, 'pytest -q');
+    if (orden in ALIAS) return reproducir(D.terminal[`python -m vigia sql "${D.consultas[ALIAS[orden]]}"`]);
+    if (orden in D.terminal) return reproducir(D.terminal[orden]);
+    const [cmd, ...resto] = o.split(' ');
+    const arg = resto.join(' ');
+    switch (cmd.toLowerCase()) {
+      case 'ayuda': case 'help': case 'get-help': return ayuda();
+      case 'cls': case 'clear': case 'clear-host': salida.innerHTML = ''; return;
+      case 'whoami':
+        return html(`${esc(D.autor.nombre)} · ${esc(D.autor.cargo)}
+Procesos, automatización y datos. Este proyecto: Python, SQLite y un modelo de lenguaje con verificación.
+${[D.autor.correo, D.autor.linkedin, D.autor.github].filter(Boolean).map(esc).join('\n')}`);
+      case 'ls': case 'dir': case 'get-childitem': {
+        const dir = normalizarRuta(arg || '');
+        if (!esCarpeta(dir)) return html(`<span class="t-error">Get-ChildItem : No se encuentra la ruta '${esc(CASA + '\\' + win(dir))}' porque no existe.</span>\n`);
+        const { carpetas, archivos } = listar(dir);
+        const pre = dir ? dir + '/' : '';
+        const filas = carpetas.map((c) => `d-----  ${''.padStart(9)}  <span class="carpeta orden" data-orden="ls ${esc(win(pre + c))}">${esc(c)}</span>`)
+          .concat(archivos.map((a) => `-a----  ${String(ARCHIVOS[pre + a].bytes ?? '').padStart(9)}  ${ord(`start ${win(pre + a)}`, a)}`));
+        return html(`\n    Directorio: ${esc(CASA + (dir ? '\\' + win(dir) : ''))}\n\n<span class="t-tenue">Mode       Length  Name\n----       ------  ----</span>\n${filas.join('\n')}\n`);
+      }
+      case 'cat': case 'type': case 'gc': case 'get-content': {
+        const ruta = normalizarRuta(arg);
+        const a = ARCHIVOS[ruta];
+        if (!a) return html(`<span class="t-error">Get-Content : No se encuentra la ruta '${esc(arg || '')}' porque no existe.</span>\n`);
+        if (!a.contenido) return html(`${esc(win(ruta))} es un archivo binario; prueba ${ord('start ' + win(ruta))}\n`);
+        return html(esc(a.contenido));
+      }
+      case 'start': case 'ii': case 'invoke-item': case 'explorer': case 'abrir': {
+        const destino = normalizarRuta(arg);
+        if (['verificador', 'informe', 'navegador', 'archivos', 'editor'].includes(destino)) {
+          abrir({ informe: 'navegador' }[destino] || destino);
+          return;
+        }
+        if (destino === '.' || destino === '') return void abrir('archivos', '');
+        if (ARCHIVOS[destino]) return void abrirArchivo(destino);
+        if (esCarpeta(destino)) return void abrir('archivos', destino);
+        return html(`<span class="t-error">${esc(cmd)} : No se encuentra '${esc(arg)}'.</span> Prueba ${ord('start verificador')} o ${ord('ls')}\n`);
+      }
+      case 'cd': case 'set-location':
+        return html(`<span class="t-tenue">Esta demo se queda en ${esc(CASA)}. Usa ${ord('ls')} para mirar las carpetas.</span>\n`);
+      case 'python': case 'py':
+        return html(`<span class="t-tenue">En esta demo están grabadas las órdenes de ${ord('ayuda')}.</span>\n`);
+      default:
+        return html(`<span class="t-error">${esc(cmd)} : El término '${esc(cmd)}' no se reconoce como nombre de un cmdlet, función o programa ejecutable.</span>\nEscribe ${ord('ayuda')} para ver las órdenes de esta demo.\n`);
+    }
+  }
+
+  salida.addEventListener('click', (e) => {
+    const o = e.target.closest('.orden');
+    if (o) { e.stopPropagation(); ejecutar(o.dataset.orden); }
+  });
+  salida.addEventListener('keydown', (e) => {
+    const o = e.target.closest('.orden');
+    if (o && e.key === 'Enter') ejecutar(o.dataset.orden);
+  });
+  term.addEventListener('click', () => {
+    if (ocupado) { apurar = true; return; }
+    if (!getSelection().toString()) entrada.focus({ preventScroll: true });
+  });
+  term.addEventListener('keydown', () => { if (ocupado) apurar = true; });
+  entrada.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); ejecutar(entrada.value, { tipear: false }); }
+    else if (e.key === 'ArrowUp' && historial.length) { e.preventDefault(); posHist = Math.max(0, posHist - 1); entrada.value = historial[posHist]; }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); posHist = Math.min(historial.length, posHist + 1); entrada.value = historial[posHist] || ''; }
+    else if (e.key === 'Tab') {
+      e.preventDefault();
+      const val = entrada.value;
+      const candidatos = [...new Set(COMPLETAR.filter((c) => c.startsWith(val) && c !== val))];
+      if (candidatos.length === 1) entrada.value = candidatos[0];
+      else if (candidatos.length > 1) {
+        let comun = candidatos[0];
+        for (const c of candidatos) while (!c.startsWith(comun)) comun = comun.slice(0, -1);
+        if (comun.length > val.length) entrada.value = comun;
+        else html(PROMPT + esc(val) + '\n' + candidatos.slice(0, 12).map((c) => ord(c)).join('   ') + '\n\n');
+      }
+    } else if (e.key === 'l' && e.ctrlKey) { e.preventDefault(); salida.innerHTML = ''; }
+  });
+
+  bienvenida();
+  return {
+    ejecutar: (o) => ejecutar(o),
+    escribirTexto: (t) => html(esc(t)),
+    foco: () => { if (!ocupado && !telefono()) entrada.focus({ preventScroll: true }); },
+  };
+}
+
+// ── Explorador de archivos ────────────────────────────────────────────
+function crearExplorador(cuerpo, v) {
+  const FLECHA = (d) => `<svg viewBox="0 0 14 14"><path d="${d}"/></svg>`;
+  cuerpo.innerHTML = `
+    <div class="exp-barra">
+      <button class="flecha atras" aria-label="Atrás">${FLECHA('M12 7H2M6 3L2 7l4 4')}</button>
+      <button class="flecha arriba" aria-label="Subir un nivel">${FLECHA('M7 12V2M3 6l4-4 4 4')}</button>
+      <div class="direccion"></div>
+    </div>
+    <div class="exp">
+      <nav class="lado" aria-label="Acceso rápido"></nav>
+      <div class="exp-main"><div class="lista"></div><div class="estado"></div></div>
+    </div>`;
+  const LUGARES = [['', 'vigia-ernc'], ['vigia', 'vigia'], ['datos/reportes', 'Reportes CNE'], ['datos/extracciones', 'Extracciones'], ['tests', 'Pruebas'], ['docs', 'docs']];
+  let actual = '';
+  const pila = [];
+  function cargar(dir, { guardar = true } = {}) {
+    if (guardar && dir !== actual) pila.push(actual);
+    actual = dir;
+    $('.lado', cuerpo).innerHTML = `<p class="grupo">Acceso rápido</p>` + LUGARES.map(([r, n]) =>
+      `<button data-dir="${r}" aria-current="${r === dir}">${ICONO.carpeta}${n}</button>`).join('');
+    const partes = dir ? dir.split('/') : [];
+    $('.direccion', cuerpo).innerHTML = ICONO.carpeta + `<span class="sep">›</span><button data-dir="">vigia-ernc</button>` + partes.map((p, i) =>
+      `<span class="sep">›</span><button data-dir="${partes.slice(0, i + 1).join('/')}">${esc(p)}</button>`).join('');
+    $('.atras', cuerpo).disabled = !pila.length;
+    $('.arriba', cuerpo).disabled = !dir;
+    const { carpetas, archivos } = listar(dir);
+    const pre = dir ? dir + '/' : '';
+    $('.lista', cuerpo).innerHTML = `<table>
+      <thead><tr><th>Nombre</th><th>Tipo</th><th class="n">Tamaño</th></tr></thead>
+      <tbody>${carpetas.map((c) => `<tr tabindex="0" data-dir="${esc(pre + c)}"><td class="nombre">${ICONO.carpeta}${esc(c)}</td><td>Carpeta de archivos</td><td></td></tr>`).join('')}
+      ${archivos.map((a) => `<tr tabindex="0" data-archivo="${esc(pre + a)}"><td class="nombre">${iconoArchivo(a)}${esc(a)}</td><td>${tipoDe(a)[2]}</td><td class="n">${tamano(ARCHIVOS[pre + a].bytes)}</td></tr>`).join('')}</tbody>
+    </table>`;
+    $('.estado', cuerpo).textContent = `${carpetas.length + archivos.length} elementos · doble clic para abrir`;
+    $('h2', v).textContent = `${partes.at(-1) || 'vigia-ernc'} - Explorador de archivos`;
+  }
+  const accion = (el) => {
+    if (!el) return;
+    if (el.dataset.dir !== undefined) cargar(el.dataset.dir);
+    else if (el.dataset.archivo) abrirArchivo(el.dataset.archivo);
+  };
+  $('.lado', cuerpo).onclick = (e) => accion(e.target.closest('button'));
+  $('.direccion', cuerpo).onclick = (e) => accion(e.target.closest('button'));
+  $('.atras', cuerpo).onclick = () => { if (pila.length) cargar(pila.pop(), { guardar: false }); };
+  $('.arriba', cuerpo).onclick = () => cargar(actual.split('/').slice(0, -1).join('/'));
+  const lista = $('.lista', cuerpo);
+  lista.onclick = (e) => {
+    const tr = e.target.closest('tbody tr');
+    lista.querySelectorAll('tr.sel').forEach((x) => x.classList.remove('sel'));
+    if (tr) { tr.classList.add('sel'); if (telefono()) accion(tr); }
+  };
+  lista.ondblclick = (e) => accion(e.target.closest('tbody tr'));
+  lista.onkeydown = (e) => { if (e.key === 'Enter') accion(e.target.closest('tbody tr')); };
+  cargar('', { guardar: false });
+  return { cargar: (dir) => cargar(dir || '') };
+}
+
+// ── Editor (solo lectura) con resaltado ───────────────────────────────
+const KW = 'def|class|return|if|elif|else|for|while|in|not|and|or|import|from|as|with|try|except|finally|raise|None|True|False|lambda|yield|continue|break|pass|is|assert|global';
+function resaltar(texto, ext) {
+  const e = String(texto).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));  // comillas intactas: el resaltado las necesita
+  if (ext === 'py') {
+    const re = new RegExp(`("""[\\s\\S]*?"""|'''[\\s\\S]*?'''|[rf]?"(?:\\\\.|[^"\\\\\\n])*"|[rf]?'(?:\\\\.|[^'\\\\\\n])*'|#[^\\n]*|\\b(?:${KW})\\b|\\b\\d+(?:\\.\\d+)?\\b)`, 'g');
+    return e.replace(re, (m) => {
+      if (m.startsWith('#')) return `<span class="hl-c">${m}</span>`;
+      if (/^[rf]?["']/.test(m)) return `<span class="hl-s">${m}</span>`;
+      if (/^\d/.test(m)) return `<span class="hl-n">${m}</span>`;
+      return `<span class="hl-k">${m}</span>`;
+    }).replace(/(<span class="hl-k">(?:def|class)<\/span> )(\w+)/g, '$1<span class="hl-f">$2</span>');
+  }
+  if (ext === 'json') {
+    return e.replace(/("(?:\\.|[^"\\])*")(\s*:)?|\b(-?\d+(?:\.\d+)?|true|false|null)\b/g, (m, s, dosp, n) =>
+      s ? (dosp ? `<span class="hl-f">${s}</span>${dosp}` : `<span class="hl-s">${s}</span>`) : `<span class="hl-n">${n}</span>`);
+  }
+  if (ext === 'md') {
+    return e.replace(/^(#{1,6} .*)$/gm, '<span class="hl-h">$1</span>')
+      .replace(/^(```[\s\S]*?```)$/gm, '<span class="hl-c">$1</span>')
+      .replace(/(`[^`\n]+`)/g, '<span class="hl-s">$1</span>');
+  }
+  return e;
+}
+function crearEditor(cuerpo, v) {
+  cuerpo.innerHTML = `<div class="editor"><pre class="nums" aria-hidden="true"></pre><pre class="codigo"></pre></div><div class="editor-estado"></div>`;
+  function cargar(ruta) {
+    const a = ARCHIVOS[ruta];
+    if (!a || a.contenido == null) return;
+    const texto = a.contenido.replace(/\n$/, '');
+    const ext = ruta.split('.').pop();
+    const lineas = texto.split('\n').length;
+    $('.codigo', cuerpo).innerHTML = resaltar(texto, ext);
+    $('.nums', cuerpo).textContent = Array.from({ length: lineas }, (_, i) => i + 1).join('\n');
+    const carpeta = ruta.split('/').slice(0, -1).join('/');
+    $('h2', v).textContent = `${ruta.split('/').pop()} - ${CASA}${carpeta ? '\\' + win(carpeta) : ''}`;
+    $('.editor-estado', cuerpo).innerHTML = `<span>${lineas} líneas</span><span>${tipoDe(ruta)[2]}</span><span>UTF-8</span><span>Solo lectura</span>`;
+    $('.editor', cuerpo).scrollTo(0, 0);
+  }
+  cargar('README.md');
+  return { cargar };
+}
+
+// ── Verificador: la página del PDF junto a la extracción y las reglas ─
+const NOMBRE_REGLA = { totales: 'Totales', conteo: 'Conteo', evidencia: 'Evidencia', fecha_en_mes: 'Fecha', rango: 'Rango', faltante: 'Faltante', duplicado: 'Duplicado' };
+const PEOR = (cs) => cs.some((c) => c.resultado === 'error') ? 'error' : cs.some((c) => c.resultado === 'aviso') ? 'aviso' : 'ok';
+const GENERICAS = /^(parque|planta|central|proyecto|solar|fotovoltaic[ao]s?|e[oó]lic[ao]|energ[ií]a|chile|spa\.?|s\.a\.|almacenamiento|generaci[oó]n|sistema|modificaci[oó]n|ampliaci[oó]n|l[ií]nea|transmisi[oó]n|mediante|baterías|hidroel[eé]ctrica)$/i;
+function crearVerificador(cuerpo, v) {
+  const conDatos = EDS.filter((e) => e.estado === 'ok');
+  let ed = conDatos.at(-1)?.edicion, etapa = 'aprobacion';
+  cuerpo.innerHTML = `
+    <div class="ver">
+      <nav class="lado" aria-label="Ediciones"></nav>
+      <div class="ver-main">
+        <div class="ver-barra">
+          <div class="segmentado" role="group" aria-label="Tabla">
+            <button data-etapa="ingreso">Ingresos</button><button data-etapa="aprobacion">Aprobados</button>
+          </div>
+          <span class="info"></span>
+        </div>
+        <div class="ver-paneles">
+          <section class="ver-fuente"><h3>Texto de la página, tal como lo recibe el modelo</h3><pre></pre></section>
+          <section class="ver-extr"></section>
+        </div>
+      </div>
+    </div>`;
+
+  function lado() {
+    $('.lado', cuerpo).innerHTML = EDS.map((e) => {
+      if (e.estado !== 'ok') return `<button data-ed="${e.edicion}" class="faltante" aria-current="${e.edicion === ed}"><span>${edCorta(e.edicion)}</span><span class="marca m-nada" title="no publicado"></span></button>`;
+      const p = PEOR(e.controles);
+      return `<button data-ed="${e.edicion}" aria-current="${e.edicion === ed}"><span>${edCorta(e.edicion)}</span><span class="marca m-${p}" title="${p}"></span></button>`;
+    }).join('');
+  }
+
+  function tokens(f) {
+    // Lo que debería estar escrito en la página para esta fila: números, fecha y palabras propias del nombre
+    const t = [];
+    for (const val of [f.potencia_mw, f.inversion_musd]) if (val != null) t.push(`(?<![\\d.,])${comoTexto(val).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1\\.?')}(?![\\d,])`);
+    const [a, m, d] = f.fecha.split('-');
+    t.push(`${d}\\s*[-/]\\s*${m}\\s*[-/]\\s*${a}`);
+    const palabras = (f.nombre + ' ' + f.titular).split(/\s+/)
+      .filter((p) => p.replace(/[^\p{L}\d]/gu, '').length >= 5 && !GENERICAS.test(p));
+    for (const p of palabras.slice(0, 6)) t.push(p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    return t;
+  }
+
+  function fuente(fila) {
+    const pag = EDS.find((e) => e.edicion === ed).paginas[etapa];
+    const pre = $('.ver-fuente pre', cuerpo);
+    if (!fila) { pre.textContent = pag.texto; return; }
+    const re = new RegExp(tokens(fila).join('|'), 'gi');
+    pre.innerHTML = esc(pag.texto).replace(re, (m) => `<mark>${m}</mark>`);
+    const [a, , d] = fila.fecha.split('-');
+    const marcas = [...pre.querySelectorAll('mark')];
+    const primera = marcas.find((x) => x.textContent.startsWith(d) && x.textContent.includes(a)) || marcas[0];
+    if (primera) pre.scrollTo({ top: primera.offsetTop - pre.clientHeight / 3, behavior: quieto ? 'auto' : 'smooth' });
+  }
+
+  function mostrar() {
+    lado();
+    const e = EDS.find((x) => x.edicion === ed);
+    cuerpo.querySelectorAll('.segmentado button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.etapa === etapa));
+    $('h2', v).textContent = `Verificador - ${e.estado === 'ok' ? 'edición de ' + edLarga(e.edicion) : 'edición faltante'}`;
+    $('.ver-main', cuerpo).querySelector('.ausente')?.remove();
+    if (e.estado !== 'ok') {
+      $('.ver-paneles', cuerpo).hidden = true;
+      $('.info', cuerpo).innerHTML = '';
+      $('.ver-main', cuerpo).insertAdjacentHTML('beforeend', `<p class="ausente">La CNE no publicó la edición de ${edLarga(e.edicion)} en la dirección esperada (HTTP 404).<br>Se registró como faltante y el resto siguió.</p>`);
+      return;
+    }
+    $('.ver-paneles', cuerpo).hidden = false;
+    const pag = e.paginas[etapa];
+    $('.info', cuerpo).innerHTML = `Página ${pag.pagina} del <a href="${esc(e.url)}" target="_blank" rel="noopener">PDF de la CNE</a> · ${e.intentos} intento${e.intentos === 1 ? '' : 's'} del modelo`;
+    fuente(null);
+
+    const filas = e.filas.filter((f) => f.etapa === etapa);
+    const ctrl = e.controles.filter((c) => c.etapa === etapa);
+    const dec = e.declarado[etapa];
+    $('.ver-extr', cuerpo).innerHTML = `
+      <h3>Filas que devolvió el modelo · pasa el cursor o toca una fila para ver de dónde sale</h3>
+      <table>
+        <thead><tr><th>Proyecto</th><th>Titular</th><th>Reg.</th><th>Fecha</th><th class="n">MW</th><th class="n">MMUSD</th><th>Bat.</th></tr></thead>
+        <tbody>${filas.map((f, i) => `<tr data-i="${i}" tabindex="0"><td>${esc(f.nombre)}<br><span class="sub">${esc(f.tecnologia)}</span></td><td>${esc(f.titular)}</td><td>${esc(f.region)}</td><td style="white-space:nowrap">${esc(f.fecha)}</td><td class="n${f.potencia_mw == null ? ' vacio' : ''}">${f.potencia_mw == null ? 'vacío' : num(f.potencia_mw)}</td><td class="n${f.inversion_musd == null ? ' vacio' : ''}">${f.inversion_musd == null ? 'vacío' : num(f.inversion_musd)}</td><td>${f.almacenamiento ? 'Sí' : 'No'}</td></tr>`).join('')}</tbody>
+      </table>
+      ${dec ? `<h3>Lo que declara el texto del reporte</h3>
+      <p class="declarado"><b>${dec.proyectos} proyectos · ${num(dec.mw)} MW · ${num(dec.mmusd)} MMUSD</b><br>«${esc(dec.cita)}»</p>` : ''}
+      <h3>Siete reglas</h3>
+      <ul class="reglas">${ctrl.map((c) => `<li class="${c.resultado}"><span class="marca m-${c.resultado}" title="${c.resultado}"></span><b>${NOMBRE_REGLA[c.regla] || c.regla}</b><span class="det">${esc(c.detalle)}</span></li>`).join('')}</ul>
+      ${e.via ? `<p class="nota-ver">Extracción: ${esc(D.modelo)}, ${esc(e.via)}.</p>` : ''}`;
+    const filasDom = cuerpo.querySelectorAll('.ver-extr tbody tr');
+    filasDom.forEach((tr) => {
+      const elegir = () => { filasDom.forEach((x) => x.classList.toggle('activa', x === tr)); fuente(filas[tr.dataset.i]); };
+      tr.addEventListener('mouseenter', elegir);
+      tr.addEventListener('focus', elegir);
+      tr.addEventListener('click', elegir);
+    });
+  }
+
+  $('.lado', cuerpo).onclick = (e) => { const b = e.target.closest('button'); if (b) { ed = b.dataset.ed; mostrar(); } };
+  $('.segmentado', cuerpo).onclick = (e) => { const b = e.target.closest('button'); if (b) { etapa = b.dataset.etapa; mostrar(); } };
+  mostrar();
+  return { cargar: (o) => { if (o?.edicion) ed = o.edicion; if (o?.etapa) etapa = o.etapa; mostrar(); } };
+}
+
+// ── Navegador ─────────────────────────────────────────────────────────
+function crearNavegador(cuerpo, v) {
+  $('.izq', v).innerHTML = `<span class="nav-pestana">${ICONO.navegador}Vigía ERNC</span>`;
+  cuerpo.innerHTML = `
+    <div class="nav-barra">
+      <button class="boton" aria-label="Actualizar">↻</button>
+      <span class="url">file:///C:/Users/francisco/vigia-ernc/docs/<b>informe.html</b></span>
+      <a class="boton" href="informe.html" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">Abrir en pestaña nueva</a>
+    </div>
+    <iframe src="informe.html" title="Informe de Vigía ERNC"></iframe>`;
+  $('.nav-barra button', cuerpo).onclick = () => { const f = $('iframe', cuerpo); f.src = f.src; };
+  return {};
+}
+
+// ── Inicio ────────────────────────────────────────────────────────────
+armarTareas();
+armarInicio();
+armarIconos();
+reloj();
+setInterval(reloj, 20000);
+abrir('terminal');
+</script>
+</body>
+</html>

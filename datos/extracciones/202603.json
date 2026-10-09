@@ -1,0 +1,148 @@
+{
+  "edicion": "202603",
+  "modelo": "claude-opus-5-5",
+  "via": "Claude Code (plan Team), sin clave de API: mismo mensaje y mismo esquema que messages.parse",
+  "paginas": {
+    "ingreso": 7,
+    "aprobacion": 8
+  },
+  "intentos": [
+    {
+      "filas": [
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Eólica",
+          "region": "VII",
+          "titular": "Inversiones Bosquemar SpA",
+          "nombre": "Parque Eólico El Parrón",
+          "fecha": "2026-02-20",
+          "potencia_mw": 184.0,
+          "inversion_musd": 280.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "II",
+          "titular": "GR Cabo de Hornos SpA",
+          "nombre": "Parque Fotovoltaico Elena 2",
+          "fecha": "2026-02-04",
+          "potencia_mw": 468.0,
+          "inversion_musd": 577.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "VI",
+          "titular": "GR Las Chinchillas SpA",
+          "nombre": "Parque Fotovoltaico y Sistema BESS Chanqueahue",
+          "fecha": "2026-02-23",
+          "potencia_mw": 150.0,
+          "inversion_musd": 227.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Eólica",
+          "region": "XII",
+          "titular": "Eólica Faro del Sur S.P.A",
+          "nombre": "Parque Eólico Faro del Sur",
+          "fecha": "2026-02-05",
+          "potencia_mw": 384.0,
+          "inversion_musd": 500.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Mini - Hidro",
+          "region": "XII",
+          "titular": "Empresa Eléctrica de Magallanes S.A",
+          "nombre": "Minicentral Hidroeléctrica río Guerrico",
+          "fecha": "2026-02-17",
+          "potencia_mw": 1.0,
+          "inversion_musd": 8.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "IV",
+          "titular": "Solarig Development Chile SpA",
+          "nombre": "Central Fotovoltaica Sol de La Virgen",
+          "fecha": "2026-02-25",
+          "potencia_mw": 13.0,
+          "inversion_musd": 27.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "V",
+          "titular": "PSF Alicanto Solar SpA",
+          "nombre": "Parque Solar Alicanto",
+          "fecha": "2026-02-17",
+          "potencia_mw": 86.0,
+          "inversion_musd": 125.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "V",
+          "titular": "Sol del Melón SG SpA",
+          "nombre": "Central Fotovoltaica Sol del Melón",
+          "fecha": "2026-02-10",
+          "potencia_mw": 18.0,
+          "inversion_musd": 35.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "VI",
+          "titular": "LAYLA DE VERANO SPA",
+          "nombre": "Parque Fotovoltaico Layla del Verano",
+          "fecha": "2026-02-04",
+          "potencia_mw": 144.0,
+          "inversion_musd": 98.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "XIV",
+          "titular": "ENERGIA RENOVABLE JADE SPA",
+          "nombre": "PARQUE FOTOVOLTAICO LOS ALAMOS",
+          "fecha": "2026-02-03",
+          "potencia_mw": 11.0,
+          "inversion_musd": 15.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Mixto",
+          "region": "II",
+          "titular": "EDF en Chile Holding SpA.",
+          "nombre": "Parque Eólico Wayra",
+          "fecha": "2026-02-04",
+          "potencia_mw": 557.0,
+          "inversion_musd": 624.0,
+          "almacenamiento": true
+        }
+      ],
+      "declarado_ingreso": {
+        "proyectos": 3,
+        "mw": 802.0,
+        "mmusd": 1084.0,
+        "cita": "Durante el mes de febrero, el Sistema de Evaluación Ambiental acogió 3 nuevos proyectos ERNC a calificación. De los cuales, 2 proyectos son solares fotovoltaicos y 1 proyecto es eólico; que en su conjunto suman 802 MW , y que equivalen a una inversión de 1.084 MMUSD."
+      },
+      "declarado_aprobacion": {
+        "proyectos": 8,
+        "mw": 1214.0,
+        "mmusd": 1432.0,
+        "cita": "Durante el mes de febrero, el Sistema de Evaluación Ambiental otorgó 8 nuevas Resoluciones de Calificación Ambiental (RCA) favorables en proyectos ERNC. De los cuales, 5 proyectos son solares fotovoltaicos, 1 proyecto es eólico, 1 proyecto es mixto solar- eólico y 1 proyecto es mini —hidro; que en su conjunto suman 1.214 MW, y que equivale a una inversión de 1.432 MMUSD."
+      }
+    }
+  ]
+}

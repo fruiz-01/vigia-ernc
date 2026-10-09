@@ -1,0 +1,71 @@
+{
+  "edicion": "202607",
+  "modelo": "claude-opus-5-5",
+  "via": "Claude Code (plan Team), sin clave de API: mismo mensaje y mismo esquema que messages.parse",
+  "paginas": {
+    "ingreso": 6,
+    "aprobacion": 7
+  },
+  "intentos": [
+    {
+      "filas": [
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "Interregional",
+          "titular": "Parque Eólico Las Lilas SpA",
+          "nombre": "Parque Eólico Las Lilas",
+          "fecha": "2026-04-10",
+          "potencia_mw": 240.0,
+          "inversion_musd": 510.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "V",
+          "titular": "KSR SEIS SpA",
+          "nombre": "Sistema de Generación Solar Fotovoltaica Loma Verde",
+          "fecha": "2026-04-24",
+          "potencia_mw": 90.0,
+          "inversion_musd": 130.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "IV",
+          "titular": "Solarig Development Chile SpA",
+          "nombre": "Central Fotovoltaica Sol de Oro",
+          "fecha": "2026-04-15",
+          "potencia_mw": 15.0,
+          "inversion_musd": 29.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "VII",
+          "titular": "Pillanco SpA",
+          "nombre": "Parque Fotovoltaico Pillancó",
+          "fecha": "2026-04-13",
+          "potencia_mw": 198.0,
+          "inversion_musd": 236.0,
+          "almacenamiento": true
+        }
+      ],
+      "declarado_ingreso": {
+        "proyectos": 2,
+        "mw": 330.0,
+        "mmusd": 640.0,
+        "cita": "Durante el mes de abril, el Sistema de Evaluación Ambiental acogió 2 nuevos proyectos ERNC a calificación. Todos correspondientes a proyectos solares fotovoltaicos; que en su conjunto suman 330 MW , y que equivalen a una inversión de 640 MMUSD."
+      },
+      "declarado_aprobacion": {
+        "proyectos": 2,
+        "mw": 213.0,
+        "mmusd": 265.0,
+        "cita": "Durante el mes de abril, el Sistema de Evaluación Ambiental otorgó 2 nuevas Resoluciones de Calificación Ambiental (RCA) favorables en proyectos ERNC. Todos correspondientes a proyectos solares fotovoltaicos; que en su conjunto suman 213 MW, y que equivale a una inversión de 265 MMUSD."
+      }
+    }
+  ]
+}

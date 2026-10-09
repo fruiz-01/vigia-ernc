@@ -1,0 +1,148 @@
+{
+  "edicion": "202602",
+  "modelo": "claude-opus-5-5",
+  "via": "Claude Code (plan Team), sin clave de API: mismo mensaje y mismo esquema que messages.parse",
+  "paginas": {
+    "ingreso": 7,
+    "aprobacion": 8
+  },
+  "intentos": [
+    {
+      "filas": [
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Eólica",
+          "region": "Interregional",
+          "titular": "Parque Eolico Tulipanes SpA",
+          "nombre": "Parque Eólico Tulipanes",
+          "fecha": "2026-01-06",
+          "potencia_mw": 410.0,
+          "inversion_musd": 625.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "XIV",
+          "titular": "PSF BESS Puile SpA",
+          "nombre": "PARQUE SOLAR FOTOVOLTAICO Y DE ALMACENAMIENTO DE ENERGÍA PUILE",
+          "fecha": "2026-01-22",
+          "potencia_mw": 9.0,
+          "inversion_musd": 20.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "VII",
+          "titular": "Wpd Inambú SpA",
+          "nombre": "Parque Fotovoltaico Inambú",
+          "fecha": "2026-01-07",
+          "potencia_mw": 21.0,
+          "inversion_musd": 50.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Eólica",
+          "region": "VII",
+          "titular": "Colbún S.A.",
+          "nombre": "Parque Eólico Junquillos",
+          "fecha": "2026-01-06",
+          "potencia_mw": 475.0,
+          "inversion_musd": 570.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "VI",
+          "titular": "PFV PORTEZUELO SPA",
+          "nombre": "Parque Fotovoltaico PMGD Portezuelo",
+          "fecha": "2026-01-30",
+          "potencia_mw": 9.0,
+          "inversion_musd": 15.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "IV",
+          "titular": "PFV Limarí Solar SpA",
+          "nombre": "Parque Fotovoltaico Lagunillas 94,5 MW y Línea Eléctrica Lagunillas - La Ruca 220 kV",
+          "fecha": "2026-01-29",
+          "potencia_mw": 95.0,
+          "inversion_musd": 150.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "VI",
+          "titular": "CVE Proyecto Cincuenta SpA",
+          "nombre": "Parque Fotovoltaico Hacienda Tagua Tagua",
+          "fecha": "2026-01-27",
+          "potencia_mw": 11.0,
+          "inversion_musd": 11.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "I",
+          "titular": "Minerva SpA",
+          "nombre": "Parque Fotovoltaico con Capacidad de Almacenamiento Minerva",
+          "fecha": "2026-01-26",
+          "potencia_mw": 18.0,
+          "inversion_musd": 28.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "I",
+          "titular": "Parque Fotovoltaico Pita Solar SpA",
+          "nombre": "Parque fotovoltaico y línea de transmisión Pita Solar",
+          "fecha": "2026-01-26",
+          "potencia_mw": 192.0,
+          "inversion_musd": 320.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "RM",
+          "titular": "Pacific Hydro Chile S.A",
+          "nombre": "Parque Fotovoltaico Don Patricio",
+          "fecha": "2026-01-07",
+          "potencia_mw": 200.0,
+          "inversion_musd": 368.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "IV",
+          "titular": "The Association of Universities for Research in Astronomy Inc.",
+          "nombre": "Parque Fotovoltaico y sistema de almacenamiento para el suministro eléctrico a los telescopios SOAR, Gemini Sur y Rubin",
+          "fecha": "2026-01-06",
+          "potencia_mw": 5.0,
+          "inversion_musd": 10.0,
+          "almacenamiento": true
+        }
+      ],
+      "declarado_ingreso": {
+        "proyectos": 3,
+        "mw": 440.0,
+        "mmusd": 695.0,
+        "cita": "Durante el mes de enero, el Sistema de Evaluación Ambiental acogió 3 nuevos proyectos ERNC a calificación. De los cuales, 2 proyectos son solares fotovoltaicos y 1 proyecto es eólico; que en su conjunto suman 440 MW , y que equivalen a una inversión de 695 MMUSD."
+      },
+      "declarado_aprobacion": {
+        "proyectos": 8,
+        "mw": 1005.0,
+        "mmusd": 1472.0,
+        "cita": "Durante el mes de enero, el Sistema de Evaluación Ambiental otorgó 8 nuevas Resoluciones de Calificación Ambiental (RCA) favorables en proyectos ERNC. De los cuales, 7 proyectos son solares fotovoltaicos y 1 proyecto es eólico; que en su conjunto suman 1.005 MW, y que equivale a una inversión de 1.472 MMUSD."
+      }
+    }
+  ]
+}

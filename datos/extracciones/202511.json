@@ -1,0 +1,148 @@
+{
+  "edicion": "202511",
+  "modelo": "claude-opus-5-5",
+  "via": "Claude Code (plan Team), sin clave de API: mismo mensaje y mismo esquema que messages.parse",
+  "paginas": {
+    "ingreso": 7,
+    "aprobacion": 8
+  },
+  "intentos": [
+    {
+      "filas": [
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "VII",
+          "titular": "Parque Solar Neutrón SpA",
+          "nombre": "Parque Fotovoltaico Neutrón",
+          "fecha": "2025-10-22",
+          "potencia_mw": 9.0,
+          "inversion_musd": 13.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "VI",
+          "titular": "Los Llanos Solar SpA",
+          "nombre": "Parque Fotovoltaico Cumbres del Sol",
+          "fecha": "2025-10-13",
+          "potencia_mw": 110.0,
+          "inversion_musd": 100.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "V",
+          "titular": "ENERGETICA SOLAR LAUREL SPA",
+          "nombre": "Planta Fotovoltaica Laurel",
+          "fecha": "2025-10-10",
+          "potencia_mw": 7.0,
+          "inversion_musd": 10.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "IV",
+          "titular": "Hanna Solar SpA",
+          "nombre": "Parque Fotovoltaico Hanna",
+          "fecha": "2025-10-10",
+          "potencia_mw": 9.0,
+          "inversion_musd": 15.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "RM",
+          "titular": "CVE Proyecto Cuarenta y Cuatro SpA",
+          "nombre": "Parque Fotovoltaico Bruno Solar",
+          "fecha": "2025-10-21",
+          "potencia_mw": 9.0,
+          "inversion_musd": 13.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Eólica",
+          "region": "XIV",
+          "titular": "Parque Eólico Ovejera Sur SpA",
+          "nombre": "PARQUE EÓLICO OVEJERA SUR",
+          "fecha": "2025-10-13",
+          "potencia_mw": 216.0,
+          "inversion_musd": 280.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Eólica",
+          "region": "II",
+          "titular": "Parque Eólico Antofagasta SpA",
+          "nombre": "Modificación de la Etapa II del Parque Eólico Antofagasta",
+          "fecha": "2025-10-07",
+          "potencia_mw": 462.0,
+          "inversion_musd": 672.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "RM",
+          "titular": "Proyecto Solar Fotovoltaico Lampa SpA",
+          "nombre": "Proyecto Solar Fotovoltaico Lampa",
+          "fecha": "2025-10-20",
+          "potencia_mw": 108.0,
+          "inversion_musd": 160.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "XVI",
+          "titular": "Sayen Fotovoltaica SPA",
+          "nombre": "Parque Fotovoltaico Bulnes",
+          "fecha": "2025-10-14",
+          "potencia_mw": 10.0,
+          "inversion_musd": 9.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "VI",
+          "titular": "ENERGÉTICA SOLAR REQUÍNOA SPA",
+          "nombre": "Energética Solar Requínoa",
+          "fecha": "2025-10-01",
+          "potencia_mw": 10.0,
+          "inversion_musd": 18.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Mixto",
+          "region": "Interregional",
+          "titular": "ERNC LOA Spa",
+          "nombre": "ERNC Tarapacá",
+          "fecha": "2025-10-13",
+          "potencia_mw": 239.0,
+          "inversion_musd": 200.0,
+          "almacenamiento": true
+        }
+      ],
+      "declarado_ingreso": {
+        "proyectos": 5,
+        "mw": 144.0,
+        "mmusd": 151.0,
+        "cita": "Durante el mes de octubre, el Sistema de Evaluación Ambiental acogió 5 nuevos proyectos ERNC a calificación. Todos correspondientes a proyectos solares; que en su conjunto suman 144 MW , y que equivalen a una inversión de 151 MMUSD."
+      },
+      "declarado_aprobacion": {
+        "proyectos": 6,
+        "mw": 1045.0,
+        "mmusd": 1339.0,
+        "cita": "Durante el mes de octubre, el Sistema de Evaluación Ambiental otorgó 6 nuevas Resoluciones de Calificación Ambiental (RCA) favorables en proyectos ERNC. De los cuales, 3 son solares, 2 eólicos y 1 proyecto mixto eólico - fotovoltaico; que en su conjunto suman 1.045 MW, y que equivale a una inversión de 1.339 MMUSD."
+      }
+    }
+  ]
+}

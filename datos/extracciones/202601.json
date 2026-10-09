@@ -1,0 +1,203 @@
+{
+  "edicion": "202601",
+  "modelo": "claude-opus-5-5",
+  "via": "Claude Code (plan Team), sin clave de API: mismo mensaje y mismo esquema que messages.parse",
+  "paginas": {
+    "ingreso": 7,
+    "aprobacion": 8
+  },
+  "intentos": [
+    {
+      "filas": [
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Eólica",
+          "region": "VII",
+          "titular": "Coyanco SpA",
+          "nombre": "Parque eólico Coyanco",
+          "fecha": "2025-12-10",
+          "potencia_mw": 248.0,
+          "inversion_musd": 370.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Eólica",
+          "region": "X",
+          "titular": "Mirador del Sur SPA",
+          "nombre": "Parque Eólico Mirador del Sur",
+          "fecha": "2025-12-30",
+          "potencia_mw": 320.0,
+          "inversion_musd": 111.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Eólica",
+          "region": "X",
+          "titular": "wpd Trumao SpA",
+          "nombre": "Parque Eólico Trumao",
+          "fecha": "2025-12-31",
+          "potencia_mw": 320.0,
+          "inversion_musd": 100.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "V",
+          "titular": "CLD GENERACION 8 SPA",
+          "nombre": "Planta Fotovoltaica Longotoma",
+          "fecha": "2025-12-17",
+          "potencia_mw": 6.0,
+          "inversion_musd": 13.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "II",
+          "titular": "SQM S.A.",
+          "nombre": "Parque Fotovoltaico y Línea de Transmisión para el Abastecimiento de Instalaciones SQM",
+          "fecha": "2025-12-30",
+          "potencia_mw": null,
+          "inversion_musd": 500.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "I",
+          "titular": "SQM S.A.",
+          "nombre": "Parque Fotovoltaico y Línea de Transmisión para el abastecimiento de instalaciones SQM en la Región de Tarapacá",
+          "fecha": "2025-12-02",
+          "potencia_mw": null,
+          "inversion_musd": 111.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "I",
+          "titular": "EUCLIDES SPA",
+          "nombre": "Parque Fotovoltaico con Capacidad de Almacenamiento Euclides",
+          "fecha": "2025-12-02",
+          "potencia_mw": 9.0,
+          "inversion_musd": 17.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "II",
+          "titular": "CI GMF II La Negra ProjectCo SpA",
+          "nombre": "Parque Fotovoltaico Ckoirama Solar",
+          "fecha": "2025-12-24",
+          "potencia_mw": 300.0,
+          "inversion_musd": 500.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "RM",
+          "titular": "Platero Spa",
+          "nombre": "Parque Solar Platero",
+          "fecha": "2025-12-30",
+          "potencia_mw": 16.0,
+          "inversion_musd": 15.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "VI",
+          "titular": "PER LICANCABUR SPA",
+          "nombre": "Parque Solar Fotovoltaico Agnis",
+          "fecha": "2025-12-30",
+          "potencia_mw": 12.0,
+          "inversion_musd": 18.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "I",
+          "titular": "RAMADITAS SOLAR SPA",
+          "nombre": "Parque Fotovoltaico Ramaditas",
+          "fecha": "2025-12-26",
+          "potencia_mw": 420.0,
+          "inversion_musd": 550.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "II",
+          "titular": "Gaviota Solar SpA",
+          "nombre": "Parque fotovoltaico con capacidad de almacenamiento Gaviota Solar",
+          "fecha": "2025-12-24",
+          "potencia_mw": 18.0,
+          "inversion_musd": 28.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "VII",
+          "titular": "Fotovoltaica Galleguillos SpA",
+          "nombre": "Parque Fotovoltaico El Prado",
+          "fecha": "2025-12-24",
+          "potencia_mw": 11.0,
+          "inversion_musd": 11.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "III",
+          "titular": "Parque Solar Llanos de Marañón SpA",
+          "nombre": "Parque Fotovoltaico Llanos de Marañón",
+          "fecha": "2025-12-19",
+          "potencia_mw": 458.0,
+          "inversion_musd": 372.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "II",
+          "titular": "Volta Hidrógeno SpA",
+          "nombre": "Proyecto Volta - Planta de Hidrógeno y Amoníaco Verde",
+          "fecha": "2025-12-17",
+          "potencia_mw": 600.0,
+          "inversion_musd": 2500.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "V",
+          "titular": "PSF Guanay SpA",
+          "nombre": "Proyecto Solar Fotovoltaico Guanay",
+          "fecha": "2025-12-17",
+          "potencia_mw": 123.0,
+          "inversion_musd": 160.0,
+          "almacenamiento": true
+        }
+      ],
+      "declarado_ingreso": {
+        "proyectos": 8,
+        "mw": 1203.0,
+        "mmusd": 1722.0,
+        "cita": "Durante el mes de diciembre, el Sistema de Evaluación Ambiental acogió 8 nuevos proyectos ERNC a calificación. De los cuales, 5 proyectos son solares fotovoltaicos y 3 proyectos son eólicos; que en su conjunto suman 1.203 MW , y que equivalen a una inve rsión de 1.722 MMUSD."
+      },
+      "declarado_aprobacion": {
+        "proyectos": 8,
+        "mw": 1658.0,
+        "mmusd": 3654.0,
+        "cita": "Durante el mes de diciembre, el Sistema de Evaluación Ambiental otorgó 8 nuevas Resoluciones de Calificación Ambiental (RCA) favorables en proyectos ERNC. Todos correspondientes a proyectos solares fotovoltaicos; que en su conjunto suman 1.658 MW, y que equivale a una inversión de 3.654 MMUSD."
+      }
+    }
+  ]
+}

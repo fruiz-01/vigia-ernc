@@ -1,0 +1,183 @@
+{
+  "edicion": "202510",
+  "nota": "Transcrito a mano desde el PDF de la CNE (páginas de las tablas).",
+  "filas": [
+    {
+      "etapa": "ingreso",
+      "tecnologia": "Solar - PV",
+      "region": "I",
+      "titular": "Pampino Solar SpA",
+      "nombre": "Parque Fotovoltaico Pampino",
+      "fecha": "2025-09-30",
+      "potencia_mw": 170,
+      "inversion_musd": 263,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "ingreso",
+      "tecnologia": "Solar - PV",
+      "region": "X",
+      "titular": "Energía Renovable Turquesa SpA",
+      "nombre": "Parque Fotovoltaico Los Maquis",
+      "fecha": "2025-09-16",
+      "potencia_mw": 9,
+      "inversion_musd": 15,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "ingreso",
+      "tecnologia": "Solar - PV",
+      "region": "VII",
+      "titular": "Manquel Solar SpA",
+      "nombre": "Parque Fotovoltaico Manquel Solar",
+      "fecha": "2025-09-03",
+      "potencia_mw": 65,
+      "inversion_musd": 39,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "ingreso",
+      "tecnologia": "Solar - PV",
+      "region": "RM",
+      "titular": "CLD GENERACION 2 SPA",
+      "nombre": "PLANTA FOTOVOLTAICA GRANEROS II",
+      "fecha": "2025-09-22",
+      "potencia_mw": 7,
+      "inversion_musd": 12,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "ingreso",
+      "tecnologia": "Solar - PV",
+      "region": "RM",
+      "titular": "IM2 Solar Chile SpA",
+      "nombre": "Parque Solar Alvarado",
+      "fecha": "2025-09-02",
+      "potencia_mw": 9,
+      "inversion_musd": 15,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "ingreso",
+      "tecnologia": "Solar - PV",
+      "region": "III",
+      "titular": "PFV PEUCO SPA",
+      "nombre": "Parque Fotovoltaico Peuco",
+      "fecha": "2025-09-05",
+      "potencia_mw": 285,
+      "inversion_musd": 795,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "ingreso",
+      "tecnologia": "Solar - PV",
+      "region": "III",
+      "titular": "PFV PIMPOLLO SPA",
+      "nombre": "Parque Fotovoltaico Pimpollo",
+      "fecha": "2025-09-08",
+      "potencia_mw": 9,
+      "inversion_musd": 43,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "ingreso",
+      "tecnologia": "Solar - PV",
+      "region": "III",
+      "titular": "PFV EL AGUILUCHO SPA",
+      "nombre": "Parque Fotovoltaico El Aguilucho",
+      "fecha": "2025-09-08",
+      "potencia_mw": 20,
+      "inversion_musd": 66,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "aprobacion",
+      "tecnologia": "Eólica",
+      "region": "XVI",
+      "titular": "Hy2Wind SpA",
+      "nombre": "Parque Eólico Los Coihues",
+      "fecha": "2025-09-09",
+      "potencia_mw": 187,
+      "inversion_musd": 470,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "aprobacion",
+      "tecnologia": "Solar - PV",
+      "region": "VII",
+      "titular": "Parque Solar Omega SpA",
+      "nombre": "Parque Fotovoltaico Omega",
+      "fecha": "2025-09-24",
+      "potencia_mw": 6,
+      "inversion_musd": 5,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "aprobacion",
+      "tecnologia": "Solar - PV",
+      "region": "III",
+      "titular": "INVERSIONES CANDELARIA SOLAR SPA",
+      "nombre": "Adecuación Proyecto Parque Candelaria Solar y su Línea de Transmisión",
+      "fecha": "2025-09-23",
+      "potencia_mw": null,
+      "inversion_musd": 204,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "aprobacion",
+      "tecnologia": "Solar - PV",
+      "region": "I",
+      "titular": "Solar Oriente SpA",
+      "nombre": "Parque Fotovoltaico Solar",
+      "fecha": "2025-09-15",
+      "potencia_mw": 581,
+      "inversion_musd": 990,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "aprobacion",
+      "tecnologia": "Solar - PV",
+      "region": "VII",
+      "titular": "CHUCAO SOLAR SPA",
+      "nombre": "Parque Solar BESS Cuyumillaco",
+      "fecha": "2025-09-15",
+      "potencia_mw": 101,
+      "inversion_musd": 200,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "aprobacion",
+      "tecnologia": "Solar - PV",
+      "region": "III",
+      "titular": "Campanillas Solar SpA",
+      "nombre": "Parque Solar Fotovoltaico Tamarico Fase II",
+      "fecha": "2025-09-12",
+      "potencia_mw": 169,
+      "inversion_musd": 250,
+      "almacenamiento": true
+    },
+    {
+      "etapa": "aprobacion",
+      "tecnologia": "Solar - PV",
+      "region": "VI",
+      "titular": "ENERGÉTICA SOLAR MARCHIHUE SPA",
+      "nombre": "Energética Solar Marchihue",
+      "fecha": "2025-09-09",
+      "potencia_mw": 9,
+      "inversion_musd": 18,
+      "almacenamiento": true
+    }
+  ],
+  "declarado_ingreso": {
+    "proyectos": 8,
+    "mw": 574,
+    "mmusd": 1248,
+    "cita": "el Sistema de Evaluación Ambiental acogió 8 nuevos proyectos ERNC a calificación. Todos correspondientes a proyectos solares; que en su conjunto suman 574 MW , y que equivalen a una inversión de 1.248 MMUSD."
+  },
+  "declarado_aprobacion": {
+    "proyectos": 7,
+    "mw": 1053,
+    "mmusd": 2137,
+    "cita": "el Sistema de Evaluación Ambiental otorgó 7 nuevas Resoluciones de Calificación Ambiental (RCA) favorables en proyectos ERNC. De los cuales, 6 son solares y 1 eólico; que en su conjunto suman 1.053 MW, y que equivale a una inversión de 2.137 MMUSD."
+  }
+}

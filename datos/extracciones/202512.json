@@ -1,0 +1,192 @@
+{
+  "edicion": "202512",
+  "modelo": "claude-opus-5-5",
+  "via": "Claude Code (plan Team), sin clave de API: mismo mensaje y mismo esquema que messages.parse",
+  "paginas": {
+    "ingreso": 7,
+    "aprobacion": 8
+  },
+  "intentos": [
+    {
+      "filas": [
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "V",
+          "titular": "LUZ DE SOL 5 SPA",
+          "nombre": "Ampliación Parque Fotovoltaico Ritoque Solar",
+          "fecha": "2025-11-21",
+          "potencia_mw": 127.0,
+          "inversion_musd": 70.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "VII",
+          "titular": "Austriaenergy Chile Once SpA",
+          "nombre": "Parque Fotovoltaico El Retiro",
+          "fecha": "2025-11-21",
+          "potencia_mw": null,
+          "inversion_musd": 272.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "III",
+          "titular": "ENERGETICA SOLAR CAYENA SPA",
+          "nombre": "Planta Fotovoltaica Cayena",
+          "fecha": "2025-11-11",
+          "potencia_mw": null,
+          "inversion_musd": 10.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "III",
+          "titular": "PFV EL PITOTOY SPA",
+          "nombre": "Parque Fotovoltaico El Pitotoy",
+          "fecha": "2025-11-03",
+          "potencia_mw": 100.0,
+          "inversion_musd": 136.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "V",
+          "titular": "SLK CB NUEVE SPA",
+          "nombre": "Modificación Proyecto Fotovoltaico de 3MW, SLK CB Nueve SpA",
+          "fecha": "2025-11-04",
+          "potencia_mw": 3.0,
+          "inversion_musd": null,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "III",
+          "titular": "Copao Energía SpA",
+          "nombre": "Parque Fotovoltaico, de almacenamiento y línea de Transmisión Copao, Diego de Almagro",
+          "fecha": "2025-11-07",
+          "potencia_mw": 351.0,
+          "inversion_musd": 289.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Solar - PV",
+          "region": "I",
+          "titular": "PFV SEMILLERO SPA",
+          "nombre": "Parque Fotovoltaico Semillero",
+          "fecha": "2025-11-06",
+          "potencia_mw": 57.0,
+          "inversion_musd": 136.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Mini - Hidro",
+          "region": "XI",
+          "titular": "Empresa Eléctrica de Aisén S.A.",
+          "nombre": "Ampliación de Mini central Hidroeléctrica de Pasada Los Maquis",
+          "fecha": "2025-11-20",
+          "potencia_mw": null,
+          "inversion_musd": 12.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "VI",
+          "titular": "ENERGÉTICA SOLAR LAS NIEVES SPA",
+          "nombre": "Energética Solar Las Nieves",
+          "fecha": "2025-11-24",
+          "potencia_mw": 9.0,
+          "inversion_musd": 18.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "VI",
+          "titular": "PER CERRO MOHAI SPA",
+          "nombre": "Parque Solar Fotovoltaico Vulcano",
+          "fecha": "2025-11-21",
+          "potencia_mw": 16.0,
+          "inversion_musd": 18.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "RM",
+          "titular": "QUELTEHUE SPA",
+          "nombre": "Parque Fotovoltaico Queltehue",
+          "fecha": "2025-11-20",
+          "potencia_mw": 11.0,
+          "inversion_musd": 12.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "V",
+          "titular": "PARQUE SOLAR CASABLANCA SPA",
+          "nombre": "Planta Solar Fotovoltaica Pradera Larga",
+          "fecha": "2025-11-18",
+          "potencia_mw": 132.0,
+          "inversion_musd": 105.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "XV",
+          "titular": "PFV YAL SPA",
+          "nombre": "Parque Fotovoltaico Yal",
+          "fecha": "2025-11-14",
+          "potencia_mw": 22.0,
+          "inversion_musd": 68.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "VI",
+          "titular": "KABAN ENERGY SPA",
+          "nombre": "Parque Fotovoltaico Kaban",
+          "fecha": "2025-11-06",
+          "potencia_mw": 9.0,
+          "inversion_musd": 15.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "I",
+          "titular": "PAMPA PERDIZ SPA",
+          "nombre": "Parque Fotovoltaico Pampa Perdiz",
+          "fecha": "2025-11-03",
+          "potencia_mw": 18.0,
+          "inversion_musd": 20.0,
+          "almacenamiento": true
+        }
+      ],
+      "declarado_ingreso": {
+        "proyectos": 7,
+        "mw": 638.0,
+        "mmusd": 913.0,
+        "cita": "Durante el mes de noviembre, el Sistema de Evaluación Ambiental acogió 7 nuevos proyectos ERNC a calificación. Todos correspondientes a proyectos solares fotovoltaicos; que en su conjunto suman 638 MW , y que equivalen a una inversión de 913 MMUSD."
+      },
+      "declarado_aprobacion": {
+        "proyectos": 8,
+        "mw": 217.0,
+        "mmusd": 268.0,
+        "cita": "Durante el mes de noviembre, el Sistema de Evaluación Ambiental otorgó 8 nuevas Resoluciones de Calificación Ambiental (RCA) favorables en proyectos ERNC. De los cuales, 7 son solares y 1 proyecto mini - hidro; que en su conjunto suman 217 MW, y que equivale a una inversión de 268 MMUSD."
+      }
+    }
+  ]
+}

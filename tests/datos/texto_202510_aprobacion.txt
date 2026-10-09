@@ -1,0 +1,197 @@
+Comisión Nacional de Energía -  Reporte Mensual ERNC -  Octubre 2025  
+8 
+554
+562
+382
+163
+704
+216
+177
+475
+297
+196
+725
+1.527
+1.054
+7.032 
+ -
+ 1.200
+ 2.400
+ 3.600
+ 4.800
+ 6.000
+ 7.200
+ 8.400
+0
+350
+700
+1.050
+1.400
+1.750
+sept
+oct
+nov
+dic
+ene
+feb
+mar
+abr
+may
+jun
+jul
+ago
+sept
+2024
+2025
+Potencia Aprobada acumulado[MW]
+Potencia Aprobada [MW]
+575
+614
+565
+179
+742
+381
+150
+528
+337
+339
+879
+1.828
+2.137
+9.253
+0
+1.500
+3.000
+4.500
+6.000
+7.500
+9.000
+10.500
+0
+400
+800
+1.200
+1.600
+2.000
+2.400
+2.800
+sept
+oct
+nov
+dic
+ene
+feb
+mar
+abr
+may
+jun
+jul
+ago
+sept
+2024
+2025
+MMUSD aprobados acumulados
+MMUSD aprobados  mensual
+Fuente: Ministerio de Energía, División de Desarrollo de Proyectos,  a partir de datos del SEA. Datos: Energía Abierta. Blockchain: Certificado. 
+3. Proyectos con RCA Aprobada  
+Nota: la columna de almacenamiento indica si el proyecto incorpora sistema de almacenamiento en su presentación.  
+Fuente: Ministerio de Energía, División de Desarrollo de Proyectos,  a partir de datos del SEA. Datos: Energía Abierta. Blockchain: 
+Solar fotovoltaico  
+Eólica 
+Biomasa 
+Mini Hidráulica de Pasada 
+Concentración Solar de Potencia  
+Potencia acumulada últimos 13 meses  
+Evolución de Potencia — Proyectos ERNC con RCA aprobada en los últimos 13  meses
+ 
+Inversión acumulada últimos 13 meses 
+Inversión mensual MMUSD 
+Evolución de inversión ERNC — Proyectos con RCA aprobada en los últimos 13  meses
+ 
+La gráfica a continuación presenta la evolución de los proyectos aprobados por el SEA durante los últimos 13 meses. En el pri
+mer 
+gráfico se advierte que la inversión total acumulada de todos los proyectos aprobados durante este período equivale a 9.253 
+MMUSD en el segundo, que la potencia ERNC aprobada fue de 7.032 MW, lo que equivale a un 93,7% del total de la potencia aprob a-
+da. Estos gráficos no incluyen proyectos de tecnología mixta como es el caso de los parques eólicos -  solares . 
+Durante el mes de septiembre, el Sistema de Evaluación Ambiental otorgó 7 nuevas Resoluciones de Calificación Ambiental (RCA)
+ 
+favorables en proyectos ERNC. De los cuales, 6 son solares y 1 eólico; que en su conjunto suman 1.053 MW, y que equivale a un
+a in-
+versión de 2.137 MMUSD. 
+Tecnología  
+Región Titular del proyecto  
+Nombre del proyecto  
+Fecha 
+Aprobación 
+Potencia  
+[MW] 
+Inversión  
+[MMUSD] WEB Almacena-
+miento 
+Eólica 
+XVI 
+Hy2Wind SpA 
+Parque Eólico Los Coihues 09-09-2025 
+187 
+470 
+Ver 
+Si 
+Solar -  PV 
+VII 
+Parque Solar Omega 
+SpA 
+Parque Fotovoltaico Omega  24-09-2025 
+6 
+5 
+Ver 
+Si 
+Solar -  PV 
+III 
+INVERSIONES CANDE-
+LARIA SOLAR SPA 
+Adecuación Proyecto Parque 
+Candelaria Solar y su Línea 
+de Transmisión 
+23-09-2025 
+-  
+204 
+Ver 
+Si 
+Solar -  PV 
+I 
+Solar Oriente SpA 
+Parque Fotovoltaico Solar 
+15-09-2025 
+581 
+990 
+Ver 
+Si 
+Solar -  PV 
+VII 
+CHUCAO SOLAR SPA 
+Parque Solar BESS Cuyumi-
+llaco 
+15-09-2025 
+101 
+200 
+Ver 
+Si 
+Solar -  PV 
+III 
+Campanillas Solar SpA  
+Parque Solar Fotovoltaico 
+Tamarico Fase II 
+12-09-2025 
+169 
+250 
+Ver 
+Si 
+Solar -  PV 
+VI 
+ENERGÉTICA SOLAR 
+MARCHIHUE SPA 
+Energética Solar Marchihue 09-09-2025 
+9 
+18 
+Ver 
+Si 

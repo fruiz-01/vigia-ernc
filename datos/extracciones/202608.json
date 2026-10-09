@@ -1,0 +1,93 @@
+{
+  "edicion": "202608",
+  "modelo": "claude-opus-5-5",
+  "via": "Claude Code (plan Team), sin clave de API: mismo mensaje y mismo esquema que messages.parse",
+  "paginas": {
+    "ingreso": 6,
+    "aprobacion": 7
+  },
+  "intentos": [
+    {
+      "filas": [
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Eólica",
+          "region": "VII",
+          "titular": "Vientos Pacífico Verde SpA",
+          "nombre": "Parque Eólico Viento Pacífico Verde",
+          "fecha": "2026-07-20",
+          "potencia_mw": 154.0,
+          "inversion_musd": 150.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "ingreso",
+          "tecnologia": "Mixto",
+          "region": "Interregional",
+          "titular": "PLAN 8 Energía Infinita Ltda",
+          "nombre": "Parque Híbrido Eólico, Solar y Almacenamiento de Energía Las Quintas (PHLQ)",
+          "fecha": "2026-07-20",
+          "potencia_mw": 190.0,
+          "inversion_musd": 200.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "X",
+          "titular": "Energía Renovable Platino SpA",
+          "nombre": "Parque Fotovoltaico El Tepual Norte",
+          "fecha": "2026-07-17",
+          "potencia_mw": 18.0,
+          "inversion_musd": 15.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "VII",
+          "titular": "Mariquina Solar I SpA",
+          "nombre": "Parque Fotovoltaico El Coipo Solar",
+          "fecha": "2026-07-14",
+          "potencia_mw": 145.0,
+          "inversion_musd": 183.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "IV",
+          "titular": "CLD GENERACION 3 SPA",
+          "nombre": "Planta Fotovoltaica Perico",
+          "fecha": "2026-07-07",
+          "potencia_mw": 6.0,
+          "inversion_musd": 13.0,
+          "almacenamiento": true
+        },
+        {
+          "etapa": "aprobacion",
+          "tecnologia": "Solar - PV",
+          "region": "V",
+          "titular": "PFV Limachino III SpA",
+          "nombre": "Parque Fotovoltaico Limachino III",
+          "fecha": "2026-07-07",
+          "potencia_mw": 9.0,
+          "inversion_musd": 15.0,
+          "almacenamiento": true
+        }
+      ],
+      "declarado_ingreso": {
+        "proyectos": 2,
+        "mw": 344.0,
+        "mmusd": 350.0,
+        "cita": "Durante el mes de julio, el Sistema de Evaluación Ambiental acogió 2 nuevos proyectos ERNC a calificación. De los cuales, 1 proyecto es eólico y 1 proyecto es mixto solar fotovoltaico - eólico; que en su conjunto suman 344 MW, y que equivalen a una inversión de 350 MMUSD."
+      },
+      "declarado_aprobacion": {
+        "proyectos": 4,
+        "mw": 178.0,
+        "mmusd": 226.0,
+        "cita": "Durante el mes de julio, el Sistema de Evaluación Ambiental otorgó 4 nuevas Resoluciones de Calificación Ambiental (RCA) favorables en proyectos ERNC. Todos correspondientes a proyectos solares fotovoltaicos; que en su conjunto suman 178 MW, y que equivalen a una inversión de 226 MMUSD."
+      }
+    }
+  ]
+}

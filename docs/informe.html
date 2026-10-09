@@ -1,0 +1,1585 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vigía ERNC</title>
+<meta name="description" content="Proyectos ERNC que entran a evaluación ambiental y se aprueban en Chile, leídos de los reportes de la CNE por un agente y verificados antes de guardarse.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --fondo: #fbfaf6; --banda: #eef3ef; --linea-banda: #d6e2da;
+  --tinta: #1d2a26; --tinta-2: #4c5a55; --tenue: #7b8782; --regla: #e3e2da;
+  --solar: #e9a21b; --eolica: #1f8a9b; --mixto: #7c5cb3; --otra: #8a9a3f;
+  --ingreso: #3c78c3; --aprobacion: #2e8b57;
+  --verde: #2e8b57; --rojo: #c8442f; --ambar: #b7791f;
+}
+@media (prefers-color-scheme: dark) { :root {
+  --fondo: #121816; --banda: #18221f; --linea-banda: #26332e;
+  --tinta: #e9eeeb; --tinta-2: #b4c0bb; --tenue: #84918c; --regla: #26302c;
+  --solar: #f2b33d; --eolica: #3fb0c1; --mixto: #a487d6; --otra: #a9bb5c;
+  --ingreso: #6aa1e3; --aprobacion: #4fb57a; --verde: #4fb57a; --rojo: #ee6b55; --ambar: #e3a54a; } }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin:0; background:var(--fondo); color:var(--tinta); font:15px/1.55 'Archivo', system-ui, sans-serif;
+       font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; }
+.contenido { max-width: 1180px; margin: 0 auto; padding: 0 40px; }
+h1, h2, h3, p, dl, dd, ol, ul, figure { margin: 0; }
+small { font-size: .55em; font-weight: 500; color: var(--tinta-2); }
+
+/* Cabecera en una banda de color suave, con una franja de las tres tecnologías */
+.cabecera { background: var(--banda); border-bottom: 1px solid var(--linea-banda); position: relative; }
+.cabecera::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 4px;
+  background: linear-gradient(90deg, var(--solar) 0 34%, var(--eolica) 34% 67%, var(--aprobacion) 67%); }
+.cabecera .contenido { padding-top: 56px; padding-bottom: 36px; }
+.sobretitulo { font-size: 13px; font-weight: 600; color: var(--eolica); letter-spacing: .02em; }
+h1 { margin-top: 6px; font-size: 60px; line-height: .95; font-stretch: 70%; font-weight: 750; }
+h1 span { color: var(--eolica); }
+.bajada { margin-top: 14px; color: var(--tinta-2); max-width: 64ch; font-size: 17px; }
+.aviso-previa { margin-top: 16px; display: inline-block; padding: 6px 12px; border-left: 3px solid var(--ambar);
+  background: color-mix(in srgb, var(--ambar) 10%, transparent); color: var(--tinta-2); font-size: 14px; max-width: 80ch; }
+.cifras { display: flex; flex-wrap: wrap; margin-top: 34px; gap: 0; }
+.cifras div { padding: 0 34px 0 0; margin-right: 34px; border-right: 1px solid var(--linea-banda); }
+.cifras div:last-child { border: 0; }
+.cifras dt { font-size: 13px; color: var(--tinta-2); }
+.cifras dd { font-size: 34px; font-weight: 650; font-stretch: 85%; line-height: 1.15; }
+.cifras dd.nota { font-size: 13px; font-weight: 400; font-stretch: 100%; color: var(--tenue); }
+
+section { margin-top: 64px; }
+h2 { font-size: 18px; font-stretch: 82%; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+h2::before { content: ""; width: 14px; height: 3px; background: var(--eolica); border-radius: 2px; }
+
+/* Gráficos */
+.graficos { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px 64px; }
+.grafico figcaption { font-weight: 650; font-stretch: 85%; font-size: 15px; margin-bottom: 14px; }
+.grafico figcaption span { font-weight: 400; color: var(--tenue); font-size: 13px; margin-left: 4px; }
+.region { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr) 3.5rem; align-items: center; gap: 12px; padding: 4px 0; font-size: 14px; }
+.region .nombre { color: var(--tinta-2); }
+.region .valor { text-align: right; font-weight: 600; }
+.pista { display: flex; height: 14px; border-radius: 3px; overflow: hidden; transform-origin: left;
+  animation: crecer-x .9s cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(var(--i) * 60ms + 150ms); }
+.pista span { display: block; height: 100%; }
+.meses { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 6px; align-items: end; }
+.mes .area { height: 170px; display: flex; align-items: flex-end; justify-content: center; gap: 3px;
+  border-bottom: 1px solid var(--tinta-2); position: relative; }
+.barra { width: 42%; max-width: 14px; border-radius: 2px 2px 0 0; transform-origin: bottom;
+  animation: crecer-y .9s cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(var(--i) * 50ms + 200ms); }
+.mes.pendiente .area, .mes.falta .area { background: repeating-linear-gradient(135deg, transparent 0 5px, var(--regla) 5px 6px); }
+.mes.falta .area { background: repeating-linear-gradient(135deg, transparent 0 5px, color-mix(in srgb, var(--rojo) 35%, transparent) 5px 6px); }
+.mes.falta .etiqueta, .mes.falta .etiqueta span { color: var(--rojo); font-weight: 600; }
+.etiqueta { text-align: center; font-size: 12px; color: var(--tinta-2); margin-top: 6px; line-height: 1.2; }
+.etiqueta span { color: var(--tenue); font-size: 11px; }
+.leyenda { display: flex; flex-wrap: wrap; gap: 6px 20px; margin-top: 16px; font-size: 13px; color: var(--tinta-2); }
+.leyenda span { display: inline-flex; align-items: center; gap: 7px; }
+.cuadro { display: inline-block; width: 11px; height: 11px; border-radius: 2px; }
+.cuadro.rayado { background: repeating-linear-gradient(135deg, transparent 0 2px, var(--tenue) 2px 3px); }
+.t-solar { background: var(--solar); } .t-eolica { background: var(--eolica); }
+.t-mixto { background: var(--mixto); } .t-otra { background: var(--otra); }
+.e-ingreso { background: var(--ingreso); } .e-aprobacion { background: var(--aprobacion); }
+.punto { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 7px; vertical-align: .02em; }
+
+/* Tablas */
+.tabla { position: relative; overflow-x: auto; margin: 0 -10px; } /* contiene a los .sr absolutos */
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { text-align: left; font-size: 12.5px; font-weight: 600; font-stretch: 87%; color: var(--tinta-2);
+     padding: 0 10px 8px; border-bottom: 1.5px solid var(--tinta-2); white-space: nowrap; }
+td { padding: 9px 10px; border-bottom: 1px solid var(--regla); vertical-align: baseline; }
+tbody tr { transition: background .15s; }
+tbody tr:hover { background: color-mix(in srgb, var(--eolica) 6%, transparent); }
+.n { text-align: right; white-space: nowrap; }
+.c { text-align: center; }
+.sin-corte { white-space: nowrap; }
+.verificacion th:nth-child(n+3) { text-align: center; }
+.verificacion .ed { white-space: nowrap; font-weight: 500; }
+.verificacion tr.pendiente td, .verificacion tr.falta td { color: var(--tenue); font-size: 13.5px; }
+.verificacion tr.falta { background: color-mix(in srgb, var(--rojo) 5%, transparent); }
+.etiqueta-estado { font-size: 13px; font-weight: 600; color: var(--tenue); }
+.etiqueta-estado.rojo { color: var(--rojo); } .etiqueta-estado.verde { color: var(--verde); }
+.tenue { color: var(--tenue); } .rojo { color: var(--rojo); } .ambar { color: var(--ambar); } .verde { color: var(--verde); }
+.m { display: inline-block; vertical-align: 0; }
+.m-ok { width: 8px; height: 8px; border-radius: 50%; background: color-mix(in srgb, var(--verde) 70%, transparent); }
+.m-aviso { width: 9px; height: 9px; background: var(--ambar); transform: rotate(45deg) scale(.86); }
+.m-error { width: 9px; height: 9px; background: var(--rojo); }
+.detalles { list-style: none; padding: 0; margin-top: 18px; font-size: 14px; color: var(--tinta-2); }
+.detalles li { padding: 7px 0; border-bottom: 1px solid var(--regla); }
+.detalles .m { margin-right: 10px; }
+.detalles b { color: var(--tinta); font-weight: 600; }
+.etapa { font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+.etapa::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.etapa.e-ingreso, .etapa.e-aprobacion { background: none; }
+.etapa.e-ingreso { color: var(--ingreso); } .etapa.e-aprobacion { color: var(--aprobacion); }
+
+/* Fichas: sin cajas; una línea de color por tecnología marca cada una */
+.criterio { color: var(--tinta-2); max-width: 80ch; margin-bottom: 14px; }
+.fichas { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 8px 48px; }
+.ficha { padding: 16px 0 22px; border-top: 3px solid var(--tenue); }
+.ficha.f-solar { border-top-color: var(--solar); } .ficha.f-eolica { border-top-color: var(--eolica); }
+.ficha.f-mixto { border-top-color: var(--mixto); }
+.ficha .meta { font-size: 13px; color: var(--tinta-2); }
+.ficha h3 { margin-top: 6px; font-size: 22px; font-stretch: 78%; line-height: 1.15; }
+.ficha .titular { color: var(--tinta-2); }
+.datos { display: grid; grid-template-columns: repeat(4, auto); justify-content: start; gap: 0 26px; margin-top: 12px; }
+.datos dt { font-size: 12.5px; color: var(--tenue); white-space: nowrap; }
+.datos dd { font-size: 18px; font-weight: 650; white-space: nowrap; }
+.falta { margin-top: 12px; font-size: 13.5px; color: var(--tinta-2); }
+.falta span { color: var(--tinta); }
+.fuente { margin-top: 6px; font-size: 13px; color: var(--tenue); }
+a { color: var(--eolica); text-underline-offset: 3px; }
+
+/* Método */
+.pasos { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; counter-reset: paso; }
+.pasos li { counter-increment: paso; border-top: 1.5px solid var(--regla); padding-top: 10px; color: var(--tinta-2); font-size: 14px; }
+.pasos b { display: block; color: var(--tinta); font-size: 15px; margin-bottom: 4px; }
+.pasos b::before { content: counter(paso) " "; color: var(--eolica); font-weight: 700; }
+.reglas { margin-top: 28px; max-width: 86ch; }
+.reglas div { display: grid; grid-template-columns: 8rem 1fr; padding: 7px 0; border-bottom: 1px solid var(--regla); font-size: 14px; }
+.reglas dt { font-weight: 600; }
+.reglas dd { color: var(--tinta-2); }
+footer { margin: 72px 0 0; padding: 18px 0 40px; border-top: 1px solid var(--regla); font-size: 13px; color: var(--tenue); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* Animaciones: crecen las barras y las secciones aparecen al llegar a ellas */
+@keyframes crecer-x { from { transform: scaleX(0); } }
+@keyframes crecer-y { from { transform: scaleY(0); } }
+.js .aparece { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
+.js .aparece.visible { opacity: 1; transform: none; }
+.js .aparece .pista, .js .aparece .barra { animation-play-state: paused; }
+.js .aparece.visible .pista, .js .aparece.visible .barra { animation-play-state: running; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before { animation: none !important; transition: none !important; }
+  .js .aparece { opacity: 1; transform: none; }
+}
+@media (max-width: 860px) { .graficos { grid-template-columns: 1fr; } .pasos { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .contenido { padding: 0 16px; } h1 { font-size: 42px; }
+  .cabecera .contenido { padding-top: 40px; }
+  .cifras div { padding-right: 18px; margin-right: 18px; margin-bottom: 12px; } .cifras dd { font-size: 26px; }
+  .region { grid-template-columns: 7rem minmax(0, 1fr) 3rem; }
+  .meses { gap: 3px; } .mes .area { height: 130px; }
+  .datos { grid-template-columns: repeat(2, auto); } .pasos { grid-template-columns: 1fr; }
+  .reglas div { grid-template-columns: 1fr; } }
+</style>
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="contenido">
+    <p class="sobretitulo">Mercado eléctrico chileno · energías renovables</p>
+    <h1>Vigía <span>ERNC</span></h1>
+    <p class="bajada">Proyectos que entran a evaluación ambiental y se aprueban en Chile. Un agente los lee de los reportes mensuales de la CNE y los verifica antes de guardarlos.</p>
+    
+    
+    <dl class="cifras">
+      <div><dt>Filas leídas</dt><dd><span data-cuenta="113" data-decimales="0">113</span></dd><dd class="nota">11 de 12 ediciones</dd></div>
+      <div><dt>Potencia</dt><dd><span data-cuenta="12897.0" data-decimales="0">12.897</span> <small>MW</small></dd><dd class="nota">ingresos y aprobaciones</dd></div>
+      <div><dt>Controles</dt><dd><span data-cuenta="154" data-decimales="0">154</span></dd><dd class="nota">7 reglas por tabla</dd></div>
+      <div><dt>Observaciones</dt><dd><span class="rojo"><span data-cuenta="5" data-decimales="0">5</span></span> <small>errores</small> · <span class="ambar"><span data-cuenta="12" data-decimales="0">12</span></span> <small>avisos</small></dd><dd class="nota">cada una explicada abajo</dd></div>
+    </dl>
+  </div>
+</header>
+<main class="contenido">
+  
+    <section class="aparece">
+      <div class="graficos">
+        
+      <figure class="grafico">
+        <figcaption>Potencia por región, de norte a sur <span>MW</span></figcaption>
+        <div class="regiones"><div class="region"><span class="nombre">Arica y Parinacota</span><span class="pista" style="--i:0"><span class="t-solar" style="width:0.91%" title="Solar: 22 MW"></span></span><span class="valor">22</span></div><div class="region"><span class="nombre">Tarapacá</span><span class="pista" style="--i:1"><span class="t-solar" style="width:60.91%" title="Solar: 1.465 MW"></span></span><span class="valor">1.465</span></div><div class="region"><span class="nombre">Antofagasta</span><span class="pista" style="--i:2"><span class="t-solar" style="width:57.63%" title="Solar: 1.386 MW"></span><span class="t-eolica" style="width:19.21%" title="Eólica: 462 MW"></span><span class="t-mixto" style="width:23.16%" title="Mixto: 557 MW"></span></span><span class="valor">2.405</span></div><div class="region"><span class="nombre">Atacama</span><span class="pista" style="--i:3"><span class="t-solar" style="width:57.88%" title="Solar: 1.392 MW"></span></span><span class="valor">1.392</span></div><div class="region"><span class="nombre">Coquimbo</span><span class="pista" style="--i:4"><span class="t-solar" style="width:10.98%" title="Solar: 264 MW"></span></span><span class="valor">264</span></div><div class="region"><span class="nombre">Valparaíso</span><span class="pista" style="--i:5"><span class="t-solar" style="width:33.93%" title="Solar: 816 MW"></span></span><span class="valor">816</span></div><div class="region"><span class="nombre">Metropolitana</span><span class="pista" style="--i:6"><span class="t-solar" style="width:15.97%" title="Solar: 384 MW"></span></span><span class="valor">384</span></div><div class="region"><span class="nombre">O'Higgins</span><span class="pista" style="--i:7"><span class="t-solar" style="width:20.33%" title="Solar: 489 MW"></span><span class="t-eolica" style="width:0.25%" title="Eólica: 6 MW"></span></span><span class="valor">495</span></div><div class="region"><span class="nombre">Maule</span><span class="pista" style="--i:8"><span class="t-solar" style="width:36.38%" title="Solar: 875 MW"></span><span class="t-eolica" style="width:51.27%" title="Eólica: 1.233 MW"></span></span><span class="valor">2.108</span></div><div class="region"><span class="nombre">Ñuble</span><span class="pista" style="--i:9"><span class="t-solar" style="width:9.23%" title="Solar: 222 MW"></span><span class="t-eolica" style="width:12.56%" title="Eólica: 302 MW"></span></span><span class="valor">524</span></div><div class="region"><span class="nombre">Los Ríos</span><span class="pista" style="--i:10"><span class="t-solar" style="width:0.83%" title="Solar: 20 MW"></span><span class="t-eolica" style="width:8.98%" title="Eólica: 216 MW"></span></span><span class="valor">236</span></div><div class="region"><span class="nombre">Los Lagos</span><span class="pista" style="--i:11"><span class="t-solar" style="width:2.41%" title="Solar: 58 MW"></span><span class="t-eolica" style="width:37.26%" title="Eólica: 896 MW"></span></span><span class="valor">954</span></div><div class="region"><span class="nombre">Magallanes</span><span class="pista" style="--i:12"><span class="t-eolica" style="width:15.97%" title="Eólica: 384 MW"></span><span class="t-otra" style="width:0.04%" title="Otra: 1 MW"></span></span><span class="valor">385</span></div><div class="region"><span class="nombre">Interregional</span><span class="pista" style="--i:13"><span class="t-solar" style="width:19.96%" title="Solar: 480 MW"></span><span class="t-eolica" style="width:17.05%" title="Eólica: 410 MW"></span><span class="t-mixto" style="width:17.84%" title="Mixto: 429 MW"></span></span><span class="valor">1.319</span></div><div class="region"><span class="nombre">Interregion</span><span class="pista" style="--i:14"><span class="t-eolica" style="width:5.32%" title="Eólica: 128 MW"></span></span><span class="valor">128</span></div></div>
+      </figure>
+        
+      <figure class="grafico">
+        <figcaption>Potencia por edición del reporte <span>MW</span></figcaption>
+        <div class="meses"><div class="mes" title="octubre 2025: ingresos 574 MW · aprobados 1.053 MW"><div class="area"><span class="barra e-ingreso" style="height:34.6%;--i:0"></span><span class="barra e-aprobacion" style="height:63.5%;--i:0"></span></div><div class="etiqueta">oct<br><span>25</span></div></div><div class="mes" title="noviembre 2025: ingresos 144 MW · aprobados 1.045 MW"><div class="area"><span class="barra e-ingreso" style="height:8.7%;--i:1"></span><span class="barra e-aprobacion" style="height:63.0%;--i:1"></span></div><div class="etiqueta">nov<br><span>25</span></div></div><div class="mes" title="diciembre 2025: ingresos 638 MW · aprobados 217 MW"><div class="area"><span class="barra e-ingreso" style="height:38.5%;--i:2"></span><span class="barra e-aprobacion" style="height:13.1%;--i:2"></span></div><div class="etiqueta">dic<br><span>25</span></div></div><div class="mes" title="enero 2026: ingresos 1.203 MW · aprobados 1.658 MW"><div class="area"><span class="barra e-ingreso" style="height:72.6%;--i:3"></span><span class="barra e-aprobacion" style="height:100.0%;--i:3"></span></div><div class="etiqueta">ene<br><span>26</span></div></div><div class="mes" title="febrero 2026: ingresos 440 MW · aprobados 1.005 MW"><div class="area"><span class="barra e-ingreso" style="height:26.5%;--i:4"></span><span class="barra e-aprobacion" style="height:60.6%;--i:4"></span></div><div class="etiqueta">feb<br><span>26</span></div></div><div class="mes" title="marzo 2026: ingresos 802 MW · aprobados 1.214 MW"><div class="area"><span class="barra e-ingreso" style="height:48.4%;--i:5"></span><span class="barra e-aprobacion" style="height:73.2%;--i:5"></span></div><div class="etiqueta">mar<br><span>26</span></div></div><div class="mes" title="abril 2026: ingresos 217 MW · aprobados 313 MW"><div class="area"><span class="barra e-ingreso" style="height:13.1%;--i:6"></span><span class="barra e-aprobacion" style="height:18.9%;--i:6"></span></div><div class="etiqueta">abr<br><span>26</span></div></div><div class="mes falta" title="mayo 2026: no está publicado"><div class="area"></div><div class="etiqueta">may<br><span>26</span></div></div><div class="mes" title="junio 2026: ingresos 330 MW · aprobados 213 MW"><div class="area"><span class="barra e-ingreso" style="height:19.9%;--i:8"></span><span class="barra e-aprobacion" style="height:12.8%;--i:8"></span></div><div class="etiqueta">jun<br><span>26</span></div></div><div class="mes" title="julio 2026: ingresos 330 MW · aprobados 213 MW"><div class="area"><span class="barra e-ingreso" style="height:19.9%;--i:9"></span><span class="barra e-aprobacion" style="height:12.8%;--i:9"></span></div><div class="etiqueta">jul<br><span>26</span></div></div><div class="mes" title="agosto 2026: ingresos 344 MW · aprobados 178 MW"><div class="area"><span class="barra e-ingreso" style="height:20.7%;--i:10"></span><span class="barra e-aprobacion" style="height:10.7%;--i:10"></span></div><div class="etiqueta">ago<br><span>26</span></div></div><div class="mes" title="septiembre 2026: ingresos 245 MW · aprobados 521 MW"><div class="area"><span class="barra e-ingreso" style="height:14.8%;--i:11"></span><span class="barra e-aprobacion" style="height:31.4%;--i:11"></span></div><div class="etiqueta">sep<br><span>26</span></div></div></div>
+        <p class="leyenda"><span><i class="cuadro e-ingreso"></i>Ingresa a evaluación</span><span><i class="cuadro e-aprobacion"></i>Aprobado</span><span><i class="cuadro rayado"></i>Sin datos</span></p>
+      </figure>
+      </div>
+      <p class="leyenda"><span><i class="punto t-solar"></i>Solar</span><span><i class="punto t-eolica"></i>Eólica</span><span><i class="punto t-mixto"></i>Mixto</span><span><i class="punto t-otra"></i>Otra</span></p>
+    </section>
+  
+    <section class="aparece">
+      <h2>Verificación</h2>
+      <div class="tabla"><table class="verificacion">
+        <thead><tr><th>Edición</th><th>Estado</th><th>Totales</th><th>Conteo</th><th>Evidencia</th><th>Fecha</th><th>Rango</th><th>Faltante</th><th>Duplicado</th></tr></thead>
+        <tbody><tr><td class="ed">octubre 2025</td><td><span class="etiqueta-estado verde">Verificado</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-aviso" title="aviso"></i><span class="sr">aviso</span></td><td class="c"><i class="m m-aviso" title="aviso"></i><span class="sr">aviso</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td></tr><tr><td class="ed">noviembre 2025</td><td><span class="etiqueta-estado verde">Verificado</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td></tr><tr><td class="ed">diciembre 2025</td><td><span class="etiqueta-estado verde">Verificado</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-aviso" title="aviso"></i><span class="sr">aviso</span></td><td class="c"><i class="m m-aviso" title="aviso"></i><span class="sr">aviso</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td></tr><tr><td class="ed">enero 2026</td><td><span class="etiqueta-estado verde">Verificado</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-aviso" title="aviso"></i><span class="sr">aviso</span></td><td class="c"><i class="m m-aviso" title="aviso"></i><span class="sr">aviso</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td></tr><tr><td class="ed">febrero 2026</td><td><span class="etiqueta-estado verde">Verificado</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td></tr><tr><td class="ed">marzo 2026</td><td><span class="etiqueta-estado verde">Verificado</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-aviso" title="aviso"></i><span class="sr">aviso</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td></tr><tr><td class="ed">abril 2026</td><td><span class="etiqueta-estado rojo">1 error</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-error" title="error"></i><span class="sr">error</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-aviso" title="aviso"></i><span class="sr">aviso</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td></tr><tr class="falta"><td class="ed">mayo 2026</td><td><span class="etiqueta-estado rojo">Falta</span></td><td colspan="7">No está publicado en la dirección esperada; se registra y se sigue</td></tr><tr><td class="ed">junio 2026</td><td><span class="etiqueta-estado rojo">2 errores</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-error" title="error"></i><span class="sr">error</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td></tr><tr><td class="ed">julio 2026</td><td><span class="etiqueta-estado rojo">2 errores</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-error" title="error"></i><span class="sr">error</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-aviso" title="aviso"></i><span class="sr">aviso</span></td></tr><tr><td class="ed">agosto 2026</td><td><span class="etiqueta-estado verde">Verificado</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td></tr><tr><td class="ed">septiembre 2026</td><td><span class="etiqueta-estado verde">Verificado</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td><td class="c"><i class="m m-aviso" title="aviso"></i><span class="sr">aviso</span></td><td class="c"><i class="m m-ok" title="sin observaciones"></i><span class="sr">sin observaciones</span></td></tr></tbody>
+      </table></div>
+      <ul class="detalles"><li><i class="m m-aviso" title="aviso"></i><span class="sr">aviso</span><b>octubre 2025</b> · ingresos · Rango: revisar: Parque Fotovoltaico Pimpollo: 4,78 MMUSD/MW; Parque Fotovoltaico El Aguilucho: 3,30 MMUSD/MW</li><li><i class="m m-aviso" title="aviso"></i><span class="sr">aviso</span><b>octubre 2025</b> · aprobados · Faltante: «-» en la fuente: Adecuación Proyecto Parque Candelaria Solar y su Línea de Transmisión (potencia)</li><li><i class="m m-aviso" title="aviso"></i><span class="sr">aviso</span><b>diciembre 2025</b> · ingresos · Faltante: «-» en la fuente: Parque Fotovoltaico El Retiro (potencia); Planta Fotovoltaica Cayena (potencia); Modificación Proyecto Fotovoltaico de 3MW, SLK CB Nueve SpA (inversión)</li><li><i class="m m-aviso" title="aviso"></i><span class="sr">aviso</span><b>diciembre 2025</b> · aprobados · Rango: revisar: Parque Fotovoltaico Yal: 3,09 MMUSD/MW</li><li><i class="m m-aviso" title="aviso"></i><span class="sr">aviso</span><b>diciembre 2025</b> · aprobados · Faltante: «-» en la fuente: Ampliación de Mini central Hidroeléctrica de Pasada Los Maquis (potencia)</li><li><i class="m m-aviso" title="aviso"></i><span class="sr">aviso</span><b>enero 2026</b> · ingresos · Faltante: «-» en la fuente: Parque Fotovoltaico y Línea de Transmisión para el Abastecimiento de Instalaciones SQM (potencia); Parque Fotovoltaico y Línea de Transmisión para el abastecimiento de instalaciones SQM en la Región de Tarapacá (potencia)</li><li><i class="m m-aviso" title="aviso"></i><span class="sr">aviso</span><b>enero 2026</b> · aprobados · Rango: revisar: Proyecto Volta - Planta de Hidrógeno y Amoníaco Verde: 4,17 MMUSD/MW</li><li><i class="m m-aviso" title="aviso"></i><span class="sr">aviso</span><b>marzo 2026</b> · aprobados · Rango: revisar: Minicentral Hidroeléctrica río Guerrico: 8,00 MMUSD/MW</li><li><i class="m m-aviso" title="aviso"></i><span class="sr">aviso</span><b>abril 2026</b> · ingresos · Faltante: «-» en la fuente: Modificación Planta Solar Fotovoltaica Tres Cruces (potencia)</li><li><i class="m m-error" title="error"></i><span class="sr">error</span><b>abril 2026</b> · aprobados · Evidencia: no aparece en el texto: total mw 313 no está en la cita</li><li><i class="m m-error" title="error"></i><span class="sr">error</span><b>junio 2026</b> · ingresos · Fecha: fuera de 2026-05: Parque Eólico Las Lilas (2026-04-10); Sistema de Generación Solar Fotovoltaica Loma Verde (2026-04-24)</li><li><i class="m m-error" title="error"></i><span class="sr">error</span><b>junio 2026</b> · aprobados · Fecha: fuera de 2026-05: Central Fotovoltaica Sol de Oro (2026-04-15); Parque Fotovoltaico Pillancó (2026-04-13)</li><li><i class="m m-error" title="error"></i><span class="sr">error</span><b>julio 2026</b> · ingresos · Fecha: fuera de 2026-06: Parque Eólico Las Lilas (2026-04-10); Sistema de Generación Solar Fotovoltaica Loma Verde (2026-04-24)</li><li><i class="m m-aviso" title="aviso"></i><span class="sr">aviso</span><b>julio 2026</b> · ingresos · Duplicado: repetido: Parque Eólico Las Lilas (ya en 202606); Sistema de Generación Solar Fotovoltaica Loma Verde (ya en 202606)</li><li><i class="m m-error" title="error"></i><span class="sr">error</span><b>julio 2026</b> · aprobados · Fecha: fuera de 2026-06: Central Fotovoltaica Sol de Oro (2026-04-15); Parque Fotovoltaico Pillancó (2026-04-13)</li><li><i class="m m-aviso" title="aviso"></i><span class="sr">aviso</span><b>julio 2026</b> · aprobados · Duplicado: repetido: Central Fotovoltaica Sol de Oro (ya en 202606); Parque Fotovoltaico Pillancó (ya en 202606)</li><li><i class="m m-aviso" title="aviso"></i><span class="sr">aviso</span><b>septiembre 2026</b> · ingresos · Faltante: «-» en la fuente: Planta Fotovoltaica El Faro (potencia)</li></ul>
+    </section>
+  
+    <section class="aparece">
+      <h2>Fichas de oportunidad</h2>
+      <p class="criterio">Proyectos con RCA aprobada, con baterías y entre 20 y 300 MW, de mayor a menor potencia. Son posibles vendedores de energía para una comercializadora sin centrales propias; el criterio es un supuesto para conversar con el área de Mercados.</p>
+      <div class="fichas">
+      <article class="ficha f-mixto" style="--i:0">
+        <p class="meta"><i class="punto t-mixto"></i>Mixto · Interregional · aprobado el 13 oct 2025</p>
+        <h3>ERNC Tarapacá</h3>
+        <p class="titular">ERNC LOA Spa</p>
+        <dl class="datos">
+          <div><dt>Potencia</dt><dd>239 MW</dd></div>
+          <div><dt>Inversión</dt><dd>200 MMUSD</dd></div>
+          <div><dt>Por MW</dt><dd>0,84</dd></div>
+          <div><dt>Baterías</dt><dd>Sí</dd></div>
+        </dl>
+        <p class="falta"><span>Falta confirmar en el expediente del SEA:</span> MWh de baterías, punto de conexión, fecha de operación y si ya tiene contrato de venta.</p>
+        <p class="fuente">Fuente: <a href="https://www.cne.cl/wp-content/uploads/2025/11/RMensual_ERNC_v202511.pdf">CNE, Reporte Mensual ERNC, noviembre 2025</a>, página 8</p>
+      </article>
+      <article class="ficha f-eolica" style="--i:1">
+        <p class="meta"><i class="punto t-eolica"></i>Eólica · Los Ríos · aprobado el 13 oct 2025</p>
+        <h3>PARQUE EÓLICO OVEJERA SUR</h3>
+        <p class="titular">Parque Eólico Ovejera Sur SpA</p>
+        <dl class="datos">
+          <div><dt>Potencia</dt><dd>216 MW</dd></div>
+          <div><dt>Inversión</dt><dd>280 MMUSD</dd></div>
+          <div><dt>Por MW</dt><dd>1,30</dd></div>
+          <div><dt>Baterías</dt><dd>Sí</dd></div>
+        </dl>
+        <p class="falta"><span>Falta confirmar en el expediente del SEA:</span> MWh de baterías, punto de conexión, fecha de operación y si ya tiene contrato de venta.</p>
+        <p class="fuente">Fuente: <a href="https://www.cne.cl/wp-content/uploads/2025/11/RMensual_ERNC_v202511.pdf">CNE, Reporte Mensual ERNC, noviembre 2025</a>, página 8</p>
+      </article>
+      <article class="ficha f-solar" style="--i:2">
+        <p class="meta"><i class="punto t-solar"></i>Solar · Ñuble · aprobado el 4 ago 2026</p>
+        <h3>Planta Fotovoltaica Las Mellizas</h3>
+        <p class="titular">CIUDADLUZ</p>
+        <dl class="datos">
+          <div><dt>Potencia</dt><dd>212 MW</dd></div>
+          <div><dt>Inversión</dt><dd>400 MMUSD</dd></div>
+          <div><dt>Por MW</dt><dd>1,89</dd></div>
+          <div><dt>Baterías</dt><dd>Sí</dd></div>
+        </dl>
+        <p class="falta"><span>Falta confirmar en el expediente del SEA:</span> MWh de baterías, punto de conexión, fecha de operación y si ya tiene contrato de venta.</p>
+        <p class="fuente">Fuente: <a href="https://www.cne.cl/wp-content/uploads/2026/09/RMensual_ERNC_v202609.pdf">CNE, Reporte Mensual ERNC, septiembre 2026</a>, página 7</p>
+      </article>
+      <article class="ficha f-solar" style="--i:3">
+        <p class="meta"><i class="punto t-solar"></i>Solar · Metropolitana · aprobado el 7 ene 2026</p>
+        <h3>Parque Fotovoltaico Don Patricio</h3>
+        <p class="titular">Pacific Hydro Chile S.A</p>
+        <dl class="datos">
+          <div><dt>Potencia</dt><dd>200 MW</dd></div>
+          <div><dt>Inversión</dt><dd>368 MMUSD</dd></div>
+          <div><dt>Por MW</dt><dd>1,84</dd></div>
+          <div><dt>Baterías</dt><dd>Sí</dd></div>
+        </dl>
+        <p class="falta"><span>Falta confirmar en el expediente del SEA:</span> MWh de baterías, punto de conexión, fecha de operación y si ya tiene contrato de venta.</p>
+        <p class="fuente">Fuente: <a href="https://www.cne.cl/wp-content/uploads/2026/02/RMensual_ERNC_v202602.pdf">CNE, Reporte Mensual ERNC, febrero 2026</a>, página 8</p>
+      </article>
+      <article class="ficha f-solar" style="--i:4">
+        <p class="meta"><i class="punto t-solar"></i>Solar · Maule · aprobado el 13 abr 2026</p>
+        <h3>Parque Fotovoltaico Pillancó</h3>
+        <p class="titular">Pillanco SpA</p>
+        <dl class="datos">
+          <div><dt>Potencia</dt><dd>198 MW</dd></div>
+          <div><dt>Inversión</dt><dd>236 MMUSD</dd></div>
+          <div><dt>Por MW</dt><dd>1,19</dd></div>
+          <div><dt>Baterías</dt><dd>Sí</dd></div>
+        </dl>
+        <p class="falta"><span>Falta confirmar en el expediente del SEA:</span> MWh de baterías, punto de conexión, fecha de operación y si ya tiene contrato de venta.</p>
+        <p class="fuente">Fuente: <a href="https://www.cne.cl/wp-content/uploads/2026/06/RMensual_ERNC_v202606.pdf">CNE, Reporte Mensual ERNC, junio 2026</a>, página 7</p>
+      </article>
+      <article class="ficha f-solar" style="--i:5">
+        <p class="meta"><i class="punto t-solar"></i>Solar · Tarapacá · aprobado el 26 ene 2026</p>
+        <h3>Parque fotovoltaico y línea de transmisión Pita Solar</h3>
+        <p class="titular">Parque Fotovoltaico Pita Solar SpA</p>
+        <dl class="datos">
+          <div><dt>Potencia</dt><dd>192 MW</dd></div>
+          <div><dt>Inversión</dt><dd>320 MMUSD</dd></div>
+          <div><dt>Por MW</dt><dd>1,67</dd></div>
+          <div><dt>Baterías</dt><dd>Sí</dd></div>
+        </dl>
+        <p class="falta"><span>Falta confirmar en el expediente del SEA:</span> MWh de baterías, punto de conexión, fecha de operación y si ya tiene contrato de venta.</p>
+        <p class="fuente">Fuente: <a href="https://www.cne.cl/wp-content/uploads/2026/02/RMensual_ERNC_v202602.pdf">CNE, Reporte Mensual ERNC, febrero 2026</a>, página 8</p>
+      </article></div>
+    </section>
+  
+    <section class="aparece">
+      <h2>Proyectos</h2>
+      <div class="tabla"><table>
+        <thead><tr><th>Etapa</th><th class="n">Fecha</th><th>Proyecto</th><th>Titular</th><th>Región</th><th>Tecnología</th><th class="n">MW</th><th class="n">MMUSD</th><th>Baterías</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">27 ago 2026</td>
+          <td>Parque Fotovoltaico Hanna</td>
+          <td class="tenue">LENERGIA</td>
+          <td>Coquimbo</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">9</td>
+          <td class="n">15</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">27 ago 2026</td>
+          <td>Planta Fotovoltaica El Faro</td>
+          <td class="tenue">IDENERGY</td>
+          <td>Atacama</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">—</td>
+          <td class="n">10</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">21 ago 2026</td>
+          <td>Parque Eólico Andino Suiza</td>
+          <td class="tenue">andes-solar</td>
+          <td>Ñuble</td>
+          <td class="sin-corte"><i class="punto t-eolica"></i>Eólica</td>
+          <td class="n">115</td>
+          <td class="n">172</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">21 ago 2026</td>
+          <td>Parque Fotovoltaico y de Almacenamiento de Energía Mediante el Uso de Baterías (BESS) Versalles II - Sector Chilicauquen</td>
+          <td class="tenue">Langa</td>
+          <td>Valparaíso</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">116</td>
+          <td class="n">110</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">19 ago 2026</td>
+          <td>Parque Eólico Viena</td>
+          <td class="tenue">AUSTRIA ENERGY</td>
+          <td>Los Lagos</td>
+          <td class="sin-corte"><i class="punto t-eolica"></i>Eólica</td>
+          <td class="n">120</td>
+          <td class="n">150</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">18 ago 2026</td>
+          <td>Parque Eólico Loma Verde</td>
+          <td class="tenue">ENGIE</td>
+          <td>Los Lagos</td>
+          <td class="sin-corte"><i class="punto t-eolica"></i>Eólica</td>
+          <td class="n">136</td>
+          <td class="n">212</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">18 ago 2026</td>
+          <td>Parque Fotovoltaico Chacayal</td>
+          <td class="tenue">IM2 SOLAR</td>
+          <td>Los Lagos</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">14</td>
+          <td class="n">15</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">6 ago 2026</td>
+          <td>Planta Fotovoltaica Cabildo</td>
+          <td class="tenue">IDENERGY</td>
+          <td>Valparaíso</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">9</td>
+          <td class="n">10</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">5 ago 2026</td>
+          <td>Planta fotovoltaica Parral</td>
+          <td class="tenue">CIUDADLUZ</td>
+          <td>Maule</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">7</td>
+          <td class="n">14</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">4 ago 2026</td>
+          <td>Planta Fotovoltaica Las Mellizas</td>
+          <td class="tenue">CIUDADLUZ</td>
+          <td>Ñuble</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">212</td>
+          <td class="n">400</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">3 ago 2026</td>
+          <td>Parque Fotovoltaico El Roble Norte</td>
+          <td class="tenue">Eactiva</td>
+          <td>Los Lagos</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">17</td>
+          <td class="n">15</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">3 ago 2026</td>
+          <td>Parque Fotovoltaico Gabriela Solar</td>
+          <td class="tenue">CVE</td>
+          <td>Metropolitana</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">11</td>
+          <td class="n">11</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">20 jul 2026</td>
+          <td>Parque Eólico Viento Pacífico Verde</td>
+          <td class="tenue">Vientos Pacífico Verde SpA</td>
+          <td>Maule</td>
+          <td class="sin-corte"><i class="punto t-eolica"></i>Eólica</td>
+          <td class="n">154</td>
+          <td class="n">150</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">20 jul 2026</td>
+          <td>Parque Híbrido Eólico, Solar y Almacenamiento de Energía Las Quintas (PHLQ)</td>
+          <td class="tenue">PLAN 8 Energía Infinita Ltda</td>
+          <td>Interregional</td>
+          <td class="sin-corte"><i class="punto t-mixto"></i>Mixto</td>
+          <td class="n">190</td>
+          <td class="n">200</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">17 jul 2026</td>
+          <td>Parque Fotovoltaico El Tepual Norte</td>
+          <td class="tenue">Energía Renovable Platino SpA</td>
+          <td>Los Lagos</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">18</td>
+          <td class="n">15</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">14 jul 2026</td>
+          <td>Parque Fotovoltaico El Coipo Solar</td>
+          <td class="tenue">Mariquina Solar I SpA</td>
+          <td>Maule</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">145</td>
+          <td class="n">183</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">7 jul 2026</td>
+          <td>Parque Fotovoltaico Limachino III</td>
+          <td class="tenue">PFV Limachino III SpA</td>
+          <td>Valparaíso</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">9</td>
+          <td class="n">15</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">7 jul 2026</td>
+          <td>Planta Fotovoltaica Perico</td>
+          <td class="tenue">CLD GENERACION 3 SPA</td>
+          <td>Coquimbo</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">6</td>
+          <td class="n">13</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">24 abr 2026</td>
+          <td>Sistema de Generación Solar Fotovoltaica Loma Verde</td>
+          <td class="tenue">KSR SEIS SpA</td>
+          <td>Valparaíso</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">90</td>
+          <td class="n">130</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">24 abr 2026</td>
+          <td>Sistema de Generación Solar Fotovoltaica Loma Verde</td>
+          <td class="tenue">KSR SEIS SpA</td>
+          <td>Valparaíso</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">90</td>
+          <td class="n">130</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">15 abr 2026</td>
+          <td>Central Fotovoltaica Sol de Oro</td>
+          <td class="tenue">Solarig Development Chile SpA</td>
+          <td>Coquimbo</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">15</td>
+          <td class="n">29</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">15 abr 2026</td>
+          <td>Central Fotovoltaica Sol de Oro</td>
+          <td class="tenue">Solarig Development Chile SpA</td>
+          <td>Coquimbo</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">15</td>
+          <td class="n">29</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">13 abr 2026</td>
+          <td>Parque Fotovoltaico Pillancó</td>
+          <td class="tenue">Pillanco SpA</td>
+          <td>Maule</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">198</td>
+          <td class="n">236</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">13 abr 2026</td>
+          <td>Parque Fotovoltaico Pillancó</td>
+          <td class="tenue">Pillanco SpA</td>
+          <td>Maule</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">198</td>
+          <td class="n">236</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">10 abr 2026</td>
+          <td>Parque Eólico Las Lilas</td>
+          <td class="tenue">Parque Eólico Las Lilas SpA</td>
+          <td>Interregional</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">240</td>
+          <td class="n">510</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">10 abr 2026</td>
+          <td>Parque Eólico Las Lilas</td>
+          <td class="tenue">Parque Eólico Las Lilas SpA</td>
+          <td>Interregional</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">240</td>
+          <td class="n">510</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">30 mar 2026</td>
+          <td>Planta Solar Monte Patria III</td>
+          <td class="tenue">CLD GENERACION 5 SPA</td>
+          <td>Coquimbo</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">6</td>
+          <td class="n">13</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">27 mar 2026</td>
+          <td>Modificación Parques Eólicos Cardonal, Manantiales y Los Cerrillos</td>
+          <td class="tenue">Statkraft eólico S.A.</td>
+          <td>O'Higgins</td>
+          <td class="sin-corte"><i class="punto t-eolica"></i>Eólica</td>
+          <td class="n">6</td>
+          <td class="n">14</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">26 mar 2026</td>
+          <td>Parque Fotovoltaico Hortensia Solar</td>
+          <td class="tenue">CVE Proyecto Cuarenta y Ocho SpA.</td>
+          <td>Metropolitana</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">13</td>
+          <td class="n">11</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">18 mar 2026</td>
+          <td>Ampliación y Modificaciones Parque Fotovoltaico Soles del Norte</td>
+          <td class="tenue">Soles Del Norte SpA</td>
+          <td>Coquimbo</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">91</td>
+          <td class="n">79</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">9 mar 2026</td>
+          <td>Parque Eólico El Rosal</td>
+          <td class="tenue">Engie Energía Chile S.A.</td>
+          <td>Maule</td>
+          <td class="sin-corte"><i class="punto t-eolica"></i>Eólica</td>
+          <td class="n">172</td>
+          <td class="n">230</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">6 mar 2026</td>
+          <td>Parque fotovoltaico El colorado</td>
+          <td class="tenue">ENERGIA RENOVABLE TOPACIO SPA</td>
+          <td>Maule</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">114</td>
+          <td class="n">130</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">4 mar 2026</td>
+          <td>Parque Eólico Fénix</td>
+          <td class="tenue">Parque Eólico Maqui SpA</td>
+          <td>Interregion</td>
+          <td class="sin-corte"><i class="punto t-eolica"></i>Eólica</td>
+          <td class="n">128</td>
+          <td class="n">110</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">2 mar 2026</td>
+          <td>Modificación Planta Solar Fotovoltaica Tres Cruces</td>
+          <td class="tenue">Sonnedix Chile Holding SpA</td>
+          <td>Atacama</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">—</td>
+          <td class="n">205</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">25 feb 2026</td>
+          <td>Central Fotovoltaica Sol de La Virgen</td>
+          <td class="tenue">Solarig Development Chile SpA</td>
+          <td>Coquimbo</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">13</td>
+          <td class="n">27</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">23 feb 2026</td>
+          <td>Parque Fotovoltaico y Sistema BESS Chanqueahue</td>
+          <td class="tenue">GR Las Chinchillas SpA</td>
+          <td>O'Higgins</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">150</td>
+          <td class="n">227</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">20 feb 2026</td>
+          <td>Parque Eólico El Parrón</td>
+          <td class="tenue">Inversiones Bosquemar SpA</td>
+          <td>Maule</td>
+          <td class="sin-corte"><i class="punto t-eolica"></i>Eólica</td>
+          <td class="n">184</td>
+          <td class="n">280</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">17 feb 2026</td>
+          <td>Minicentral Hidroeléctrica río Guerrico</td>
+          <td class="tenue">Empresa Eléctrica de Magallanes S.A</td>
+          <td>Magallanes</td>
+          <td class="sin-corte"><i class="punto t-otra"></i>Otra</td>
+          <td class="n">1</td>
+          <td class="n">8</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">17 feb 2026</td>
+          <td>Parque Solar Alicanto</td>
+          <td class="tenue">PSF Alicanto Solar SpA</td>
+          <td>Valparaíso</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">86</td>
+          <td class="n">125</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">10 feb 2026</td>
+          <td>Central Fotovoltaica Sol del Melón</td>
+          <td class="tenue">Sol del Melón SG SpA</td>
+          <td>Valparaíso</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">18</td>
+          <td class="n">35</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">5 feb 2026</td>
+          <td>Parque Eólico Faro del Sur</td>
+          <td class="tenue">Eólica Faro del Sur S.P.A</td>
+          <td>Magallanes</td>
+          <td class="sin-corte"><i class="punto t-eolica"></i>Eólica</td>
+          <td class="n">384</td>
+          <td class="n">500</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">4 feb 2026</td>
+          <td>Parque Eólico Wayra</td>
+          <td class="tenue">EDF en Chile Holding SpA.</td>
+          <td>Antofagasta</td>
+          <td class="sin-corte"><i class="punto t-mixto"></i>Mixto</td>
+          <td class="n">557</td>
+          <td class="n">624</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">4 feb 2026</td>
+          <td>Parque Fotovoltaico Elena 2</td>
+          <td class="tenue">GR Cabo de Hornos SpA</td>
+          <td>Antofagasta</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">468</td>
+          <td class="n">577</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">4 feb 2026</td>
+          <td>Parque Fotovoltaico Layla del Verano</td>
+          <td class="tenue">LAYLA DE VERANO SPA</td>
+          <td>O'Higgins</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">144</td>
+          <td class="n">98</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">3 feb 2026</td>
+          <td>PARQUE FOTOVOLTAICO LOS ALAMOS</td>
+          <td class="tenue">ENERGIA RENOVABLE JADE SPA</td>
+          <td>Los Ríos</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">11</td>
+          <td class="n">15</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">30 ene 2026</td>
+          <td>Parque Fotovoltaico PMGD Portezuelo</td>
+          <td class="tenue">PFV PORTEZUELO SPA</td>
+          <td>O'Higgins</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">9</td>
+          <td class="n">15</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">29 ene 2026</td>
+          <td>Parque Fotovoltaico Lagunillas 94,5 MW y Línea Eléctrica Lagunillas - La Ruca 220 kV</td>
+          <td class="tenue">PFV Limarí Solar SpA</td>
+          <td>Coquimbo</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">95</td>
+          <td class="n">150</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">27 ene 2026</td>
+          <td>Parque Fotovoltaico Hacienda Tagua Tagua</td>
+          <td class="tenue">CVE Proyecto Cincuenta SpA</td>
+          <td>O'Higgins</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">11</td>
+          <td class="n">11</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">26 ene 2026</td>
+          <td>Parque Fotovoltaico con Capacidad de Almacenamiento Minerva</td>
+          <td class="tenue">Minerva SpA</td>
+          <td>Tarapacá</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">18</td>
+          <td class="n">28</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">26 ene 2026</td>
+          <td>Parque fotovoltaico y línea de transmisión Pita Solar</td>
+          <td class="tenue">Parque Fotovoltaico Pita Solar SpA</td>
+          <td>Tarapacá</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">192</td>
+          <td class="n">320</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">22 ene 2026</td>
+          <td>PARQUE SOLAR FOTOVOLTAICO Y DE ALMACENAMIENTO DE ENERGÍA PUILE</td>
+          <td class="tenue">PSF BESS Puile SpA</td>
+          <td>Los Ríos</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">9</td>
+          <td class="n">20</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">7 ene 2026</td>
+          <td>Parque Fotovoltaico Don Patricio</td>
+          <td class="tenue">Pacific Hydro Chile S.A</td>
+          <td>Metropolitana</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">200</td>
+          <td class="n">368</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">7 ene 2026</td>
+          <td>Parque Fotovoltaico Inambú</td>
+          <td class="tenue">Wpd Inambú SpA</td>
+          <td>Maule</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">21</td>
+          <td class="n">50</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">6 ene 2026</td>
+          <td>Parque Eólico Junquillos</td>
+          <td class="tenue">Colbún S.A.</td>
+          <td>Maule</td>
+          <td class="sin-corte"><i class="punto t-eolica"></i>Eólica</td>
+          <td class="n">475</td>
+          <td class="n">570</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">6 ene 2026</td>
+          <td>Parque Eólico Tulipanes</td>
+          <td class="tenue">Parque Eolico Tulipanes SpA</td>
+          <td>Interregional</td>
+          <td class="sin-corte"><i class="punto t-eolica"></i>Eólica</td>
+          <td class="n">410</td>
+          <td class="n">625</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">6 ene 2026</td>
+          <td>Parque Fotovoltaico y sistema de almacenamiento para el suministro eléctrico a los telescopios SOAR, Gemini Sur y Rubin</td>
+          <td class="tenue">The Association of Universities for Research in Astronomy Inc.</td>
+          <td>Coquimbo</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">5</td>
+          <td class="n">10</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">31 dic 2025</td>
+          <td>Parque Eólico Trumao</td>
+          <td class="tenue">wpd Trumao SpA</td>
+          <td>Los Lagos</td>
+          <td class="sin-corte"><i class="punto t-eolica"></i>Eólica</td>
+          <td class="n">320</td>
+          <td class="n">100</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">30 dic 2025</td>
+          <td>Parque Eólico Mirador del Sur</td>
+          <td class="tenue">Mirador del Sur SPA</td>
+          <td>Los Lagos</td>
+          <td class="sin-corte"><i class="punto t-eolica"></i>Eólica</td>
+          <td class="n">320</td>
+          <td class="n">111</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">30 dic 2025</td>
+          <td>Parque Fotovoltaico y Línea de Transmisión para el Abastecimiento de Instalaciones SQM</td>
+          <td class="tenue">SQM S.A.</td>
+          <td>Antofagasta</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">—</td>
+          <td class="n">500</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">30 dic 2025</td>
+          <td>Parque Solar Fotovoltaico Agnis</td>
+          <td class="tenue">PER LICANCABUR SPA</td>
+          <td>O'Higgins</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">12</td>
+          <td class="n">18</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">30 dic 2025</td>
+          <td>Parque Solar Platero</td>
+          <td class="tenue">Platero Spa</td>
+          <td>Metropolitana</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">16</td>
+          <td class="n">15</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">26 dic 2025</td>
+          <td>Parque Fotovoltaico Ramaditas</td>
+          <td class="tenue">RAMADITAS SOLAR SPA</td>
+          <td>Tarapacá</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">420</td>
+          <td class="n">550</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">24 dic 2025</td>
+          <td>Parque Fotovoltaico Ckoirama Solar</td>
+          <td class="tenue">CI GMF II La Negra ProjectCo SpA</td>
+          <td>Antofagasta</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">300</td>
+          <td class="n">500</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">24 dic 2025</td>
+          <td>Parque Fotovoltaico El Prado</td>
+          <td class="tenue">Fotovoltaica Galleguillos SpA</td>
+          <td>Maule</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">11</td>
+          <td class="n">11</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">24 dic 2025</td>
+          <td>Parque fotovoltaico con capacidad de almacenamiento Gaviota Solar</td>
+          <td class="tenue">Gaviota Solar SpA</td>
+          <td>Antofagasta</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">18</td>
+          <td class="n">28</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">19 dic 2025</td>
+          <td>Parque Fotovoltaico Llanos de Marañón</td>
+          <td class="tenue">Parque Solar Llanos de Marañón SpA</td>
+          <td>Atacama</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">458</td>
+          <td class="n">372</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">17 dic 2025</td>
+          <td>Planta Fotovoltaica Longotoma</td>
+          <td class="tenue">CLD GENERACION 8 SPA</td>
+          <td>Valparaíso</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">6</td>
+          <td class="n">13</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">17 dic 2025</td>
+          <td>Proyecto Solar Fotovoltaico Guanay</td>
+          <td class="tenue">PSF Guanay SpA</td>
+          <td>Valparaíso</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">123</td>
+          <td class="n">160</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">17 dic 2025</td>
+          <td>Proyecto Volta - Planta de Hidrógeno y Amoníaco Verde</td>
+          <td class="tenue">Volta Hidrógeno SpA</td>
+          <td>Antofagasta</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">600</td>
+          <td class="n">2.500</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">10 dic 2025</td>
+          <td>Parque eólico Coyanco</td>
+          <td class="tenue">Coyanco SpA</td>
+          <td>Maule</td>
+          <td class="sin-corte"><i class="punto t-eolica"></i>Eólica</td>
+          <td class="n">248</td>
+          <td class="n">370</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">2 dic 2025</td>
+          <td>Parque Fotovoltaico con Capacidad de Almacenamiento Euclides</td>
+          <td class="tenue">EUCLIDES SPA</td>
+          <td>Tarapacá</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">9</td>
+          <td class="n">17</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">2 dic 2025</td>
+          <td>Parque Fotovoltaico y Línea de Transmisión para el abastecimiento de instalaciones SQM en la Región de Tarapacá</td>
+          <td class="tenue">SQM S.A.</td>
+          <td>Tarapacá</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">—</td>
+          <td class="n">111</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">24 nov 2025</td>
+          <td>Energética Solar Las Nieves</td>
+          <td class="tenue">ENERGÉTICA SOLAR LAS NIEVES SPA</td>
+          <td>O'Higgins</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">9</td>
+          <td class="n">18</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">21 nov 2025</td>
+          <td>Ampliación Parque Fotovoltaico Ritoque Solar</td>
+          <td class="tenue">LUZ DE SOL 5 SPA</td>
+          <td>Valparaíso</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">127</td>
+          <td class="n">70</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">21 nov 2025</td>
+          <td>Parque Fotovoltaico El Retiro</td>
+          <td class="tenue">Austriaenergy Chile Once SpA</td>
+          <td>Maule</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">—</td>
+          <td class="n">272</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">21 nov 2025</td>
+          <td>Parque Solar Fotovoltaico Vulcano</td>
+          <td class="tenue">PER CERRO MOHAI SPA</td>
+          <td>O'Higgins</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">16</td>
+          <td class="n">18</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">20 nov 2025</td>
+          <td>Ampliación de Mini central Hidroeléctrica de Pasada Los Maquis</td>
+          <td class="tenue">Empresa Eléctrica de Aisén S.A.</td>
+          <td>Aysén</td>
+          <td class="sin-corte"><i class="punto t-otra"></i>Otra</td>
+          <td class="n">—</td>
+          <td class="n">12</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">20 nov 2025</td>
+          <td>Parque Fotovoltaico Queltehue</td>
+          <td class="tenue">QUELTEHUE SPA</td>
+          <td>Metropolitana</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">11</td>
+          <td class="n">12</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">18 nov 2025</td>
+          <td>Planta Solar Fotovoltaica Pradera Larga</td>
+          <td class="tenue">PARQUE SOLAR CASABLANCA SPA</td>
+          <td>Valparaíso</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">132</td>
+          <td class="n">105</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">14 nov 2025</td>
+          <td>Parque Fotovoltaico Yal</td>
+          <td class="tenue">PFV YAL SPA</td>
+          <td>Arica y Parinacota</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">22</td>
+          <td class="n">68</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">11 nov 2025</td>
+          <td>Planta Fotovoltaica Cayena</td>
+          <td class="tenue">ENERGETICA SOLAR CAYENA SPA</td>
+          <td>Atacama</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">—</td>
+          <td class="n">10</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">7 nov 2025</td>
+          <td>Parque Fotovoltaico, de almacenamiento y línea de Transmisión Copao, Diego de Almagro</td>
+          <td class="tenue">Copao Energía SpA</td>
+          <td>Atacama</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">351</td>
+          <td class="n">289</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">6 nov 2025</td>
+          <td>Parque Fotovoltaico Kaban</td>
+          <td class="tenue">KABAN ENERGY SPA</td>
+          <td>O'Higgins</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">9</td>
+          <td class="n">15</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">6 nov 2025</td>
+          <td>Parque Fotovoltaico Semillero</td>
+          <td class="tenue">PFV SEMILLERO SPA</td>
+          <td>Tarapacá</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">57</td>
+          <td class="n">136</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">4 nov 2025</td>
+          <td>Modificación Proyecto Fotovoltaico de 3MW, SLK CB Nueve SpA</td>
+          <td class="tenue">SLK CB NUEVE SPA</td>
+          <td>Valparaíso</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">3</td>
+          <td class="n">—</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">3 nov 2025</td>
+          <td>Parque Fotovoltaico El Pitotoy</td>
+          <td class="tenue">PFV EL PITOTOY SPA</td>
+          <td>Atacama</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">100</td>
+          <td class="n">136</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">3 nov 2025</td>
+          <td>Parque Fotovoltaico Pampa Perdiz</td>
+          <td class="tenue">PAMPA PERDIZ SPA</td>
+          <td>Tarapacá</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">18</td>
+          <td class="n">20</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">22 oct 2025</td>
+          <td>Parque Fotovoltaico Neutrón</td>
+          <td class="tenue">Parque Solar Neutrón SpA</td>
+          <td>Maule</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">9</td>
+          <td class="n">13</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">21 oct 2025</td>
+          <td>Parque Fotovoltaico Bruno Solar</td>
+          <td class="tenue">CVE Proyecto Cuarenta y Cuatro SpA</td>
+          <td>Metropolitana</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">9</td>
+          <td class="n">13</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">20 oct 2025</td>
+          <td>Proyecto Solar Fotovoltaico Lampa</td>
+          <td class="tenue">Proyecto Solar Fotovoltaico Lampa SpA</td>
+          <td>Metropolitana</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">108</td>
+          <td class="n">160</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">14 oct 2025</td>
+          <td>Parque Fotovoltaico Bulnes</td>
+          <td class="tenue">Sayen Fotovoltaica SPA</td>
+          <td>Ñuble</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">10</td>
+          <td class="n">9</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">13 oct 2025</td>
+          <td>ERNC Tarapacá</td>
+          <td class="tenue">ERNC LOA Spa</td>
+          <td>Interregional</td>
+          <td class="sin-corte"><i class="punto t-mixto"></i>Mixto</td>
+          <td class="n">239</td>
+          <td class="n">200</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">13 oct 2025</td>
+          <td>PARQUE EÓLICO OVEJERA SUR</td>
+          <td class="tenue">Parque Eólico Ovejera Sur SpA</td>
+          <td>Los Ríos</td>
+          <td class="sin-corte"><i class="punto t-eolica"></i>Eólica</td>
+          <td class="n">216</td>
+          <td class="n">280</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">13 oct 2025</td>
+          <td>Parque Fotovoltaico Cumbres del Sol</td>
+          <td class="tenue">Los Llanos Solar SpA</td>
+          <td>O'Higgins</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">110</td>
+          <td class="n">100</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">10 oct 2025</td>
+          <td>Parque Fotovoltaico Hanna</td>
+          <td class="tenue">Hanna Solar SpA</td>
+          <td>Coquimbo</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">9</td>
+          <td class="n">15</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">10 oct 2025</td>
+          <td>Planta Fotovoltaica Laurel</td>
+          <td class="tenue">ENERGETICA SOLAR LAUREL SPA</td>
+          <td>Valparaíso</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">7</td>
+          <td class="n">10</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">7 oct 2025</td>
+          <td>Modificación de la Etapa II del Parque Eólico Antofagasta</td>
+          <td class="tenue">Parque Eólico Antofagasta SpA</td>
+          <td>Antofagasta</td>
+          <td class="sin-corte"><i class="punto t-eolica"></i>Eólica</td>
+          <td class="n">462</td>
+          <td class="n">672</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">1 oct 2025</td>
+          <td>Energética Solar Requínoa</td>
+          <td class="tenue">ENERGÉTICA SOLAR REQUÍNOA SPA</td>
+          <td>O'Higgins</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">10</td>
+          <td class="n">18</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">30 sep 2025</td>
+          <td>Parque Fotovoltaico Pampino</td>
+          <td class="tenue">Pampino Solar SpA</td>
+          <td>Tarapacá</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">170</td>
+          <td class="n">263</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">24 sep 2025</td>
+          <td>Parque Fotovoltaico Omega</td>
+          <td class="tenue">Parque Solar Omega SpA</td>
+          <td>Maule</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">6</td>
+          <td class="n">5</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">23 sep 2025</td>
+          <td>Adecuación Proyecto Parque Candelaria Solar y su Línea de Transmisión</td>
+          <td class="tenue">INVERSIONES CANDELARIA SOLAR SPA</td>
+          <td>Atacama</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">—</td>
+          <td class="n">204</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">22 sep 2025</td>
+          <td>PLANTA FOTOVOLTAICA GRANEROS II</td>
+          <td class="tenue">CLD GENERACION 2 SPA</td>
+          <td>Metropolitana</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">7</td>
+          <td class="n">12</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">16 sep 2025</td>
+          <td>Parque Fotovoltaico Los Maquis</td>
+          <td class="tenue">Energía Renovable Turquesa SpA</td>
+          <td>Los Lagos</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">9</td>
+          <td class="n">15</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">15 sep 2025</td>
+          <td>Parque Fotovoltaico Solar</td>
+          <td class="tenue">Solar Oriente SpA</td>
+          <td>Tarapacá</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">581</td>
+          <td class="n">990</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">15 sep 2025</td>
+          <td>Parque Solar BESS Cuyumillaco</td>
+          <td class="tenue">CHUCAO SOLAR SPA</td>
+          <td>Maule</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">101</td>
+          <td class="n">200</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">12 sep 2025</td>
+          <td>Parque Solar Fotovoltaico Tamarico Fase II</td>
+          <td class="tenue">Campanillas Solar SpA</td>
+          <td>Atacama</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">169</td>
+          <td class="n">250</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">9 sep 2025</td>
+          <td>Energética Solar Marchihue</td>
+          <td class="tenue">ENERGÉTICA SOLAR MARCHIHUE SPA</td>
+          <td>O'Higgins</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">9</td>
+          <td class="n">18</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-aprobacion">Aprobado</span></td>
+          <td class="n">9 sep 2025</td>
+          <td>Parque Eólico Los Coihues</td>
+          <td class="tenue">Hy2Wind SpA</td>
+          <td>Ñuble</td>
+          <td class="sin-corte"><i class="punto t-eolica"></i>Eólica</td>
+          <td class="n">187</td>
+          <td class="n">470</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">8 sep 2025</td>
+          <td>Parque Fotovoltaico El Aguilucho</td>
+          <td class="tenue">PFV EL AGUILUCHO SPA</td>
+          <td>Atacama</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">20</td>
+          <td class="n">66</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">8 sep 2025</td>
+          <td>Parque Fotovoltaico Pimpollo</td>
+          <td class="tenue">PFV PIMPOLLO SPA</td>
+          <td>Atacama</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">9</td>
+          <td class="n">43</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">5 sep 2025</td>
+          <td>Parque Fotovoltaico Peuco</td>
+          <td class="tenue">PFV PEUCO SPA</td>
+          <td>Atacama</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">285</td>
+          <td class="n">795</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">3 sep 2025</td>
+          <td>Parque Fotovoltaico Manquel Solar</td>
+          <td class="tenue">Manquel Solar SpA</td>
+          <td>Maule</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">65</td>
+          <td class="n">39</td>
+          <td>Sí</td>
+        </tr>
+        <tr>
+          <td><span class="etapa e-ingreso">Ingresa</span></td>
+          <td class="n">2 sep 2025</td>
+          <td>Parque Solar Alvarado</td>
+          <td class="tenue">IM2 Solar Chile SpA</td>
+          <td>Metropolitana</td>
+          <td class="sin-corte"><i class="punto t-solar"></i>Solar</td>
+          <td class="n">9</td>
+          <td class="n">15</td>
+          <td>Sí</td>
+        </tr></tbody>
+      </table></div>
+    </section>
+  
+    <section class="metodo aparece">
+      <h2>Método</h2>
+      <ol class="pasos">
+        <li><b>Descarga</b><span>Cada mes la CNE publica en PDF el Reporte Mensual ERNC. Se descarga con su huella SHA-256; si una edición no está, se registra.</span></li>
+        <li><b>Lectura</b><span>Las tablas no se extraen limpias: nombres partidos en varias líneas y formatos que cambian entre meses. Un modelo de lenguaje (Claude) las lee y devuelve filas con un esquema fijo.</span></li>
+        <li><b>Verificación</b><span>Siete reglas revisan lo extraído antes de guardarlo. Si las sumas no cuadran con lo que declara el reporte, el modelo reintenta una vez; si sigue fallando, queda para revisión manual.</span></li>
+        <li><b>Publicación</b><span>Base SQLite y esta página, regenerada con un comando.</span></li>
+      </ol>
+      <dl class="reglas">
+        <div><dt>Totales</dt><dd>La suma de MW e inversión coincide con lo que declara el texto del reporte.</dd></div>
+        <div><dt>Conteo</dt><dd>El número de filas coincide con los proyectos declarados.</dd></div>
+        <div><dt>Evidencia</dt><dd>Cada valor extraído aparece en el texto de la página.</dd></div>
+        <div><dt>Fecha</dt><dd>La fecha cae en el mes que cubre la edición.</dd></div>
+        <div><dt>Rango</dt><dd>La inversión por MW está entre 0,3 y 3 MMUSD.</dd></div>
+        <div><dt>Faltante</dt><dd>Un dato que la fuente trae como «-» queda vacío, no en cero.</dd></div>
+        <div><dt>Duplicado</dt><dd>Un proyecto no se repite en la misma etapa, ni en la misma edición ni en otra.</dd></div>
+      </dl>
+    </section>
+  <footer>Prototipo de Francisco Ruiz · Datos públicos de la Comisión Nacional de Energía · Generado el 9 oct 2026</footer>
+</main>
+<script>
+document.documentElement.classList.add('js');
+const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const formato = (v, d) => v.toLocaleString('es-CL', { minimumFractionDigits: d, maximumFractionDigits: d });
+for (const el of document.querySelectorAll('[data-cuenta]')) {
+  const fin = Number(el.dataset.cuenta), d = Number(el.dataset.decimales || 0);
+  if (quieto || !fin) continue;
+  const t0 = performance.now();
+  const paso = (t) => {
+    const p = Math.min(1, Math.max(0, (t - t0) / 1100)), suave = 1 - Math.pow(1 - p, 3);
+    el.textContent = formato(fin * suave, d);
+    if (p < 1) requestAnimationFrame(paso);
+  };
+  requestAnimationFrame(paso);
+}
+const observador = new IntersectionObserver((entradas) => {
+  for (const e of entradas) if (e.isIntersecting) { e.target.classList.add('visible'); observador.unobserve(e.target); }
+}, { threshold: 0.12 });
+document.querySelectorAll('.aparece').forEach((s) => observador.observe(s));
+</script>
+</body>
+</html>
